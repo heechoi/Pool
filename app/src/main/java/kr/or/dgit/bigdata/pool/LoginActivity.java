@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         new HttpRequestTack().execute(http);
-
     }
 
     private class HttpRequestTack extends AsyncTask<String,Void,String>{
@@ -63,7 +62,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         protected void onPostExecute(String result) {
             progressDlg.dismiss();
             Toast.makeText(LoginActivity.this,result,Toast.LENGTH_SHORT).show();
-
         }
 
         @Override

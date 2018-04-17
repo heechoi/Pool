@@ -1,6 +1,9 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,12 +16,23 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import kr.or.dgit.bigdata.pool.LoginActivity;
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardFragment extends Fragment {
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/classlist";
 
-    public static ClassBoardFragment newInstance(){
+    public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
     }
@@ -28,7 +42,7 @@ public class ClassBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.classboard, container, false);
-        Button cls_board_btn = (Button)root.findViewById(R.id.cls_board_btn);
+        Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,9 +55,10 @@ public class ClassBoardFragment extends Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String[] arrays = getResources().getStringArray(R.array.classboard_selected);
                                 Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
+                                new HttpRequestTack(getContext(),"GET").execute(http);
                             }
                         })
-                        .setNegativeButton("취소",null).create().show();
+                        .setNegativeButton("취소", null).create().show();
             }
         });
 
