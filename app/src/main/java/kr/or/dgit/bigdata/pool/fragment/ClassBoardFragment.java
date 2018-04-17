@@ -1,16 +1,12 @@
-package kr.or.dgit.bigdata.pool;
+package kr.or.dgit.bigdata.pool.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-/**
- * Created by DGIT3-7 on 2018-04-17.
- */
+import kr.or.dgit.bigdata.pool.R;
 
 public class ClassBoardFragment extends Fragment {
 

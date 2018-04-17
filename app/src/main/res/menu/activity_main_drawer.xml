@@ -5,34 +5,55 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/user_attendance"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="출석보기" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/classtime"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="수업시간" />
+        <item
+            android:id="@+id/bus"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="버스위치" />
+        <item
+            android:id="@+id/clinic"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="수영클리닉" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="게시판">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/classboard"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="반별 게시판" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/qnaboard"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="문의하기" />
+            <item
+                android:id="@+id/noticeboard"
+                android:icon="@drawable/ic_menu_send"
+                android:title="공지사항" />
         </menu>
     </item>
+    <item android:title="강사">
+        <menu>
+            <item
+                android:id="@+id/classinfo"
+                android:icon="@drawable/ic_menu_send"
+                android:title="반별 정보" />
+            <item
+                android:id="@+id/reclass"
+                android:icon="@drawable/ic_menu_send"
+                android:title="등록률 보기" />
+            <item
+                android:id="@+id/notice_alram"
+                android:icon="@drawable/ic_menu_send"
+                android:title="공지사항 알림보내기" />
+        </menu>
+    </item>
+
 
 </menu>

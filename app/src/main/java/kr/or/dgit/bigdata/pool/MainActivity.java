@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,7 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
@@ -98,22 +100,28 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
-
+        if (id == R.id.classboard) {
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
-            tr.addToBackStack(null);
-            tr.replace(R.id.frame,cf);
-            tr.commit();
-        } else if (id == R.id.nav_gallery) {
+            viewFragment(cf);
+        }else if(id ==R.id.user_attendance){
 
-        } else if (id == R.id.nav_slideshow) {
+        }else if(id ==R.id.classtime){
 
-        } else if (id == R.id.nav_manage) {
+        }else if(id ==R.id.bus){
 
-        } else if (id == R.id.nav_share) {
+        }else if(id ==R.id.clinic){
 
-        } else if (id == R.id.nav_send) {
+        }else if(id ==R.id.classboard){
+
+        }else if(id ==R.id.qnaboard){
+
+        }else if(id ==R.id.noticeboard){
+
+        }else if(id ==R.id.classinfo){
+
+        }else if(id ==R.id.reclass){
+
+        }else if(id ==R.id.notice_alram){
 
         }
 
@@ -130,5 +138,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(loginIntent);
             overridePendingTransition(R.anim.login,R.anim.login_out);
         }
+    }
+
+    private void viewFragment(Fragment fgm){
+        FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+        tr.addToBackStack(null);
+        tr.replace(R.id.frame,fgm);
+        tr.commit();
     }
 }
