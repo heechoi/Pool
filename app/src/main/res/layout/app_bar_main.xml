@@ -25,6 +25,7 @@
                 android:id="@+id/toolbar_title"
                 android:textSize="25sp"
                 />
+            
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

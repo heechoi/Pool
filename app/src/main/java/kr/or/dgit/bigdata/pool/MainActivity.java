@@ -1,6 +1,5 @@
 package kr.or.dgit.bigdata.pool;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,16 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
     private TextView login;
 
+        implements NavigationView.OnNavigationItemSelectedListener {
+    int mStart = 10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +49,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         login = navigationView.getHeaderView(0).findViewById(R.id.login);
         login.setOnClickListener(this);
+
+        TestFragment cf = TestFragment.newInstance(mStart);
+
+        getSupportFragmentManager().beginTransaction().add(R.id.frame,cf).commit();
+
     }
 
     @Override
