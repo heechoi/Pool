@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
+import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
@@ -118,6 +119,8 @@ public class MainActivity extends AppCompatActivity
         }else if(id ==R.id.noticeboard){
 
         }else if(id ==R.id.classinfo){
+            ClassInfoFragment cf = ClassInfoFragment.newInstance();
+            viewFragment(cf);
 
         }else if(id ==R.id.reclass){
 
