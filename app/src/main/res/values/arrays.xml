@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="classboard_selected">
-        <item>06:00시 초급</item>
-        <item>06:00시 중급</item>
-        <item>06:00시 고급</item>
-        <item>06:00시 상급</item>
-        <item>06:00시 연수</item>
+        <item>06시 00분</item>
+        <item>07시 00분</item>
+        <item>08시 00분</item>
+        <item>09시 00분</item>
+        <item>10시 00분</item>
+        <item>11시 00분</item>
+        <item>13시 00분</item>
+        <item>14시 00분</item>
+        <item>15시 00분</item>
+        <item>16시 00분</item>
+        <item>17시 00분</item>
+        <item>19시 00분</item>
+        <item>20시 00분</item>
+        <item>21시 00분</item>
     </string-array>
 </resources>
