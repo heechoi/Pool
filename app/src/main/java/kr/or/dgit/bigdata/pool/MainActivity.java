@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
             tr.addToBackStack(null);
             tr.replace(R.id.frame,cf);
