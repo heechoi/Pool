@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="클래스 보드 입니다."/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <Spinner
+        android:id="@+id/cls_board_spinner"
+        android:layout_width="250dp"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:layout_height="30dp"
+        android:text="반을 선택하세요"
+        android:background="#cccccc"
+        />
 
 </LinearLayout>

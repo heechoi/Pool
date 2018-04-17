@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="classboard_selected">
+        <item>06:00시 초급</item>
+        <item>06:00시 중급</item>
+        <item>06:00시 고급</item>
+        <item>06:00시 상급</item>
+        <item>06:00시 연수</item>
+    </string-array>
+</resources>
