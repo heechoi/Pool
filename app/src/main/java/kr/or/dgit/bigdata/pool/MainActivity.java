@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity
 
     private void viewFragment(Fragment fgm){
         FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+        tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
         tr.addToBackStack(null);
         tr.replace(R.id.frame,fgm);
         tr.commit();
