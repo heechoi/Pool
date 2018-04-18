@@ -22,6 +22,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
+
                         >
 
                         <TextView
@@ -32,7 +33,7 @@
                             android:gravity="center_vertical"
                             android:textAlignment="center"
                             android:text="이름"
-
+                            android:textColor="@color/colorWhtie"
                             />
                         <TextView
                             android:layout_width="0dp"
@@ -42,6 +43,7 @@
                             android:gravity="center_vertical"
                             android:textAlignment="center"
                             android:text="성"
+                            android:textColor="@color/colorWhtie"
                             />
                         <TextView
                             android:layout_width="0dp"
@@ -51,6 +53,7 @@
                             android:gravity="center_vertical"
                             android:textAlignment="center"
                             android:text="생년월일"
+                            android:textColor="@color/colorWhtie"
                             />
                         <TextView
                             android:layout_width="0dp"
@@ -60,6 +63,7 @@
                             android:gravity="center_vertical"
                             android:textAlignment="center"
                             android:text="전화번호"
+                            android:textColor="@color/colorWhtie"
                             />
                         <TextView
                             android:layout_width="0dp"
@@ -69,6 +73,7 @@
                             android:gravity="center_vertical"
                             android:textAlignment="center"
                             android:text="출석"
+                            android:textColor="@color/colorWhtie"
                             />
 
                     </LinearLayout>
