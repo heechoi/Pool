@@ -56,7 +56,7 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
         classBtn = root.findViewById(R.id.btn_class);
         classBtn.setOnClickListener(this);
 
-       
+
         tno = 0;
         new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restclassinfo/classlist?tno=1004");
         listView = root.findViewById(R.id.member_list);
