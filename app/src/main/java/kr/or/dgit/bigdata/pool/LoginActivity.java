@@ -59,7 +59,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void setResult(String result){
-        Toast.makeText(this,result, Toast.LENGTH_SHORT).show();
+        if(result.equals("no member")){
+            Toast.makeText(this,"회원이 아닙니다. 아이디를 확인해 주세요",Toast.LENGTH_SHORT).show();
+            id.setText("");
+            pw.setText("");
+            id.requestFocus();
+        }
+        if(result.equals("wrong pw")){
+            Toast.makeText(this,"비밀번호를 확인해주세요",Toast.LENGTH_SHORT).show();
+            pw.setText("");
+            pw.requestFocus();
+        }
+
+        if(result.equals("member")){
+
+        }
 
     }
 
