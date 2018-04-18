@@ -20,6 +20,7 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
     private String[] arrQuery;
     private String[] arrQueryname;
     private String type;
+    private static String result;
 
     public HttpRequestTack(Context context, String type) {
         mContext = context;
@@ -33,15 +34,19 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
         this.type = type;
     }
 
+    public String getResult() {
+        return result;
+    }
+
     @Override
     protected void onPreExecute() {
         progressDlg = ProgressDialog.show(mContext,"Wait","Login....");
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(String result2) {
         progressDlg.dismiss();
-        Toast.makeText(mContext,result,Toast.LENGTH_SHORT).show();
+        this.result = result2;
     }
 
     @Override
