@@ -3,6 +3,8 @@ package kr.or.dgit.bigdata.pool.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
@@ -17,7 +19,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import kr.or.dgit.bigdata.pool.JsonResult;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
@@ -79,18 +80,24 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
                             String[] arrays = getResources().getStringArray(R.array.classboard_selected);
                             Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
 
-                            new HttpRequestTack(getContext(),ClassInfoFragment.this,"GET","정보를 가져오고 있습니다...").execute(http+"?tno=1004");
+                            new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"?tno=1004");
                         }
                     })
                     .setNegativeButton("취소", null).create().show();
         }
     }
 
-    @Override
-    public void setResult(String result) {
-        Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:{
+                    String result = (String)msg.obj;
+                    Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    };
 
-
-
-    }
 }

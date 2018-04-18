@@ -73,7 +73,7 @@ public class ClassBoardFragment extends Fragment {
                                 String[] arrname = new String[] {"test"};
                                 String[] arr  = new String[] {"1"};
 
-                                new HttpRequestTack(getContext(),mHandler,"GET").execute(http);
+                                new HttpRequestTack(getContext(),mHandler,"GET","message...").execute(http);
                             }
                         })
                         .setNegativeButton("취소", null).create().show();
