@@ -45,6 +45,7 @@ public class ClassBoardFragment extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 1:{
+
                         String result = (String)msg.obj;
                         Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
                     }
