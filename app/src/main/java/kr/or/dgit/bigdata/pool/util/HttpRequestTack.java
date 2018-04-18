@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -34,10 +35,6 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
         this.type = type;
     }
 
-    public String getResult() {
-        return result;
-    }
-
     @Override
     protected void onPreExecute() {
         progressDlg = ProgressDialog.show(mContext,"Wait","Login....");
@@ -46,6 +43,7 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
     @Override
     protected void onPostExecute(String result2) {
         progressDlg.dismiss();
+        Toast.makeText(mContext,result,Toast.LENGTH_SHORT).show();
         this.result = result2;
     }
 

@@ -54,7 +54,9 @@ public class ClassBoardFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String[] arrays = getResources().getStringArray(R.array.classboard_selected);
-                                Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
+                                String[] arrname = new String[] {"test"};
+                                String[] arr  = new String[] {"1"};
+
                                 new HttpRequestTack(getContext(),"GET").execute(http);
                             }
                         })
