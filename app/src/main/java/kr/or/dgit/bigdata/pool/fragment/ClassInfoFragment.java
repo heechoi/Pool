@@ -1,6 +1,8 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
@@ -13,9 +15,13 @@ import android.widget.Toast;
 
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassInfoFragment extends Fragment implements View.OnClickListener{
+
+    private String http = "http://192.168.0.12:8080/pool/restclassinfo/classlist";
     Button classBtn;
+
     public static ClassInfoFragment newInstance(){
         ClassInfoFragment cf = new ClassInfoFragment();
         return cf;
@@ -60,9 +66,20 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.btn_class){
-            Toast.makeText(view.getContext(), "sdf", Toast.LENGTH_SHORT).show();
-            ClassListDialog classListDialog = new ClassListDialog();
-            classListDialog.getShowsDialog();
+            new android.support.v7.app.AlertDialog.Builder(getActivity())
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle("반을 선택하세요")
+                    .setItems(R.array.classboard_selected, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String[] arrays = getResources().getStringArray(R.array.classboard_selected);
+                            Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
+                            String[] a={"1004"};
+                            String[] tno={"tno"};
+                            new HttpRequestTack(getContext(),tno,a,"GET").execute(http);
+                        }
+                    })
+                    .setNegativeButton("취소", null).create().show();
         }
     }
 }
