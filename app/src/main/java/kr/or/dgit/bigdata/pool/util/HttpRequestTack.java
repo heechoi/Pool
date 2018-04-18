@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -43,6 +46,7 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         progressDlg.dismiss();
         Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
