@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <Spinner
-        android:id="@+id/cls_board_spinner"
-        android:layout_width="250dp"
-        android:layout_gravity="center"
-        android:padding="10dp"
-        android:layout_height="30dp"
-        android:text="반을 선택하세요"
-        android:background="#cccccc"
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="다이얼로그"
+        android:id="@+id/cls_board_btn"
         />
 
 </LinearLayout>
