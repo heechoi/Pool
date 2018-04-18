@@ -5,4 +5,5 @@ package kr.or.dgit.bigdata.pool;
  */
 
 public interface JsonResult {
+    public void setResult(String result);
 }
