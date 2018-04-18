@@ -27,15 +27,17 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     private String[] arrQueryname;
     private Handler handler;
     private String type;
-    private Object obj;
     private String msg;
+    private int no;
 
     public HttpRequestTack(Context context,Handler handler, String type,String msg) {
         mContext = context;
         this.type = type;
         this.handler = handler;
         this.msg = msg;
+        this.no = 1;
     }
+
 
     public HttpRequestTack(Context context, Handler handler, String[] arrQuery, String[] arrQueryname, String type,String msg) {
         mContext = context;
@@ -44,8 +46,28 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
         this.type = type;
         this.msg = msg;
         this.handler = handler;
+        this.no = 1;
 
     }
+
+    public HttpRequestTack(Context context, Handler handler, String type, String msg, int no) {
+        mContext = context;
+        this.handler = handler;
+        this.type = type;
+        this.msg = msg;
+        this.no = no;
+    }
+
+    public HttpRequestTack(Context context, String[] arrQuery, String[] arrQueryname, Handler handler, String type, String msg, int no) {
+        mContext = context;
+        this.arrQuery = arrQuery;
+        this.arrQueryname = arrQueryname;
+        this.handler = handler;
+        this.type = type;
+        this.msg = msg;
+        this.no = no;
+    }
+
 
     @Override
     protected void onPreExecute() {
@@ -56,7 +78,7 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         progressDlg.dismiss();
-        Message message = Message.obtain(handler, 1, result);
+        Message message = Message.obtain(handler, no, result);
 
         handler.sendMessage(message);
 
