@@ -1,7 +1,6 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
-import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,11 +12,16 @@ import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import kr.or.dgit.bigdata.pool.MainActivity;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import kr.or.dgit.bigdata.pool.JsonResult;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassInfoFragment extends Fragment implements View.OnClickListener{
+public class ClassInfoFragment extends Fragment implements View.OnClickListener, JsonResult{
 
     private String http = "http://192.168.0.12:8080/pool/restclassinfo/classlist";
     Button classBtn;
@@ -74,12 +78,19 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
                         public void onClick(DialogInterface dialogInterface, int i) {
                             String[] arrays = getResources().getStringArray(R.array.classboard_selected);
                             Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
-                            String[] a={"1004"};
-                            String[] tno={"tno"};
-                            new HttpRequestTack(getContext(),tno,a,"GET").execute(http);
+
+                            new HttpRequestTack(getContext(),ClassInfoFragment.this,"GET").execute(http+"?tno=1004");
                         }
                     })
                     .setNegativeButton("취소", null).create().show();
         }
+    }
+
+    @Override
+    public void setResult(String result) {
+        Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+
+
+
     }
 }
