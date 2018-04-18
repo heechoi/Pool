@@ -21,7 +21,7 @@ import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener,JsonResult {
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
 
     private TextView login;
 
@@ -151,8 +151,4 @@ public class MainActivity extends AppCompatActivity
         tr.commit();
     }
 
-    @Override
-    public void setResult(String result) {
-
-    }
 }
