@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
 import kr.or.dgit.bigdata.pool.LoginActivity;
 
 public class HttpRequestTack extends AsyncTask<String, Void, String> {
@@ -24,38 +25,41 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     ProgressDialog progressDlg;
     private String[] arrQuery;
     private String[] arrQueryname;
+    private Handler handler;
     private String type;
     private Object obj;
-    private Handler handler;
+    private String msg;
 
-    public HttpRequestTack(Context context,Handler handler, String type) {
+    public HttpRequestTack(Context context,Handler handler, String type,String msg) {
         mContext = context;
         this.type = type;
-        this.obj = obj;
         this.handler = handler;
+        this.msg = msg;
     }
 
-    public HttpRequestTack(Context context, Handler handler, String[] arrQuery, String[] arrQueryname, String type) {
+    public HttpRequestTack(Context context, Handler handler, String[] arrQuery, String[] arrQueryname, String type,String msg) {
         mContext = context;
         this.arrQuery = arrQuery;
         this.arrQueryname = arrQueryname;
         this.type = type;
-        this.obj = obj;
+        this.msg = msg;
         this.handler = handler;
+
     }
 
     @Override
     protected void onPreExecute() {
-        progressDlg = ProgressDialog.show(mContext, "Wait", "Login....");
+        progressDlg = ProgressDialog.show(mContext, "Wait", this.msg);
 
     }
 
     @Override
     protected void onPostExecute(String result) {
         progressDlg.dismiss();
-        //((JsonResult) obj).setResult(result);
         Message message = Message.obtain(handler, 1, result);
+
         handler.sendMessage(message);
+
     }
 
     @Override

@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String[] arrQueryname ={"id","pw"};
         String[] arrQuery={id.getText().toString(),pw.getText().toString()};
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST");
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","fddfsds..");
         httpRequestTack.execute(loginHttp);
 
     }
@@ -67,6 +67,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 case 1:{
                     String result = (String)msg.obj;
                     Toast.makeText(LoginActivity.this,result, Toast.LENGTH_LONG).show();
+                    if(result.equals("no member")){
+                        Toast.makeText(LoginActivity.this,"회원이 아닙니다. 아이디를 확인해 주세요",Toast.LENGTH_SHORT).show();
+                        id.setText("");
+                        pw.setText("");
+                        id.requestFocus();
+                    }
+                    if(result.equals("wrong pw")){
+                        Toast.makeText(LoginActivity.this,"비밀번호를 확인해주세요",Toast.LENGTH_SHORT).show();
+                        pw.setText("");
+                        pw.requestFocus();
+                    }
+
+                    if(result.equals("member")){
+
+                    }
                 }
                 break;
             }
