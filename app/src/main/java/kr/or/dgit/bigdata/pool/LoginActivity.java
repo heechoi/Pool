@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String[] arrQueryname ={"id","pw"};
         String[] arrQuery={id.getText().toString(),pw.getText().toString()};
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(this,this,arrQuery,arrQueryname,"POST");
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,this,arrQuery,arrQueryname,"POST","Login...");
         httpRequestTack.execute(loginHttp);
 
     }

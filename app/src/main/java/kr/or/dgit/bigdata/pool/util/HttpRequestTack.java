@@ -25,24 +25,27 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     private String[] arrQueryname;
     private String type;
     private Object obj;
+    private String msg;
 
-    public HttpRequestTack(Context context,Object obj, String type) {
+    public HttpRequestTack(Context context,Object obj, String type,String msg) {
         mContext = context;
         this.type = type;
         this.obj = obj;
+        this.msg = msg;
     }
 
-    public HttpRequestTack(Context context,Object obj, String[] arrQuery, String[] arrQueryname, String type) {
+    public HttpRequestTack(Context context,Object obj, String[] arrQuery, String[] arrQueryname, String type,String msg) {
         mContext = context;
         this.arrQuery = arrQuery;
         this.arrQueryname = arrQueryname;
         this.type = type;
         this.obj = obj;
+        this.msg = msg;
     }
 
     @Override
     protected void onPreExecute() {
-        progressDlg = ProgressDialog.show(mContext, "Wait", "Login....");
+        progressDlg = ProgressDialog.show(mContext, "Wait", msg);
 
     }
 

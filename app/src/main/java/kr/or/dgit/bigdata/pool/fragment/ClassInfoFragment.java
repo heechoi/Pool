@@ -79,7 +79,7 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener,
                             String[] arrays = getResources().getStringArray(R.array.classboard_selected);
                             Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
 
-                            new HttpRequestTack(getContext(),ClassInfoFragment.this,"GET").execute(http+"?tno=1004");
+                            new HttpRequestTack(getContext(),ClassInfoFragment.this,"GET","정보를 가져오고 있습니다...").execute(http+"?tno=1004");
                         }
                     })
                     .setNegativeButton("취소", null).create().show();

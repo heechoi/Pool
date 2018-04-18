@@ -59,7 +59,7 @@ public class ClassBoardFragment extends Fragment implements JsonResult{
                                 String[] arrname = new String[] {"test"};
                                 String[] arr  = new String[] {"1"};
 
-                                new HttpRequestTack(getContext(),ClassBoardFragment.this,"GET").execute(http);
+                                new HttpRequestTack(getContext(),ClassBoardFragment.this,"GET","반을 검색 중 입니다...").execute(http);
                             }
                         })
                         .setNegativeButton("취소", null).create().show();
