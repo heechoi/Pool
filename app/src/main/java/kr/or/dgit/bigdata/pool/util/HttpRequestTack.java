@@ -15,13 +15,15 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import kr.or.dgit.bigdata.pool.JsonResult;
+import kr.or.dgit.bigdata.pool.LoginActivity;
+
 public class HttpRequestTack extends AsyncTask<String,Void,String> {
     private Context mContext;
     ProgressDialog progressDlg;
     private String[] arrQuery;
     private String[] arrQueryname;
     private String type;
-    private static String result;
 
     public HttpRequestTack(Context context, String type) {
         mContext = context;
@@ -38,13 +40,16 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
     @Override
     protected void onPreExecute() {
         progressDlg = ProgressDialog.show(mContext,"Wait","Login....");
+
     }
 
     @Override
-    protected void onPostExecute(String result2) {
+    protected void onPostExecute(String result) {
         progressDlg.dismiss();
-        Toast.makeText(mContext,result,Toast.LENGTH_SHORT).show();
-        this.result = result2;
+
+        Log.d("da","=============2"+result);
+        ((JsonResult)mContext).setResult(result);
+
     }
 
     @Override
@@ -103,6 +108,10 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
             }
         }
         return sb.toString();
+    }
+
+    public String getResult(String result){
+        return result;
     }
 }
 
