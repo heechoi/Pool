@@ -15,6 +15,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import kr.or.dgit.bigdata.pool.JsonResult;
+
 public class HttpRequestTack extends AsyncTask<String, Void, String> {
     private Context mContext;
     ProgressDialog progressDlg;
@@ -44,7 +46,7 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
         progressDlg.dismiss();
 
         Log.d("da","=============2"+result);
-        ((JsonResult)mContext).setResult(result);
+        //((JsonResult)mContext).setResult(result);
 
     }
 
