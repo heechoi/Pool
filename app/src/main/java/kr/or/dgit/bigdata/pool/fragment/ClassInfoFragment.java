@@ -21,7 +21,7 @@ import kr.or.dgit.bigdata.pool.JsonResult;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassInfoFragment extends Fragment implements View.OnClickListener, JsonResult{
+public class ClassInfoFragment extends Fragment implements View.OnClickListener{
 
     private String http = "http://192.168.0.12:8080/pool/restclassinfo/classlist";
     Button classBtn;
