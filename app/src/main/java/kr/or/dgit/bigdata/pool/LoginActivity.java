@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.pool;
 
 import android.app.ProgressDialog;
 import android.net.Uri;
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,12 @@ import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +31,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
@@ -55,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String[] arrQueryname ={"id","pw"};
         String[] arrQuery={id.getText().toString(),pw.getText().toString()};
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","fddfsds..");
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","로그인..");
         httpRequestTack.execute(loginHttp);
 
     }
@@ -67,25 +78,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 case 1:{
                     String result = (String)msg.obj;
                     Toast.makeText(LoginActivity.this,result, Toast.LENGTH_LONG).show();
-                    if(result.equals("no member")){
-                        Toast.makeText(LoginActivity.this,"회원이 아닙니다. 아이디를 확인해 주세요",Toast.LENGTH_SHORT).show();
-                        id.setText("");
-                        pw.setText("");
-                        id.requestFocus();
-                    }
-                    if(result.equals("wrong pw")){
-                        Toast.makeText(LoginActivity.this,"비밀번호를 확인해주세요",Toast.LENGTH_SHORT).show();
-                        pw.setText("");
-                        pw.requestFocus();
-                    }
+                  try{
+                      JSONArray arr = new JSONArray(result);
+                      for(int i=0;i<arr.length();i++){
+                          JSONObject object= arr.getJSONObject(i);
 
-                    if(result.equals("member")){
+                      }
+                  }catch(Exception e){
+                      e.printStackTrace();
+                  }
 
-                    }
+
+
+                   /* Log.d("da",member[0]);
+                    Toast.makeText(LoginActivity.this,member[0], Toast.LENGTH_LONG).show();*/
+
                 }
                 break;
             }
         }
     };
+
+
 
 }
