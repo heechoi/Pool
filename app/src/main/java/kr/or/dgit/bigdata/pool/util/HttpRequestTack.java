@@ -18,35 +18,38 @@ import java.net.URL;
 import kr.or.dgit.bigdata.pool.JsonResult;
 import kr.or.dgit.bigdata.pool.LoginActivity;
 
-public class HttpRequestTack extends AsyncTask<String,Void,String> {
+public class HttpRequestTack extends AsyncTask<String, Void, String> {
     private Context mContext;
     ProgressDialog progressDlg;
     private String[] arrQuery;
     private String[] arrQueryname;
     private String type;
+    private Object obj;
 
-    public HttpRequestTack(Context context, String type) {
+    public HttpRequestTack(Context context,Object obj, String type) {
         mContext = context;
         this.type = type;
+        this.obj = obj;
     }
 
-    public HttpRequestTack(Context context, String[] arrQuery, String[] arrQueryname, String type) {
+    public HttpRequestTack(Context context,Object obj, String[] arrQuery, String[] arrQueryname, String type) {
         mContext = context;
         this.arrQuery = arrQuery;
         this.arrQueryname = arrQueryname;
         this.type = type;
+        this.obj = obj;
     }
 
     @Override
     protected void onPreExecute() {
-        progressDlg = ProgressDialog.show(mContext,"Wait","Login....");
+        progressDlg = ProgressDialog.show(mContext, "Wait", "Login....");
 
     }
 
     @Override
     protected void onPostExecute(String result) {
         progressDlg.dismiss();
-        ((JsonResult)mContext).setResult(result);
+        ((JsonResult) obj).setResult(result);
 
     }
 
@@ -57,58 +60,60 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
         HttpURLConnection con = null;
         String line = null;
 
-        try{
+        try {
             URL url = new URL(strings[0]);
             System.out.print(strings[0]);
 
-            con =(HttpURLConnection) url.openConnection();
+            con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod(type);
+            if (type.equalsIgnoreCase("POST")) {
 
-            con.setDoInput(true);
-            con.setDoOutput(true);
 
-            Uri.Builder builder = new Uri.Builder();
-            OutputStream os = con.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
-            if(arrQuery !=null){
-                for(int i=0; i <arrQuery.length; i++){
-                    builder.appendQueryParameter(arrQueryname[i],arrQuery[i]);
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                Uri.Builder builder = new Uri.Builder();
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                if (arrQuery != null) {
+                    for (int i = 0; i < arrQuery.length; i++) {
+                        builder.appendQueryParameter(arrQueryname[i], arrQuery[i]);
+                    }
+                    String query = builder.build().getEncodedQuery();
+                    writer.write(query);
                 }
-                String query = builder.build().getEncodedQuery();
-                writer.write(query);
+                writer.flush();
+                writer.close();
+
+
+                os.close();
             }
-            writer.flush();
-            writer.close();
 
+            if (con != null) {
 
-            os.close();
-
-
-            if(con!=null){
-
-                if(con.getResponseCode() == HttpURLConnection.HTTP_OK){
+                if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 }
             }
-            while((line = br.readLine())!=null){
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            try{
+        } finally {
+            try {
                 br.close();
                 con.disconnect();
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return sb.toString();
     }
 
-    public String getResult(String result){
+    public String getResult(String result) {
         return result;
     }
 }

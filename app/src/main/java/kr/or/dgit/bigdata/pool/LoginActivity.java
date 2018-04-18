@@ -27,7 +27,7 @@ import java.net.URL;
 
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener,JsonResult {
 
     private EditText id;
     private EditText pw;
@@ -53,11 +53,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String[] arrQueryname ={"id","pw"};
         String[] arrQuery={id.getText().toString(),pw.getText().toString()};
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(this,arrQuery,arrQueryname,"POST");
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,this,arrQuery,arrQueryname,"POST");
         httpRequestTack.execute(loginHttp);
 
     }
-
+    @Override
     public void setResult(String result){
         if(result.equals("no member")){
             Toast.makeText(this,"회원이 아닙니다. 아이디를 확인해 주세요",Toast.LENGTH_SHORT).show();
