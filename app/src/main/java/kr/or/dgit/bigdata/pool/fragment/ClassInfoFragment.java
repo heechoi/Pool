@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +16,23 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassInfoFragment extends Fragment implements View.OnClickListener{
 
-    private String http = "http://192.168.0.12:8080/pool/restclassinfo/classlist";
+    private String http = "http://192.168.0.12:8080/pool";
     Button classBtn;
+    String[] arrays;
+    int[] cno;
+    int tno;
 
     public static ClassInfoFragment newInstance(){
         ClassInfoFragment cf = new ClassInfoFragment();
@@ -63,7 +70,8 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
         ));
         spec.setContent(R.id.message_send);
         host.addTab(spec);
-
+        tno = 0;
+        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restclassinfo/classlist?tno=1004");
 
         return root;
     }
@@ -74,13 +82,11 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
             new android.support.v7.app.AlertDialog.Builder(getActivity())
                     .setIcon(R.mipmap.ic_launcher)
                     .setTitle("반을 선택하세요")
-                    .setItems(R.array.classboard_selected, new DialogInterface.OnClickListener() {
+                    .setItems(arrays, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            String[] arrays = getResources().getStringArray(R.array.classboard_selected);
-                            Toast.makeText(getActivity(), arrays[i], Toast.LENGTH_SHORT).show();
-
-                            new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"?tno=1004");
+                        public void onClick(DialogInterface dialogInterface, int i){
+                            Toast.makeText(getActivity(), cno[i], Toast.LENGTH_SHORT).show();
+                            new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...",2).execute(http+"/restregister/memberList?cno="+cno[i]);
                         }
                     })
                     .setNegativeButton("취소", null).create().show();
@@ -93,7 +99,47 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
             switch (msg.what){
                 case 1:{
                     String result = (String)msg.obj;
-                    Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
+
+                    try {
+                        JSONArray ja = new JSONArray(result);
+                        arrays = new String[ja.length()];
+                        cno = new int[ja.length()];
+                        for (int i = 0; i < ja.length(); i++) {
+                            JSONObject order = ja.getJSONObject(i);
+                            Object no = order.get("cno");
+                            Object time = order.get("time");
+                            Object level =order.get("level");
+                            cno[i] = (int) no;
+                            arrays[i]=(time+" "+level);
+                        }
+                    } catch (JSONException e) {
+                        Log.i("Json_parser", e.getMessage());
+                    }
+                }
+                break;
+                case 2:{
+                    String result = (String)msg.obj;
+                    ArrayList<Member> mList = new ArrayList<>();
+
+                    try {
+                        JSONArray ja = new JSONArray(result);
+
+                        for (int i = 0; i < ja.length(); i++) {
+                            JSONObject order = ja.getJSONObject(i);
+                            Member member= new Member();
+                            member.setMno((int)order.get("mno"));
+                            member.setGender((String)order.get("gender"));
+                            member.setName((String)order.get("name"));
+                            member.setAge((int)order.get("age"));
+                            member.setTell((String)order.get("tell"));
+                            mList.add(member);
+
+                        }
+                    } catch (JSONException e) {
+                        Log.i("Json_parser", e.getMessage());
+                    }
+
+                    Toast.makeText(getActivity(), mList.toString(), Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
