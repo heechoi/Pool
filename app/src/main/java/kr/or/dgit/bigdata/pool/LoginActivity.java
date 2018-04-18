@@ -27,7 +27,7 @@ import java.net.URL;
 
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,JsonResult {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText id;
     private EditText pw;
