@@ -1,8 +1,8 @@
 package kr.or.dgit.bigdata.pool;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
@@ -16,11 +16,6 @@ import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +33,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -77,13 +73,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             switch (msg.what){
                 case 1:{
                     String result = (String)msg.obj;
-                    Toast.makeText(LoginActivity.this,result, Toast.LENGTH_LONG).show();
                   try{
-                      JSONArray arr = new JSONArray(result);
-                      for(int i=0;i<arr.length();i++){
-                          JSONObject object= arr.getJSONObject(i);
 
-                      }
+                      JSONArray arr = new JSONArray("["+result+"]");
+
+                          JSONObject object= arr.getJSONObject(0);
+
+                          int mno = object.getInt("mno");
+                      Log.d("da","===========0"+mno+"");
+                          if(mno==-1){
+                              Toast.makeText(LoginActivity.this,"회원이 아닙니다.", Toast.LENGTH_LONG).show();
+                          }else if(mno==-2){
+                              Toast.makeText(LoginActivity.this,"비밀번호가 일치하지 않습니다", Toast.LENGTH_LONG).show();
+                          }else if(mno>0){
+
+                              Member m = new Member();
+
+                              m.setMno(object.getInt("mno"));
+                              m.setId(object.getString("id"));
+                              m.setTitle(object.getString("title"));
+
+                              SharedPreferences login = getSharedPreferences("member",MODE_PRIVATE);
+                              SharedPreferences.Editor editor = login.edit();
+
+                              editor.putString("id",object.getString("id"));
+                              editor.putInt("mno",object.getInt("mno"));
+                              editor.putString("title",object.getString("title"));
+                              editor.commit();
+                          }
+
                   }catch(Exception e){
                       e.printStackTrace();
                   }
