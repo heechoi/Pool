@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.pool.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -58,7 +59,7 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
         this.no = no;
     }
 
-    public HttpRequestTack(Context context, String[] arrQuery, String[] arrQueryname, Handler handler, String type, String msg, int no) {
+    public HttpRequestTack(Context context,Handler handler, String[] arrQuery, String[] arrQueryname,  String type, String msg, int no) {
         mContext = context;
         this.arrQuery = arrQuery;
         this.arrQueryname = arrQueryname;

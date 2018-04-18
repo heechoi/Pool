@@ -19,6 +19,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -26,6 +30,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import kr.or.dgit.bigdata.pool.LoginActivity;
 import kr.or.dgit.bigdata.pool.MainActivity;
@@ -33,8 +38,10 @@ import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardFragment extends Fragment {
-    private String http = "http://192.168.0.60:8080/pool/restclassboard/classlist";
-
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/";
+    private String time = "";
+    private String level = "";
+    private int cno = 0;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -47,8 +54,49 @@ public class ClassBoardFragment extends Fragment {
                 case 1:{
 
                         String result = (String)msg.obj;
-                        Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
+                        final String[] string;
+                        try{
+
+                            JSONArray ja = new JSONArray(result);
+                            string = new String[ja.length()];
+                            for (int i=0; i< ja.length(); i++){
+                                JSONObject order = ja.getJSONObject(i);
+                                string[i] = (order.getString("level"));
+                            }
+                            new AlertDialog.Builder(getActivity())
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .setTitle("레벨을 선택해주세요")
+                                    .setItems(string, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            String[] arrname = new String[] {"time","level"};
+                                            String[] arr = new String[]{time,string[i]};
+                                            String httpclasstime = http+"classlist2";
+                                            new HttpRequestTack(getContext(),mHandler,arr,arrname,"POST","message...",2).execute(httpclasstime);
+                                        }
+                                    }).setNegativeButton("취소", null).create().show();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                }
+                    break;
+                case 2:{
+                    String result = (String)msg.obj;
+                    Log.d("bum","================="+result);
+                    try {
+                        JSONArray ja = new JSONArray("["+result+"]");
+                        JSONObject order = ja.getJSONObject(0);
+                        cno = order.getInt("cno");
+                        String[] arrname = new String[] {"cno"};
+                        String[] arr = new String[]{cno+""};
+                        String httpclassboard = http+"classboard";
+                        new HttpRequestTack(getContext(),mHandler,arr,arrname,"POST","message...",2).execute(httpclassboard);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                }
                     break;
             }
         }
@@ -71,17 +119,17 @@ public class ClassBoardFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String[] arrays = getResources().getStringArray(R.array.classboard_selected);
-                                String[] arrname = new String[] {"test"};
-                                String[] arr  = new String[] {"1"};
-
-                                new HttpRequestTack(getContext(),mHandler,"GET","message...").execute(http);
+                                String[] arrname = new String[] {"time"};
+                                Log.d("bum","=================="+arrays[i]);
+                                String[] arr  ={arrays[i]};
+                                time = arrays[i];
+                                String httpclasstime = http+"classlist";
+                                new HttpRequestTack(getContext(),mHandler,arr,arrname,"POST","message...").execute(httpclasstime);
                             }
                         })
                         .setNegativeButton("취소", null).create().show();
             }
         });
-
         return root;
     }
-
 }
