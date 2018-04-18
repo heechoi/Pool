@@ -3,6 +3,8 @@ package kr.or.dgit.bigdata.pool;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +29,7 @@ import java.net.URL;
 
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,JsonResult {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText id;
     private EditText pw;
@@ -53,15 +55,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String[] arrQueryname ={"id","pw"};
         String[] arrQuery={id.getText().toString(),pw.getText().toString()};
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(this,this,arrQuery,arrQueryname,"POST");
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST");
         httpRequestTack.execute(loginHttp);
 
     }
-    @Override
-    public void setResult(String result){
-        Toast.makeText(this,result, Toast.LENGTH_SHORT).show();
 
-    }
-
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:{
+                    String result = (String)msg.obj;
+                    Toast.makeText(LoginActivity.this,result, Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    };
 
 }

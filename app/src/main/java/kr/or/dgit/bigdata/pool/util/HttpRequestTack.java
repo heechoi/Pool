@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,7 +17,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import kr.or.dgit.bigdata.pool.JsonResult;
 import kr.or.dgit.bigdata.pool.LoginActivity;
 
 public class HttpRequestTack extends AsyncTask<String, Void, String> {
@@ -25,19 +26,22 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     private String[] arrQueryname;
     private String type;
     private Object obj;
+    private Handler handler;
 
-    public HttpRequestTack(Context context,Object obj, String type) {
+    public HttpRequestTack(Context context,Handler handler, String type) {
         mContext = context;
         this.type = type;
         this.obj = obj;
+        this.handler = handler;
     }
 
-    public HttpRequestTack(Context context,Object obj, String[] arrQuery, String[] arrQueryname, String type) {
+    public HttpRequestTack(Context context, Handler handler, String[] arrQuery, String[] arrQueryname, String type) {
         mContext = context;
         this.arrQuery = arrQuery;
         this.arrQueryname = arrQueryname;
         this.type = type;
         this.obj = obj;
+        this.handler = handler;
     }
 
     @Override
@@ -49,8 +53,9 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         progressDlg.dismiss();
-        ((JsonResult) obj).setResult(result);
-
+        //((JsonResult) obj).setResult(result);
+        Message message = Message.obtain(handler, 1, result);
+        handler.sendMessage(message);
     }
 
     @Override
