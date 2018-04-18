@@ -55,8 +55,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         HttpRequestTack httpRequestTack = new HttpRequestTack(this,arrQuery,arrQueryname,"POST");
         httpRequestTack.execute(loginHttp);
-        Log.d("da","============="+httpRequestTack.getResult());
-        Toast.makeText(this,httpRequestTack.getResult(), Toast.LENGTH_SHORT).show();
     }
 
 
