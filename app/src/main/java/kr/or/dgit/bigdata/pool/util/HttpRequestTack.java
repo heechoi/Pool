@@ -46,8 +46,6 @@ public class HttpRequestTack extends AsyncTask<String,Void,String> {
     @Override
     protected void onPostExecute(String result) {
         progressDlg.dismiss();
-
-        Log.d("da","=============2"+result);
         ((JsonResult)mContext).setResult(result);
 
     }
