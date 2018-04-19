@@ -1,5 +1,6 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,7 +57,7 @@ public class ClassBoardFragment extends Fragment {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
     }
-
+    @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -129,8 +130,6 @@ public class ClassBoardFragment extends Fragment {
                             board.setTitle(order.getString("title"));
                             mList.add(board);
                         }
-
-
                     }catch (Exception e){
                         e.printStackTrace();
                     }
