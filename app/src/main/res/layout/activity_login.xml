@@ -1,42 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/colorPrimary"
-    tools:context="kr.or.dgit.bigdata.pool.LoginActivity"
-    android:padding="20dp">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo_white"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"/>
+    android:fillViewport="true"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context="kr.or.dgit.bigdata.pool.LoginActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="800dp"
         android:orientation="vertical">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tabSelectedTextColor="#fff"
-            app:tabMinWidth="@dimen/activity_horizontal_margin"
-            app:tabBackground="@drawable/tab_select_color"
-            app:tabIndicatorHeight="0dp">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/logo_white" />
 
-        </android.support.design.widget.TabLayout>
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/tab_background">
-        </android.support.v4.view.ViewPager>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabBackground="@drawable/tab_select_color"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMinWidth="@dimen/activity_horizontal_margin"
+                    app:tabSelectedTextColor="#fff">
+
+                </android.support.design.widget.TabLayout>
+
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_background"></android.support.v4.view.ViewPager>
+            </LinearLayout>
+>
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
+
 
