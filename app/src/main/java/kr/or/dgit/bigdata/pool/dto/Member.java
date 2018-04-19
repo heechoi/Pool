@@ -106,4 +106,21 @@ public class Member {
     public void setIsleave(boolean isleave) {
         this.isleave = isleave;
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "mno=" + mno +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", tell='" + tell + '\'' +
+                ", date=" + date +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", pw='" + pw + '\'' +
+                ", id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", isleave=" + isleave +
+                '}';
+    }
 }

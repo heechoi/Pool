@@ -52,32 +52,11 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.classinfo, container, false);
-        TabHost host = root.findViewById(R.id.host);
+
         classBtn = root.findViewById(R.id.btn_class);
         classBtn.setOnClickListener(this);
 
-        host.setup();
 
-        TabHost.TabSpec spec = host.newTabSpec("출석현황");
-        spec.setIndicator(null, ResourcesCompat.getDrawable(
-                getResources(),R.drawable.tab_icon1 ,null
-        ));
-        spec.setContent(R.id.check_attend);
-        host.addTab(spec);
-
-        spec = host.newTabSpec("회원정보");
-        spec.setIndicator(null, ResourcesCompat.getDrawable(
-                getResources(), R.drawable.tab_icon3,null
-        ));
-        spec.setContent(R.id.member_info);
-        host.addTab(spec);
-
-        spec = host.newTabSpec("메시지");
-        spec.setIndicator(null, ResourcesCompat.getDrawable(
-                getResources(), android.R.drawable.ic_dialog_email,null
-        ));
-        spec.setContent(R.id.message_send);
-        host.addTab(spec);
         tno = 0;
         new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restclassinfo/classlist?tno=1004");
         listView = root.findViewById(R.id.member_list);
