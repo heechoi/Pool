@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +55,7 @@ public class ClassBoardFragment extends Fragment {
     private String time = "";
     private String level = "";
     private int cno = 0;
-    ListView listView;
+    ViewPager viewpager;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -114,33 +117,42 @@ public class ClassBoardFragment extends Fragment {
                 case 3:{
                     String result = (String)msg.obj;
                     Log.d("bum","=============3 "+result);
-                    ArrayList<ClassBoard> mList = new ArrayList<>();
+
                     try{
-                     //   JSONObject jObj = new JSONObject(result);
-                        //JSONObject cri = jObj.getJSONObject("cri");
-                       // int page = cri.getInt("page");
-                        JSONArray ja2 = new JSONArray(result);
-                        for(int i=0; i < ja2.length(); i++){
-                            JSONObject order = ja2.getJSONObject(i);
-                            ClassBoard board = new ClassBoard();
-                            board.setBno(order.getInt("bno"));
-                            board.setId(order.getString("id"));
-                            Date date = new Date(order.getLong("regdate"));
-                            board.setRegdate(date);
-                            board.setTitle(order.getString("title"));
-                            mList.add(board);
+                        JSONObject jObj = new JSONObject(result);
+                        int pageSize = jObj.getInt("pageSize");
+                        ArrayList<Fragment> arFragment = new ArrayList<>();
+                        String arName = "list_";
+                        for(int i=0; i< pageSize; i++){
+                            ArrayList<ClassBoard> mList = new ArrayList<>();
+                            arName += i;
+                            Log.d("bum",arName);
+                            JSONArray ja = jObj.getJSONArray(arName);
+                            for(int j=0; j < ja.length(); j++){
+                                JSONObject order = ja.getJSONObject(j);
+                                ClassBoard board = new ClassBoard();
+                                board.setBno(order.getInt("bno"));
+                                board.setId(order.getString("id"));
+                                Date date = new Date(order.getLong("regdate"));
+                                board.setRegdate(date);
+                                board.setTitle(order.getString("title"));
+                                mList.add(board);
+                            }
+                            ClassBoardListFragment cf = new ClassBoardListFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("list", mList);
+                            cf.setArguments(bundle);
+                           // cf.setListAdapter(getContext(),mList);
+                            arFragment.add(cf);
+                            arName = "list_";
                         }
+                        viewpager.setAdapter(new MyPagerAdapter(getActivity().getSupportFragmentManager(),arFragment));
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.class_item,mList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                        }
-                    });
+
                 }
             }
         }
@@ -151,7 +163,7 @@ public class ClassBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.classboard, container, false);
-        listView = root.findViewById(R.id.listview);
+        viewpager = root.findViewById(R.id.viewPager);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,62 +189,25 @@ public class ClassBoardFragment extends Fragment {
         });
         return root;
     }
-    class MyListAdapter extends BaseAdapter {
-        private static final String TAG = "MyListAdapter";
-        private Context mContext;  //MyListAdapter 가 Activity가 아니므로
-        private int mItemRowLayout; //항목레이아웃
-        private LayoutInflater mInflater; //항목레이아웃을 전개할 전개자
-        private List<ClassBoard> arItem;
 
-        public MyListAdapter(Context context, int itemRowLayout, List<ClassBoard> list) {
-            mContext = context;
-            mItemRowLayout = itemRowLayout;
-            arItem = list;
-            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    class MyPagerAdapter extends FragmentPagerAdapter {
 
+        private List<Fragment> fragment;
+
+        public MyPagerAdapter(FragmentManager fm,List<Fragment> fragment) {
+            super(fm);
+            this.fragment = fragment;
+
+        }
+        @Override
+        public Fragment getItem(int position) {
+            return this.fragment.get(position);
         }
 
         @Override
         public int getCount() {
-            Log.d(TAG,"getCount()");
-            return arItem.size();
+            return this.fragment.size();
         }
 
-        @Override
-        public Object getItem(int position) {
-            Log.d(TAG,"getItem()");
-            return arItem.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            Log.d(TAG,"getItemId()");
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertview, ViewGroup viewGroup) {
-            Log.d(TAG,"getView()");
-            if(convertview == null){
-                convertview = mInflater.inflate(mItemRowLayout,viewGroup,false);
-            }
-
-            TextView bno = convertview.findViewById(R.id.bno);
-            bno.setText(arItem.get(position).getBno()+"");
-
-            TextView writer = convertview.findViewById(R.id.writer);
-            writer.setText(arItem.get(position).getId());
-
-            TextView title  = convertview.findViewById(R.id.title);
-            title.setText(arItem.get(position).getTitle());
-
-            TextView date  = convertview.findViewById(R.id.date);
-            Date date2 = arItem.get(position).getRegdate();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String strDate = sdf.format(date2);
-            date.setText(strDate);
-
-            return convertview;
-        }
     }
 }
