@@ -103,6 +103,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             editor.putInt("mno",object.getInt("mno"));
                             editor.putString("title",object.getString("title"));
                             editor.commit();
+
                         }
 
                     }catch(Exception e){
