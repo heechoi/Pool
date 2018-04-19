@@ -10,5 +10,17 @@
         android:text="다이얼로그"
         android:id="@+id/cls_board_btn"
         />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listview"></ListView>
+    <!--<android.support.v4.view.ViewPager
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager"/>-->
+    <!--<fragment
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/page"/>-->
 
 </LinearLayout>
