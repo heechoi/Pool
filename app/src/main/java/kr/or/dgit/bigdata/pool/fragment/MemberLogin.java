@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -31,6 +32,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;
+    private TextView join;
     private Button loginBtn;
     private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences login;
@@ -40,29 +42,39 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.member_login,container,false);
         id = view.findViewById(R.id.idtext);
         pw = view.findViewById(R.id.pw);
+        join = view.findViewById(R.id.join);
         loginBtn = view.findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(this);
+        join.setOnClickListener(this);
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
         return view;
     }
 
     @Override
     public void onClick(View view) {
+        if(view.getId()==R.id.loginBtn){
+            if(id.getText().toString().equals("")||pw.getText().toString().equals("")){
+                Toast.makeText(getContext(),"아이디와 비밀번호를 모두 입력해 주세요",Toast.LENGTH_SHORT).show();
+                id.requestFocus();
+                return;
+            }
 
-        if(id.getText().toString().equals("")||pw.getText().toString().equals("")){
-            Toast.makeText(getContext(),"아이디와 비밀번호를 모두 입력해 주세요",Toast.LENGTH_SHORT).show();
-            id.requestFocus();
-            return;
+            String loginHttp = http+"login";
+
+            String[] arrQueryname ={"id","pw"};
+            String[] arrQuery={id.getText().toString(),pw.getText().toString()};
+
+            HttpRequestTack httpRequestTack = new HttpRequestTack(getContext(),mHandler,arrQuery,arrQueryname,"POST","로그인..");
+            httpRequestTack.execute(loginHttp);
         }
 
-        String loginHttp = http+"login";
+        if(view.getId()==R.id.join){
 
-        String[] arrQueryname ={"id","pw"};
-        String[] arrQuery={id.getText().toString(),pw.getText().toString()};
+        }
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(getContext(),mHandler,arrQuery,arrQueryname,"POST","로그인..");
-        httpRequestTack.execute(loginHttp);
     }
+
+
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler(){
