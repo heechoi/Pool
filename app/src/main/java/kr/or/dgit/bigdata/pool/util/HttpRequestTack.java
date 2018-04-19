@@ -100,10 +100,8 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
 
             con.setRequestMethod(type);
             if (type.equalsIgnoreCase("POST")) {
-
-
-                con.setDoInput(true);
                 con.setDoOutput(true);
+                con.setDoInput(true);
 
                 Uri.Builder builder = new Uri.Builder();
                 OutputStream os = con.getOutputStream();
@@ -144,9 +142,4 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
         }
         return sb.toString();
     }
-
-    public String getResult(String result) {
-        return result;
-    }
 }
-

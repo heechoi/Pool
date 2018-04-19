@@ -176,7 +176,6 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
             arItem = list;
             mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
         }
 
         @Override
@@ -221,10 +220,7 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
             TextView check  = convertview.findViewById(R.id.check_text);
             check.setText("");
 
-
-
             return convertview;
         }
     }
-
 }

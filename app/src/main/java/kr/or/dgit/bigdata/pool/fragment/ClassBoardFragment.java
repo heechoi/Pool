@@ -98,6 +98,11 @@ public class ClassBoardFragment extends Fragment {
                     }
                 }
                     break;
+                case 3:{
+                    String result = (String)msg.obj;
+                    Log.d("bum","============="+result);
+
+                }
             }
         }
     };
