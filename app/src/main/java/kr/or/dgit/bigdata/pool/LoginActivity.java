@@ -44,6 +44,7 @@ import java.util.Map;
 
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.fragment.MemberLogin;
+import kr.or.dgit.bigdata.pool.fragment.TeacherLogin;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class LoginActivity extends AppCompatActivity implements  TabLayout.OnTabSelectedListener{
@@ -61,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements  TabLayout.OnTab
        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 
        tabLayout.setupWithViewPager(viewPager);
-
+       tabLayout.addOnTabSelectedListener(this);
 
     }
 
@@ -84,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements  TabLayout.OnTab
        public MyPagerAdapter(FragmentManager fm) {
            super(fm);
            fragment.add(new MemberLogin());
+           fragment.add(new TeacherLogin());
        }
        @Override
        public Fragment getItem(int position) {
