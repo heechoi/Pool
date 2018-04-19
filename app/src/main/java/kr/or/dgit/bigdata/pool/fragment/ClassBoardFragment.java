@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,6 +62,7 @@ public class ClassBoardFragment extends Fragment {
     private String level = "";
     private int cno = 0;
     ViewPager viewpager;
+    LinearLayout pageNum;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -121,6 +128,7 @@ public class ClassBoardFragment extends Fragment {
                     try{
                         JSONObject jObj = new JSONObject(result);
                         int pageSize = jObj.getInt("pageSize");
+                        Log.d("bum",pageSize+"");
                         ArrayList<Fragment> arFragment = new ArrayList<>();
                         String arName = "list_";
                         for(int i=0; i< pageSize; i++){
@@ -147,12 +155,37 @@ public class ClassBoardFragment extends Fragment {
                             arName = "list_";
                         }
                         viewpager.setAdapter(new MyPagerAdapter(getActivity().getSupportFragmentManager(),arFragment));
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        lp.setMargins(20,0,0,0);
 
+                        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.circle);
+                        Matrix m = new Matrix();
+                        m.postTranslate(0, 0);
+                        ImageView v2 = new ImageView(getContext());
+                        v2.setLayoutParams(lp);
+                        v2.setScaleType(ImageView.ScaleType.MATRIX);  // 매트릭스로 이동시키기 때문에 scaleType은 반드시 Matrix로 지정해야한다.
+                        v2.setImageBitmap(bm);      // 이미지를 등록한다.
+                        v2.setImageMatrix(m);
+                        ImageView v3 = new ImageView(getContext());
+                        v3.setLayoutParams(lp);
+                        v3.setScaleType(ImageView.ScaleType.MATRIX);  // 매트릭스로 이동시키기 때문에 scaleType은 반드시 Matrix로 지정해야한다.
+                        v3.setImageBitmap(bm);      // 이미지를 등록한다.
+                        m = new Matrix();
+                        m.postTranslate(0, 0);
+                        v3.setImageMatrix(m);
+                        ImageView v4 = new ImageView(getContext());
+                        v4.setLayoutParams(lp);
+                        v4.setScaleType(ImageView.ScaleType.MATRIX);  // 매트릭스로 이동시키기 때문에 scaleType은 반드시 Matrix로 지정해야한다.
+                        v4.setImageBitmap(bm);      // 이미지를 등록한다.
+                        m = new Matrix();
+                        m.postTranslate(0, 0);
+                        v4.setImageMatrix(m);
+                        pageNum.addView(v2);
+                        pageNum.addView(v3);
+                        pageNum.addView(v4);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-
-
                 }
             }
         }
@@ -164,6 +197,7 @@ public class ClassBoardFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.classboard, container, false);
         viewpager = root.findViewById(R.id.viewPager);
+        pageNum = root.findViewById(R.id.pageNum);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override

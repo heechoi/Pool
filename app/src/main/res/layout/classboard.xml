@@ -5,18 +5,25 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/cls_board_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="다이얼로그"
-        android:id="@+id/cls_board_btn"
-        />
-    <android.support.v4.view.ViewPager
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/viewPager"/>
-    <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/page"/>
+        android:text="다이얼로그" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:fillViewport="true">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="wrap_content"
+            android:layout_height="400dp" />
+    </ScrollView>
+    <LinearLayout
+        android:id="@+id/pageNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
 
+    </LinearLayout>
 </LinearLayout>

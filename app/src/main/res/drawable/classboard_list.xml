@@ -5,8 +5,8 @@
     android:toDegrees="90">
     <shape android:shape="line">
         <size
-            android:width="200dp"
-            android:height="200dp" />
+            android:width="20dp"
+            android:height="15dp" />
         <stroke
             android:width="5dp"
             android:color="#0000FF" />
