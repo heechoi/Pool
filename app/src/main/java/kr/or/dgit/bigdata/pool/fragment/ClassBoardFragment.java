@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,8 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -30,11 +34,16 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import kr.or.dgit.bigdata.pool.LoginActivity;
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.dto.ClassBoard;
+import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardFragment extends Fragment {
@@ -42,6 +51,7 @@ public class ClassBoardFragment extends Fragment {
     private String time = "";
     private String level = "";
     private int cno = 0;
+    ListView listView;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -83,7 +93,8 @@ public class ClassBoardFragment extends Fragment {
                     break;
                 case 2:{
                     String result = (String)msg.obj;
-                    Log.d("bum","================="+result);
+                    Log.d("bum","=================2 "+result);
+
                     try {
                         JSONArray ja = new JSONArray("["+result+"]");
                         JSONObject order = ja.getJSONObject(0);
@@ -91,7 +102,8 @@ public class ClassBoardFragment extends Fragment {
                         String[] arrname = new String[] {"cno"};
                         String[] arr = new String[]{cno+""};
                         String httpclassboard = http+"classboard";
-                        new HttpRequestTack(getContext(),mHandler,arr,arrname,"POST","message...",2).execute(httpclassboard);
+                        Log.d("bum",httpclassboard+"");
+                        new HttpRequestTack(getContext(),mHandler,arr,arrname,"POST","message...",3).execute(httpclassboard);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -100,8 +112,36 @@ public class ClassBoardFragment extends Fragment {
                     break;
                 case 3:{
                     String result = (String)msg.obj;
-                    Log.d("bum","============="+result);
+                    Log.d("bum","=============3 "+result);
+                    ArrayList<ClassBoard> mList = new ArrayList<>();
+                    try{
+                     //   JSONObject jObj = new JSONObject(result);
+                        //JSONObject cri = jObj.getJSONObject("cri");
+                       // int page = cri.getInt("page");
+                        JSONArray ja2 = new JSONArray(result);
+                        for(int i=0; i < ja2.length(); i++){
+                            JSONObject order = ja2.getJSONObject(i);
+                            ClassBoard board = new ClassBoard();
+                            board.setBno(order.getInt("bno"));
+                            board.setId(order.getString("id"));
+                            Date date = new Date(order.getLong("regdate"));
+                            board.setRegdate(date);
+                            board.setTitle(order.getString("title"));
+                            mList.add(board);
+                        }
 
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.class_item,mList);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        }
+                    });
                 }
             }
         }
@@ -112,6 +152,7 @@ public class ClassBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.classboard, container, false);
+        listView = root.findViewById(R.id.listview);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,5 +177,63 @@ public class ClassBoardFragment extends Fragment {
             }
         });
         return root;
+    }
+    class MyListAdapter extends BaseAdapter {
+        private static final String TAG = "MyListAdapter";
+        private Context mContext;  //MyListAdapter 가 Activity가 아니므로
+        private int mItemRowLayout; //항목레이아웃
+        private LayoutInflater mInflater; //항목레이아웃을 전개할 전개자
+        private List<ClassBoard> arItem;
+
+        public MyListAdapter(Context context, int itemRowLayout, List<ClassBoard> list) {
+            mContext = context;
+            mItemRowLayout = itemRowLayout;
+            arItem = list;
+            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
+
+        @Override
+        public int getCount() {
+            Log.d(TAG,"getCount()");
+            return arItem.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            Log.d(TAG,"getItem()");
+            return arItem.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            Log.d(TAG,"getItemId()");
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertview, ViewGroup viewGroup) {
+            Log.d(TAG,"getView()");
+            if(convertview == null){
+                convertview = mInflater.inflate(mItemRowLayout,viewGroup,false);
+            }
+
+            TextView bno = convertview.findViewById(R.id.bno);
+            bno.setText(arItem.get(position).getBno()+"");
+
+            TextView writer = convertview.findViewById(R.id.writer);
+            writer.setText(arItem.get(position).getId());
+
+            TextView title  = convertview.findViewById(R.id.title);
+            title.setText(arItem.get(position).getTitle());
+
+            TextView date  = convertview.findViewById(R.id.date);
+            Date date2 = arItem.get(position).getRegdate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String strDate = sdf.format(date2);
+            date.setText(strDate);
+
+            return convertview;
+        }
     }
 }
