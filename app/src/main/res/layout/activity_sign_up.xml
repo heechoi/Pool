@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kr.or.dgit.bigdata.pool.MakeIdActivity">
+    tools:context="kr.or.dgit.bigdata.pool.SignUpActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,12 +23,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="ID"/>
+                android:hint="ID"
+                android:id="@+id/id"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="중복확인"/>
+                android:text="중복확인"
+                android:id="@+id/idBtn"
+                android:onClick="idCheckClick"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,7 +47,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="PASSWORD"/>
+                android:hint="PASSWORD"
+                android:id="@+id/pw1"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +64,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="CONFIRM PASSWORD"/>
+                android:hint="CONFIRM PASSWORD"
+                android:id="@+id/pw2"/>
         </LinearLayout>
         <LinearLayout
         android:layout_width="match_parent"
