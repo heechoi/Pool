@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.pool.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +21,9 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import kr.or.dgit.bigdata.pool.JoinActivity;
 import kr.or.dgit.bigdata.pool.LoginActivity;
+import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
@@ -32,18 +35,19 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;
-    private TextView join;
     private Button loginBtn;
     private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences login;
+    private TextView join;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.member_login,container,false);
         id = view.findViewById(R.id.idtext);
         pw = view.findViewById(R.id.pw);
-        join = view.findViewById(R.id.join);
         loginBtn = view.findViewById(R.id.loginBtn);
+        join = view.findViewById(R.id.join);
         loginBtn.setOnClickListener(this);
         join.setOnClickListener(this);
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
@@ -67,11 +71,11 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
             HttpRequestTack httpRequestTack = new HttpRequestTack(getContext(),mHandler,arrQuery,arrQueryname,"POST","로그인..");
             httpRequestTack.execute(loginHttp);
         }
-
         if(view.getId()==R.id.join){
-
+          Intent intent = new Intent(getActivity(),JoinActivity.class);
+          startActivity(intent);
+          getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
         }
-
     }
 
 
@@ -95,11 +99,15 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             Toast.makeText(getContext(),"회원이 아닙니다.", Toast.LENGTH_LONG).show();
                             id.setText("");
                             id.requestFocus();
-                        }else if(mno==-2){
-                            Toast.makeText(getContext(),"비밀번호가 일치하지 않습니다", Toast.LENGTH_LONG).show();
+                        }else if(mno==-2) {
+                            Toast.makeText(getContext(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_LONG).show();
                             pw.setText("");
                             pw.requestFocus();
-                        }else if(mno>0){
+                        }else if(mno==-3){
+                            Toast.makeText(getContext(), "탈퇴한 회원입니다 로그인 할 수 없습니다", Toast.LENGTH_LONG).show();
+                            id.requestFocus();
+                            pw.setText("");
+                        } else if(mno>0){
 
                             Member m = new Member();
 
@@ -116,6 +124,10 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             editor.putString("title",object.getString("title"));
                             editor.commit();
 
+
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+                            startActivity(intent);
                         }
 
                     }catch(Exception e){
