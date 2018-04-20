@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
@@ -123,7 +124,6 @@ public class MainActivity extends AppCompatActivity
         }else if(id ==R.id.classinfo){
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
             viewFragment(cf);
-
         }else if(id ==R.id.reclass){
 
         }else if(id ==R.id.notice_alram){
@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     @Override
     public void onClick(View v) {
