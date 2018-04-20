@@ -11,12 +11,14 @@
         android:text="다이얼로그" />
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true">
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="wrap_content"
-            android:layout_height="400dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
     </ScrollView>
     <LinearLayout
         android:id="@+id/pageNum"
