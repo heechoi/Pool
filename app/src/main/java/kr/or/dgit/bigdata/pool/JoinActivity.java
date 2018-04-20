@@ -2,12 +2,10 @@ package kr.or.dgit.bigdata.pool;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +15,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class JoinActivity extends AppCompatActivity {
@@ -50,6 +46,7 @@ public class JoinActivity extends AppCompatActivity {
         ageText = findViewById(R.id.age);
         infoLabel = findViewById(R.id.info_label);
         memberInfo = findViewById(R.id.member_info);
+
     }
 
     @Override
@@ -138,7 +135,7 @@ public class JoinActivity extends AppCompatActivity {
             return;
         }
 
-        Intent intent = new Intent(getApplicationContext(),MakeIdActivity.class);
+        Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.login,R.anim.login_out);
     }

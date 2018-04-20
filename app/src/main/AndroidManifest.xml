@@ -33,7 +33,7 @@
         <activity
             android:name=".JoinActivity"
             android:theme="@style/AppTheme.Login" />
-        <activity android:name=".MakeIdActivity"></activity>
+        <activity android:name=".SignUpActivity"/>
     </application>
 
 </manifest>
