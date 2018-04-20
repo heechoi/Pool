@@ -57,12 +57,12 @@ public class LoginActivity extends AppCompatActivity implements  TabLayout.OnTab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-     tabLayout = (TabLayout)findViewById(R.id.tabs);
-       viewPager = (ViewPager)findViewById(R.id.viewPager);
-       viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        tabLayout = (TabLayout)findViewById(R.id.tabs);
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 
-       tabLayout.setupWithViewPager(viewPager);
-       tabLayout.addOnTabSelectedListener(this);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(this);
 
     }
 
