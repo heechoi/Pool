@@ -63,6 +63,8 @@ public class ClassBoardFragment extends Fragment {
     private int cno = 0;
     ViewPager viewpager;
     LinearLayout pageNum;
+    private final int img_1 = R.drawable.circle;
+    private final int img_2 = R.drawable.circle_2;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -124,12 +126,15 @@ public class ClassBoardFragment extends Fragment {
                 case 3:{
                     String result = (String)msg.obj;
                     Log.d("bum","=============3 "+result);
-
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(20,0,0,0);
+            //        pageNum.removeAllViews();
                     try{
                         JSONObject jObj = new JSONObject(result);
                         int pageSize = jObj.getInt("pageSize");
                         Log.d("bum",pageSize+"");
                         ArrayList<Fragment> arFragment = new ArrayList<>();
+
                         String arName = "list_";
                         for(int i=0; i< pageSize; i++){
                             ArrayList<ClassBoard> mList = new ArrayList<>();
@@ -150,39 +155,25 @@ public class ClassBoardFragment extends Fragment {
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("list", mList);
                             cf.setArguments(bundle);
-                           // cf.setListAdapter(getContext(),mList);
+
                             arFragment.add(cf);
                             arName = "list_";
+                            Bitmap bm;
+                            if(i==0){
+                                bm = BitmapFactory.decodeResource(getResources(), img_2);
+                            }else{
+                                bm = BitmapFactory.decodeResource(getResources(), img_1);
+                            }
+                            Matrix m = new Matrix();
+                            m.postTranslate(0, 0);
+                            ImageView img = new ImageView(getContext());
+                            img.setLayoutParams(lp);
+                            img.setImageBitmap(bm);
+                            img.setImageMatrix(m);
+
+                            pageNum.addView(img);
                         }
                         viewpager.setAdapter(new MyPagerAdapter(getActivity().getSupportFragmentManager(),arFragment));
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        lp.setMargins(20,0,0,0);
-
-                        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.circle);
-                        Matrix m = new Matrix();
-                        m.postTranslate(0, 0);
-                        ImageView v2 = new ImageView(getContext());
-                        v2.setLayoutParams(lp);
-                        v2.setScaleType(ImageView.ScaleType.MATRIX);  // 매트릭스로 이동시키기 때문에 scaleType은 반드시 Matrix로 지정해야한다.
-                        v2.setImageBitmap(bm);      // 이미지를 등록한다.
-                        v2.setImageMatrix(m);
-                        ImageView v3 = new ImageView(getContext());
-                        v3.setLayoutParams(lp);
-                        v3.setScaleType(ImageView.ScaleType.MATRIX);  // 매트릭스로 이동시키기 때문에 scaleType은 반드시 Matrix로 지정해야한다.
-                        v3.setImageBitmap(bm);      // 이미지를 등록한다.
-                        m = new Matrix();
-                        m.postTranslate(0, 0);
-                        v3.setImageMatrix(m);
-                        ImageView v4 = new ImageView(getContext());
-                        v4.setLayoutParams(lp);
-                        v4.setScaleType(ImageView.ScaleType.MATRIX);  // 매트릭스로 이동시키기 때문에 scaleType은 반드시 Matrix로 지정해야한다.
-                        v4.setImageBitmap(bm);      // 이미지를 등록한다.
-                        m = new Matrix();
-                        m.postTranslate(0, 0);
-                        v4.setImageMatrix(m);
-                        pageNum.addView(v2);
-                        pageNum.addView(v3);
-                        pageNum.addView(v4);
                     }catch (Exception e){
                         e.printStackTrace();
                     }

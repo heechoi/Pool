@@ -3,21 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="10dp"
-    android:background="@drawable/classboard_list">
+
+    >
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/bno"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:layout_weight="1"
+        android:padding="2dp"
         android:background="@drawable/classboard_list2"
         />
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/writer"
-        android:textSize="11sp"
+        android:textSize="12sp"
+        android:padding="2dp"
         android:background="@drawable/classboard_list2"
         android:layout_weight="2"/>
     <TextView
@@ -25,14 +27,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:background="@drawable/classboard_list2"
-        android:textSize="11sp"
+        android:textSize="12sp"
+        android:padding="2dp"
         android:layout_weight="5"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/date"
         android:background="@drawable/classboard_list2"
-        android:textSize="11sp"
+        android:textSize="12sp"
+        android:padding="2dp"
         android:layout_weight="2"/>
 
 </LinearLayout>
