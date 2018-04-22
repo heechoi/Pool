@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kr.or.dgit.bigdata.pool.SignUpActivity">
+    tools:context="kr.or.dgit.bigdata.pool.SignUpActivity"
+    android:background="@drawable/tab_background"
+    android:paddingTop="40dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,60 +16,95 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="아이디"/>
+                android:text="아이디"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="13dp"/>
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="ID"
-                android:id="@+id/id"/>
+                android:layout_weight="2"
+                android:hint="ID(6~15자 영어,숫자)"
+                android:maxLength="15"
+                android:textColorHint="#fff"
+                android:id="@+id/id"
+                android:textSize="14dp"
+                android:padding="10dp"
+                android:inputType="textVisiblePassword"
+                android:background="@drawable/edit_background"
+                android:textColor="#fff"
+                android:layout_marginRight="4dp"/>
             <Button
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="중복확인"
+                android:textSize="13dp"
                 android:id="@+id/idBtn"
-                android:onClick="idCheckClick"/>
+                android:onClick="idCheckClick"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/id_check_btn"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="비밀번호"/>
+                android:text="비밀번호"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="13dp"/>
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="PASSWORD"
-                android:id="@+id/pw1"/>
+                android:layout_weight="3"
+                android:hint="(8~20자,영문,숫자,특수문자)"
+                android:textColorHint="#fff"
+                android:textColor="#fff"
+                android:inputType="textPassword"
+                android:background="@drawable/edit_background"
+                android:id="@+id/pw1"
+                android:textSize="14dp"
+                android:padding="10dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="비밀번호 확인"/>
+                android:text="비밀번호 확인"
+                android:textStyle="bold"
+                android:textSize="13dp"
+                android:textColor="#fff"/>
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:hint="CONFIRM PASSWORD"
-                android:id="@+id/pw2"/>
+                android:id="@+id/pw2"
+                android:textColor="#fff"
+                android:background="@drawable/edit_background"
+                android:textSize="14dp"
+                android:inputType="textPassword"
+                android:textColorHint="#fff"
+                android:padding="10dp"/>
         </LinearLayout>
         <LinearLayout
         android:layout_width="match_parent"
@@ -77,7 +116,11 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="회원가입"
-                android:onClick="onSignUp"/>
+                android:onClick="onSignUp"
+                android:textSize="13dp"
+                android:textColor="#fff"
+                android:background="@drawable/join_btn"
+                android:layout_marginTop="30dp"/>
         </LinearLayout>
 
     </LinearLayout>

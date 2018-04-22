@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="kr.or.dgit.bigdata.pool.JoinActivity"
-    android:background="@drawable/tab_background">
+    android:background="@drawable/tab_background"
+    android:paddingTop="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +24,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -50,7 +52,9 @@
             android:layout_height="wrap_content"
             android:text="확인"
             android:id="@+id/checkMno"
-            android:onClick="mCheck"/>
+            android:onClick="mCheck"
+            android:textColor="#fff"
+            android:background="@drawable/join_btn" />
 
         <TextView
             android:layout_width="match_parent"
@@ -190,14 +194,20 @@
                     android:layout_weight="1"
                     android:text="이전"
                     android:onClick="prevClick"
-                    android:id="@+id/prevBtn"/>
+                    android:id="@+id/prevBtn"
+                    android:textColor="#fff"
+                    android:layout_marginRight="3dp"
+                    android:background="@drawable/join_btn"/>
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="다음"
                     android:onClick="nextClick"
-                    android:id="@+id/nextBtn"/>
+                    android:id="@+id/nextBtn"
+                    android:textColor="#fff"
+                    android:layout_marginLeft="3dp"
+                    android:background="@drawable/join_btn"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
