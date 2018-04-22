@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +36,7 @@ import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener {
+public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener,AdapterView.OnItemClickListener {
     ListView mListView;
     ProgressBar progressBar;
     ArrayList<ClassBoard> mList;
@@ -65,6 +67,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
         progressBar.setVisibility(View.GONE);
 
         mListView.setOnScrollListener(this);
+        mListView.setOnItemClickListener(this);
         return root;
     }
 
@@ -77,7 +80,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             String[] arr = {cno+"",page+""};
             String[] arrname = {"cno","page"};
 
-            new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "message...").execute(http);
+            new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar...").execute(http);
         }
 
     }
@@ -86,6 +89,17 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
+        tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
+        tr.addToBackStack(null);
+        ClassBoardRead fgm = new ClassBoardRead();
+        tr.replace(R.id.frame,fgm);
+        tr.commit();
+    }
+
     class MyNoListAdapter extends BaseAdapter{
         private static final String TAG = "MyListAdapter";
         private Context mContext;  //MyListAdapter 가 Activity가 아니므로
