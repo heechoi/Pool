@@ -20,11 +20,13 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import kr.or.dgit.bigdata.pool.JoinActivity;
 import kr.or.dgit.bigdata.pool.LoginActivity;
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.SearchIdActivity;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
@@ -39,6 +41,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
     private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences login;
     private TextView join;
+    private TextView searchId;
 
     @Nullable
     @Override
@@ -47,6 +50,8 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         id = view.findViewById(R.id.idtext);
         pw = view.findViewById(R.id.pw);
         loginBtn = view.findViewById(R.id.loginBtn);
+        searchId = view.findViewById(R.id.searchId);
+        searchId.setOnClickListener(this);
         join = view.findViewById(R.id.join);
         loginBtn.setOnClickListener(this);
         join.setOnClickListener(this);
@@ -75,6 +80,12 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
           Intent intent = new Intent(getActivity(),JoinActivity.class);
           startActivity(intent);
           getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+        }
+
+        if(view.getId()==R.id.searchId){
+            Intent intent = new Intent(getActivity(),SearchIdActivity.class);
+            startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
         }
     }
 
