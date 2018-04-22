@@ -72,13 +72,19 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        progressDlg = ProgressDialog.show(mContext, "Wait", this.msg);
+        if (!msg.equalsIgnoreCase("noProgressbar")){
+            progressDlg = ProgressDialog.show(mContext, "Wait", this.msg);
+        }
+
 
     }
 
     @Override
     protected void onPostExecute(String result) {
-        progressDlg.dismiss();
+        if (!msg.equalsIgnoreCase("noProgressbar")){
+            progressDlg.dismiss();
+        }
+
         Message message = Message.obtain(handler, no, result);
 
         handler.sendMessage(message);
