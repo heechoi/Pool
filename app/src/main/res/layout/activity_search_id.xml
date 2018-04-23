@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="이메일로 찾기"
+            android:onClick="findId"
             android:id="@+id/email_search"/>
 
     </LinearLayout>

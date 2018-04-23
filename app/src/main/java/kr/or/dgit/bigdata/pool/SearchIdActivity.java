@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -43,7 +44,7 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
     private Button searchTell;
     private Button searchEmail;
     private Dialog mDialog;
-    private String http = "http://192.168.0.239:8080/pool/restLogin/";
+    private String http = "http://220.89.0.222:8080/pool/restLogin/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +56,14 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         searchTell = findViewById(R.id.tell_search);
         searchTell.setOnClickListener(this);
         searchEmail=findViewById(R.id.email_search);
-        searchEmail.setOnClickListener(this);
+    }
 
+    @Override
+    public void finish() {
+        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 
     @Override
@@ -65,14 +72,10 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         final EditText tell1;
         final EditText tell2;
         final EditText tell3;
-        final EditText email1;
-        final EditText email2;
         final LinearLayout tell_layout;
         final LinearLayout email_layout;
-        final LinearLayout tell_layou2;
-        final LinearLayout email_layou2;
         final EditText name;
-        final EditText name2;
+
 
         if (view.getId() == R.id.tell_search) {
             mDialog = new Dialog(this, R.style.SearchAlertDialog);
@@ -104,7 +107,11 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(View view) {
                     if (name.getText().toString().equals("") || tell1.getText().toString().equals("")||tell2.getText().toString().equals("")||tell3.getText().toString().equals("")) {
-                        Toast.makeText(getApplication(), "공백을 모두 입력해주세요", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(getApplication(), "공백을 모두 입력해주세요", Toast.LENGTH_SHORT);
+                        int offsetX=0;
+                        int offsetY=0;
+                        toast.setGravity(Gravity.CENTER,offsetX,offsetY);
+                        toast.show();
                         return;
                     }
 
@@ -127,51 +134,6 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
 
         }
 
-        if(view.getId()== R.id.email_search){
-
-            mDialog = new Dialog(this, R.style.SearchAlertDialog);
-            mDialog.setContentView(R.layout.search_id);
-
-            email1 = (EditText)mDialog.findViewById(R.id.email1);
-            email2 = (EditText)mDialog.findViewById(R.id.email2);
-            tell_layou2 = (LinearLayout)mDialog.findViewById(R.id.layout_tell);
-            tell_layou2.setVisibility(View.GONE);
-            email_layou2 = (LinearLayout)mDialog.findViewById(R.id.email);
-            email_layou2.setVisibility(View.VISIBLE);
-            name2 = (EditText)mDialog.findViewById(R.id.name);
-
-            Button ok2 = (Button) mDialog.findViewById(R.id.send);
-            Button cancel = (Button) mDialog.findViewById(R.id.cancel);
-
-            cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mDialog.cancel();
-                    mDialog.dismiss();
-                }
-            });
-
-            ok2.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View view) {
-                    if(name2.getText().toString().equals("")||email1.getText().toString().equals("")||email2.getText().toString().equals("")){
-                        Toast.makeText(SearchIdActivity.this,"공백을 모두 입력해주세요",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    String findIdEmail = http+"findIdByEmail";
-                    String[] arrQueryname = {"name", "email"};
-                    String email = email1.getText().toString()+"@"+email2.getText().toString();
-                    String[] arrQuery = {name2.getText().toString(), email};
-
-                    HttpRequestTack httpRequestTack = new HttpRequestTack(SearchIdActivity.this, mHandler, arrQuery, arrQueryname, "POST", "회원정보 확인중...",2);
-                    httpRequestTack.execute(findIdEmail);
-                }
-            });
-            ok2.setEnabled(true);
-            mDialog.show();
-        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -258,4 +220,50 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         }
     };
 
+    public void findId(View view) {
+
+        mDialog = new Dialog(this, R.style.SearchAlertDialog);
+        mDialog.setContentView(R.layout.search_id);
+        LinearLayout tell_layout = (LinearLayout)mDialog.findViewById(R.id.layout_tell);
+        tell_layout.setVisibility(View.GONE);
+        LinearLayout email_layout = (LinearLayout)mDialog.findViewById(R.id.email);
+        email_layout.setVisibility(View.VISIBLE);
+        final EditText email1 = (EditText)mDialog.findViewById(R.id.email1);
+        final EditText email2 = (EditText)mDialog.findViewById(R.id.email2);
+        final EditText name = (EditText)mDialog.findViewById(R.id.searchName);
+        Button ok = (Button)mDialog.findViewById(R.id.send);
+        Button cancel = (Button)mDialog.findViewById(R.id.cancel);
+
+        mDialog.show();
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+                mDialog.dismiss();
+            }
+        });
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(name.getText().toString().equals("")||email1.getText().toString().equals("")||email2.getText().toString().equals("")){
+                    Toast toast = Toast.makeText(getApplication(), "공백을 모두 입력해주세요", Toast.LENGTH_SHORT);
+                    int offsetX=0;
+                    int offsetY=0;
+                    toast.setGravity(Gravity.CENTER,offsetX,offsetY);
+                    toast.show();
+                    return;
+                }
+                String findId = http + "findIdByEmail";
+
+                String[] arrQueryname = {"name", "email"};
+               String email = email1.getText().toString()+"@"+email2.getText().toString();
+                String[] arrQuery = {name.getText().toString(), email};
+
+                HttpRequestTack httpRequestTack = new HttpRequestTack(SearchIdActivity.this, mHandler, arrQuery, arrQueryname, "POST", "회원정보 확인중...",2);
+                httpRequestTack.execute(findId);
+
+            }
+        });
+    }
 }
