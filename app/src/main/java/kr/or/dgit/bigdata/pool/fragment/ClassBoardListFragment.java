@@ -30,10 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
-import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener,AdapterView.OnItemClickListener {
