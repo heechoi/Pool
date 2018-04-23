@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import kr.or.dgit.bigdata.pool.BuildConfig;
@@ -43,6 +45,7 @@ public class ClassBoardInsert extends Fragment{
     int reqWidth;
     int reqHeight;
     LinearLayout mLinearLayout;
+    Uri mUri;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,6 +115,9 @@ public class ClassBoardInsert extends Fragment{
                 }
             }else if(view.getId()==R.id.gallery){
                 Toast.makeText(getContext(),"갤러리",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent,20);
             }
         }
     }
@@ -135,14 +141,62 @@ public class ClassBoardInsert extends Fragment{
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 Bitmap bitmap = BitmapFactory.decodeFile(filePath.getAbsolutePath());
-                Matrix m = new Matrix();
-                m.postRotate(0);
-                Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
+                Bitmap rotated = rotateImage(bitmap);
                 ImageView img = new ImageView(getContext());
                 img.setImageBitmap(rotated);
                 img.setLayoutParams(lp);
                 mLinearLayout.addView(img);
             }
+        }else if(requestCode ==20 &&resultCode == getActivity().RESULT_OK){
+            Toast.makeText(getContext(),"완성",Toast.LENGTH_SHORT).show();
+            mUri = data.getData();
+            File fileimg = new File(mUri.getPath());
+            customDialog.dismiss();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            try{
+                InputStream in = new FileInputStream(fileimg.getPath());
+                BitmapFactory.decodeStream(in,null,options);
+                in.close();
+                in = null;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(fileimg.getPath());
+            Bitmap rotated = rotateImage(bitmap);
+            ImageView img = new ImageView(getContext());
+            img.setImageBitmap(rotated);
+            img.setLayoutParams(lp);
+            mLinearLayout.addView(img);
         }
+    }
+
+    private Bitmap rotateImage(Bitmap bitmap){
+        ExifInterface exifInterface = null;
+        try{
+            exifInterface = new ExifInterface(filePath.getAbsolutePath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix m = new Matrix();
+        switch(orientation){
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                m.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                m.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                m.setRotate(270);
+                break;
+            default:
+                m.setRotate(0);
+        }
+        Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
+        return rotated;
     }
 }
