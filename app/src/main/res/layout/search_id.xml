@@ -3,25 +3,68 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorWhtie">
+    android:background="@color/colorWhtie"
+    android:paddingTop="20dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="3dp"
+    android:paddingLeft="5dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:text="아이디 찾기"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_marginBottom="3dp"/>
+        android:gravity="center"
+        android:layout_marginBottom="4dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="등록된 회원 정보를 올바르게 입력해 주세요"
         android:textSize="13dp"
-        android:textStyle="bold"/>
-    <EditText
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchKey"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="이름"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchName"
+            android:inputType="text"
+            android:layout_marginBottom="10dp"
+            android:hint="회원이름"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/label"
+            android:gravity="center_horizontal"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchKey"
+            android:layout_marginBottom="30dp" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,13 +75,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/send"
-            android:text="확인"/>
+            android:text="확인"
+            android:background="#22741C"
+            android:textColor="#fff"
+            android:layout_marginRight="3dp"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/cancel"
-            android:text="취소"/>
+            android:text="취소"
+            android:layout_marginLeft="3dp"
+            android:background="#22741C"
+            android:textColor="#fff"/>
     </LinearLayout>
 
 </LinearLayout>
