@@ -79,7 +79,11 @@
             android:text="이미지 선택"
             android:id="@+id/img_btn"/>
     </LinearLayout>
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="upload"
+        android:id="@+id/uploadbtn"/>
     <LinearLayout
         android:id="@+id/classboard_insert"
         android:layout_width="match_parent"
