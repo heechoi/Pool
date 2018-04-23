@@ -40,7 +40,8 @@ import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class SearchIdActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button searhTell;
+    private Button searchTell;
+    private Button searchEmail;
     private Dialog mDialog;
     private String http = "http://192.168.0.239:8080/pool/restLogin/";
 
@@ -51,27 +52,45 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_search_id);
         getSupportActionBar().setElevation(0);
         setTitle("아이디 찾기");
-        searhTell = findViewById(R.id.tell_search);
-        searhTell.setOnClickListener(this);
+        searchTell = findViewById(R.id.tell_search);
+        searchTell.setOnClickListener(this);
+        searchEmail=findViewById(R.id.email_search);
+        searchEmail.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View view) {
 
-        final EditText write;
+        final EditText tell1;
+        final EditText tell2;
+        final EditText tell3;
+        final EditText email1;
+        final EditText email2;
+        final LinearLayout tell_layout;
+        final LinearLayout email_layout;
+        final LinearLayout tell_layou2;
+        final LinearLayout email_layou2;
         final EditText name;
+        final EditText name2;
+
         if (view.getId() == R.id.tell_search) {
             mDialog = new Dialog(this, R.style.SearchAlertDialog);
             mDialog.setContentView(R.layout.search_id);
-            write = (EditText) mDialog.findViewById(R.id.searchKey);
+            tell1 = (EditText) mDialog.findViewById(R.id.tell1);
+            tell2 = (EditText)mDialog.findViewById(R.id.tell2);
+            tell3 =(EditText)mDialog.findViewById(R.id.tell3);
+        ;
             name = (EditText) mDialog.findViewById(R.id.searchName);
-            write.setInputType(InputType.TYPE_CLASS_PHONE);
-            write.setHint("010-1234-1234");
+            tell_layout = (LinearLayout)mDialog.findViewById(R.id.layout_tell);
+            tell_layout.setVisibility(View.VISIBLE);
+
+            email_layout = (LinearLayout)mDialog.findViewById(R.id.email);
+            email_layout.setVisibility(View.GONE);
+
             Button ok = (Button) mDialog.findViewById(R.id.send);
             Button cancel = (Button) mDialog.findViewById(R.id.cancel);
-            TextView label = (TextView) mDialog.findViewById(R.id.label);
-            label.setText("연락처");
+
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -84,7 +103,7 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
 
                 @Override
                 public void onClick(View view) {
-                    if (name.getText().toString().equals("") || write.getText().toString().equals("")) {
+                    if (name.getText().toString().equals("") || tell1.getText().toString().equals("")||tell2.getText().toString().equals("")||tell3.getText().toString().equals("")) {
                         Toast.makeText(getApplication(), "공백을 모두 입력해주세요", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -92,20 +111,67 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
                     String findId = http + "findIdBytell";
 
                     String[] arrQueryname = {"name", "tell"};
-                    String[] arrQuery = {name.getText().toString(), write.getText().toString()};
+                    String tell = tell1.getText().toString()+"-"+tell2.getText().toString()+"-"+tell3.getText().toString();
+                    String[] arrQuery = {name.getText().toString(), tell};
 
-                    HttpRequestTack httpRequestTack = new HttpRequestTack(SearchIdActivity.this, mHandler, arrQuery, arrQueryname, "POST", "회원정보 확인중...");
-                    httpRequestTack.execute(findId);
-                    //  HttpRequestTack httpRequestTack = new HttpRequestTack();
+                    HttpRequestTack httpRequestTack = new HttpRequestTack(SearchIdActivity.this, mHandler, arrQuery, arrQueryname, "POST", "회원정보 확인중...",1);
+                   httpRequestTack.execute(findId);
+
                 }
             });
-            write.setEnabled(true);
+            tell1.setEnabled(true);
+            tell2.setEnabled(true);
+            tell3.setEnabled(true);
             ok.setEnabled(true);
             mDialog.show();
 
         }
 
+        if(view.getId()== R.id.email_search){
 
+            mDialog = new Dialog(this, R.style.SearchAlertDialog);
+            mDialog.setContentView(R.layout.search_id);
+
+            email1 = (EditText)mDialog.findViewById(R.id.email1);
+            email2 = (EditText)mDialog.findViewById(R.id.email2);
+            tell_layou2 = (LinearLayout)mDialog.findViewById(R.id.layout_tell);
+            tell_layou2.setVisibility(View.GONE);
+            email_layou2 = (LinearLayout)mDialog.findViewById(R.id.email);
+            email_layou2.setVisibility(View.VISIBLE);
+            name2 = (EditText)mDialog.findViewById(R.id.name);
+
+            Button ok2 = (Button) mDialog.findViewById(R.id.send);
+            Button cancel = (Button) mDialog.findViewById(R.id.cancel);
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDialog.cancel();
+                    mDialog.dismiss();
+                }
+            });
+
+            ok2.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    if(name2.getText().toString().equals("")||email1.getText().toString().equals("")||email2.getText().toString().equals("")){
+                        Toast.makeText(SearchIdActivity.this,"공백을 모두 입력해주세요",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String findIdEmail = http+"findIdByEmail";
+                    String[] arrQueryname = {"name", "email"};
+                    String email = email1.getText().toString()+"@"+email2.getText().toString();
+                    String[] arrQuery = {name2.getText().toString(), email};
+
+                    HttpRequestTack httpRequestTack = new HttpRequestTack(SearchIdActivity.this, mHandler, arrQuery, arrQueryname, "POST", "회원정보 확인중...",2);
+                    httpRequestTack.execute(findIdEmail);
+                }
+            });
+            ok2.setEnabled(true);
+            mDialog.show();
+        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -114,10 +180,11 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1: {
-                    mDialog.dismiss();
                     String result = (String) msg.obj;
-                    if(result.equals("no Id")){
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getApplication(),R.style.SearchAlertDialog);
+
+                    if(result.equals("no Id")||result.equals("null")){
+
+                        AlertDialog.Builder alert = new AlertDialog.Builder(SearchIdActivity.this,R.style.SearchAlertDialog);
                         alert.setTitle("아이디 검색 결과");
                         alert.setMessage("일치하는 회원정보가 없습니다\n회원가입을 이용해 주세요");
                         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -127,7 +194,22 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
                                 dialogInterface.dismiss();
                             }
                         });
+                        alert.show();
                     }else{
+                        AlertDialog.Builder alert = new AlertDialog.Builder(SearchIdActivity.this,R.style.SearchAlertDialog);
+                        alert.setTitle("아이디 검색 결과");
+                        String id = result.substring(0,result.length()-4);
+                        id+="***";
+                        alert.setMessage("회원 아이디 : "+id);
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
+                                mDialog.dismiss();
+                            }
+                        });
+                        alert.show();
 
                     }
                    /* Log.d("da",member[0]);
@@ -135,7 +217,44 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
 
                 }
                 break;
+                case 2:
+                    String result = (String) msg.obj;
+                    if(result.equals("no Id")||result.equals("null")){
+
+                        AlertDialog.Builder alert = new AlertDialog.Builder(SearchIdActivity.this,R.style.SearchAlertDialog);
+                        alert.setTitle("아이디 검색 결과");
+                        alert.setMessage("일치하는 회원정보가 없습니다\n회원가입을 이용해 주세요");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        alert.show();
+                    }else{
+                        AlertDialog.Builder alert = new AlertDialog.Builder(SearchIdActivity.this,R.style.SearchAlertDialog);
+                        alert.setTitle("아이디 검색 결과");
+                        String id = result.substring(0,result.length()-4);
+                        id+="***";
+                        alert.setMessage("회원 아이디 : "+id);
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
+                                mDialog.dismiss();
+                            }
+                        });
+                        alert.show();
+
+                    }
+                   /* Log.d("da",member[0]);
+                    Toast.makeText(LoginActivity.this,member[0], Toast.LENGTH_LONG).show();*/
+
+                    break;
             }
+
         }
     };
 
