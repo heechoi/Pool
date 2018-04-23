@@ -43,7 +43,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
     BaseAdapter adapter;
     private boolean lastItemVisibleFlag = false;
     private boolean mLockListView = false;
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/classboardlist";
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/classboardlist";
     int page = 1;
     int cno = 0;
     @Override
