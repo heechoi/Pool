@@ -51,8 +51,7 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_search_id);
-        getSupportActionBar().setElevation(0);
-        setTitle("아이디 찾기");
+
         searchTell = findViewById(R.id.tell_search);
         searchTell.setOnClickListener(this);
         searchEmail=findViewById(R.id.email_search);
