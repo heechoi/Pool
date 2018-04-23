@@ -23,7 +23,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SMS으로 찾기"/>
+            android:text="휴대전화로 찾기"
+            android:id="@+id/tell_search"/>
 
         <Button
             android:layout_width="match_parent"

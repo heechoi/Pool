@@ -57,6 +57,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         join.setOnClickListener(this);
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
         return view;
+
     }
 
     @Override
