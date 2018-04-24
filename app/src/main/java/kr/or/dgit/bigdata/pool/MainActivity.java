@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
@@ -125,7 +126,8 @@ public class MainActivity extends AppCompatActivity
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
             viewFragment(cf);
         }else if(id ==R.id.reclass){
-
+            ReclassFragment cf = ReclassFragment.newInstance();
+            viewFragment(cf);
         }else if(id ==R.id.notice_alram){
 
         }

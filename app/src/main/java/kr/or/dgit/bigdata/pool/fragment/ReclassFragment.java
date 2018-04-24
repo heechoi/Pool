@@ -4,13 +4,11 @@ package kr.or.dgit.bigdata.pool.fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,28 +17,22 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassInfoFragment extends Fragment implements View.OnClickListener{
+public class ReclassFragment extends Fragment implements View.OnClickListener{
 
     private String http = "http://192.168.0.12:8080/pool";
     Button classBtn;
@@ -50,8 +42,8 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
     ListView listView;
     ArrayList<Member> mList;
     String d;
-    public static ClassInfoFragment newInstance(){
-        ClassInfoFragment cf = new ClassInfoFragment();
+    public static ReclassFragment newInstance(){
+        ReclassFragment cf = new ReclassFragment();
         return cf;
     }
 
@@ -64,12 +56,9 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
         classBtn = root.findViewById(R.id.btn_class);
         classBtn.setOnClickListener(this);
 
-        SharedPreferences sp = this.getActivity().getSharedPreferences("Admin",0);
-
-        tno = (int)sp.getInt("tno",0);
 
 
-
+        tno = 0;
 
         listView = root.findViewById(R.id.member_list);
         return root;
@@ -92,7 +81,7 @@ public class ClassInfoFragment extends Fragment implements View.OnClickListener{
                         d = year+""+month+"01";
                     }
 
-                    new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restclassinfo/classlist?tno="+tno+"&s_day="+d);
+                    new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restclassinfo/classlist?tno=1004&s_day="+d);
 
                 }
             },year,month,day);
