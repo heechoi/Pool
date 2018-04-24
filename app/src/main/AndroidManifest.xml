@@ -45,7 +45,7 @@
         <activity
             android:name=".SearchIdActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Login" />
+            android:theme="@style/AppTheme.Search" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -58,7 +58,7 @@
         </provider>
 
         <activity android:name=".SearchPwActivity"
-            android:theme="@style/AppTheme.Login"
+            android:theme="@style/AppTheme.Search"
             android:screenOrientation="portrait"/>
     </application>
 
