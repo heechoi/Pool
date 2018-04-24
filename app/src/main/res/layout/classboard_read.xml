@@ -45,5 +45,8 @@
         android:id="@+id/content"
         android:textSize="13sp"
         />
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/uplaod_img"/>
 </LinearLayout>
