@@ -31,10 +31,6 @@ import kr.or.dgit.bigdata.pool.SearchPwActivity;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-/**
- * Created by DGIT3-4 on 2018-04-19.
- */
-
 public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;

@@ -463,7 +463,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                     }
                 }.start();
             }
-
+            insert();
             return true;
         }
         return super.onContextItemSelected(item);
