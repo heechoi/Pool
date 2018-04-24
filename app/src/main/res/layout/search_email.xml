@@ -3,32 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorWhtie"
-    android:paddingTop="20dp"
-    android:paddingRight="5dp"
-    android:paddingBottom="3dp"
-    android:paddingLeft="5dp">
+    android:background="@color/colorWhtie">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:text="아이디 찾기"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="등록된 회원 정보를 올바르게 입력해 주세요"
-        android:textSize="13dp"
         android:gravity="center"
-        android:textStyle="bold"
         android:layout_marginBottom="10dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -42,54 +37,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/searchName"
             android:inputType="text"
-            android:layout_marginBottom="10dp"
-            android:hint="회원이름"/>
+            android:hint="회원이름"
+            android:textSize="13dp"/>
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/layout_tell">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="연락처"
-            android:textStyle="bold"
-            android:gravity="center_horizontal"/>
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:layout_height="wrap_content"
-            android:id="@+id/tell1"
-            android:inputType="numberDecimal" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="-"
-            android:textStyle="bold"
-            android:gravity="center_horizontal"/>
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:layout_height="wrap_content"
-            android:id="@+id/tell2"
-            android:inputType="numberDecimal" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="-"
-            android:textStyle="bold"
-            android:gravity="center_horizontal"/>
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:inputType="numberDecimal"
-            android:layout_height="wrap_content"
-            android:id="@+id/tell3" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -109,7 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="4.5"
             android:id="@+id/email1"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:textSize="13dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -123,33 +74,36 @@
             android:layout_weight="4.5"
             android:id="@+id/email2"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:textSize="13dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="8dp">
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="35dp"
+            android:textSize="11dp"
             android:id="@+id/send"
             android:text="확인"
-            android:background="#22741C"
             android:textColor="#fff"
-            android:layout_marginRight="3dp"/>
+            android:layout_margin="5dp"
+            android:background="@color/colorTitle"/>
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="35dp"
+            android:textSize="11dp"
             android:id="@+id/cancel"
             android:text="취소"
-            android:layout_marginLeft="3dp"
-            android:background="#22741C"
-            android:textColor="#fff"/>
+            android:textColor="#fff"
+            android:layout_margin="5dp"
+            android:background="@color/colorTitle"/>
     </LinearLayout>
 
 </LinearLayout>
