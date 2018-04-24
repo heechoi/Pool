@@ -29,9 +29,9 @@ public class BarCodeActivity extends AppCompatActivity {
     private ImageView view;
     private TextView code;
     private LinearLayout layout;
-    private  ProgressDialog progressDlg;
     SharedPreferences member;
     private int mno;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,6 @@ public class BarCodeActivity extends AppCompatActivity {
 
         mno = member.getInt("mno",0);
     }
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -77,6 +75,7 @@ public class BarCodeActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+
     }
 
 }
