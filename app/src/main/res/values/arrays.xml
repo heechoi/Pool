@@ -16,4 +16,11 @@
         <item>20시 00분</item>
         <item>21시 00분</item>
     </string-array>
+    <string-array name="classboard_level">
+        <item>초급</item>
+        <item>중급</item>
+        <item>고급</item>
+        <item>상급</item>
+        <item>연수</item>
+    </string-array>
 </resources>

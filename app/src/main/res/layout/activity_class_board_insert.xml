@@ -19,12 +19,52 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/circle"
+                    android:id="@+id/check_title"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="5dp"/>
+                <TextView
+                    android:id="@+id/tvtitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="5dp"
+                    android:text="제목"
+                    />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ettitle"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D0D0"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/circle"
+                    android:id="@+id/check_Class"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:paddingRight="5dp"
@@ -42,7 +82,6 @@
                     android:paddingTop="15dp"
                     android:paddingBottom="5dp"
                     android:text="반"
-
                     />
                 <TextView
                     android:id="@+id/tvclassselect"
@@ -71,6 +110,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
                     android:id="@+id/selectImg"/>
                 <EditText
                     android:id="@+id/etcontent"

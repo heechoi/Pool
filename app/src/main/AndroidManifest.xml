@@ -61,6 +61,7 @@
             android:name=".SearchPwActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
+
         <activity android:name=".ClassBoardInsertActivity"
             android:theme="@style/ClassBoardTitle">
 
