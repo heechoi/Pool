@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,9 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -27,6 +32,7 @@ public class ClassBoardRead extends Fragment {
     Bitmap bmImg;
     back tack;
     Bitmap rotate;
+    File filePath;
     String urlimg = "http://192.168.123.113:8080/pool/resources/upload/classboard/IMG8335610572756851618.jpg";
     @Nullable
     @Override
@@ -35,6 +41,9 @@ public class ClassBoardRead extends Fragment {
         imgview = root.findViewById(R.id.uplaod_img);
         tack = new back();
         tack.execute(urlimg);
+        /*Picasso.with(getContext()).load(urlimg).placeholder(R.drawable.logo_white)//이미지가 존재하지 않을대체
+                .resize(100, 100) // 이미지 크기를 재조정하고 싶을 경우
+                .into(imgview);*/
         return root;
     }
     private class back extends AsyncTask<String, Integer, Bitmap> {
@@ -48,14 +57,29 @@ public class ClassBoardRead extends Fragment {
                 conn.setDoInput(true);
                 conn.connect();
                 InputStream is = conn.getInputStream();
+                String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/pool";
+                File dir = new File(dirPath);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
 
-                bmImg = BitmapFactory.decodeStream(is);
+                filePath = new File("/storage/emulated/0/pool/test.jpg");
+                Log.d("bum",filePath.getAbsolutePath());
+                OutputStream out = new FileOutputStream(filePath);
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                //out.close();
+                bmImg = BitmapFactory.decodeFile(filePath.getAbsolutePath());
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
             rotate = rotateImage(bmImg);
-            return bmImg;
+            return rotate;
         }
 
         protected void onPostExecute(Bitmap img) {
@@ -66,7 +90,6 @@ public class ClassBoardRead extends Fragment {
     private Bitmap rotateImage(Bitmap bitmap) {
         ExifInterface exifInterface = null;
         Log.d("bum","===========시작");
-        File filePath = new File(bitmap.toString());
         Log.d("bum","===========1");
         try {
             if (filePath != null) {
@@ -95,7 +118,7 @@ public class ClassBoardRead extends Fragment {
             default:
                 m.setRotate(0);
         }
-        Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, 300, 250, m, true);
+        Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
         return rotated;
     }
 }
