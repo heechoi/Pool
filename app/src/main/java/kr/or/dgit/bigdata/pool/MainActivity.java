@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;

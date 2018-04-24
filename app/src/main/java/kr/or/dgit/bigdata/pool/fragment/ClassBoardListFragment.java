@@ -30,10 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
-import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener,AdapterView.OnItemClickListener {
@@ -43,7 +41,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
     BaseAdapter adapter;
     private boolean lastItemVisibleFlag = false;
     private boolean mLockListView = false;
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/classboardlist";
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/classboardlist";
     int page = 1;
     int cno = 0;
     @Override

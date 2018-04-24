@@ -12,6 +12,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -35,12 +36,10 @@ import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/";
     private String time = "";
     ViewPager viewpager;
     TabLayout tabs;
-
-
 
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
@@ -138,6 +137,18 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
                             }
                         })
                         .setNegativeButton("취소", null).create().show();
+            }
+        });
+        Button cls_board_insert_btn = (Button)root.findViewById(R.id.cls_board_insert_btn);
+        cls_board_insert_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
+                tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
+                tr.addToBackStack(null);
+                ClassBoardInsert fgm = new ClassBoardInsert();
+                tr.replace(R.id.frame,fgm);
+                tr.commit();
             }
         });
         return root;
