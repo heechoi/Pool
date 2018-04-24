@@ -27,6 +27,7 @@ import kr.or.dgit.bigdata.pool.LoginActivity;
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.SearchIdActivity;
+import kr.or.dgit.bigdata.pool.SearchPwActivity;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
@@ -42,6 +43,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
     private SharedPreferences login;
     private TextView join;
     private TextView searchId;
+    private TextView searchPw;
 
     @Nullable
     @Override
@@ -55,6 +57,8 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         join = view.findViewById(R.id.join);
         loginBtn.setOnClickListener(this);
         join.setOnClickListener(this);
+        searchPw = view.findViewById(R.id.searchPw);
+        searchPw.setOnClickListener(this);
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
         return view;
 
@@ -85,6 +89,12 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
 
         if(view.getId()==R.id.searchId){
             Intent intent = new Intent(getActivity(),SearchIdActivity.class);
+            startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+        }
+
+        if(view.getId()==R.id.searchPw){
+            Intent intent = new Intent(getActivity(),SearchPwActivity.class);
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
         }
