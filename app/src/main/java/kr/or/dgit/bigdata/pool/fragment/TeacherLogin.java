@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.pool.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.dto.Teacher;
@@ -110,7 +112,9 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             editor.putString("title",object.getString("title"));
                             editor.commit();
 
-
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+                            startActivity(intent);
 
                         }
 

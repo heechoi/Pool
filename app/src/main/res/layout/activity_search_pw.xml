@@ -29,7 +29,9 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="휴대폰으로 찾기"/>
+                android:text="휴대폰으로 찾기"
+                android:onClick="findPwPhone"
+                android:id="@+id/findPwPhone"/>
 
             <Button
                 android:layout_width="match_parent"

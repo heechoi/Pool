@@ -45,7 +45,7 @@
         <activity
             android:name=".SearchIdActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Login" />
+            android:theme="@style/AppTheme.Search" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -66,6 +66,7 @@
             android:theme="@style/ClassBoardTitle">
 
         </activity>
+        <activity android:name=".BarCodeActivity"></activity>
     </application>
 
 </manifest>

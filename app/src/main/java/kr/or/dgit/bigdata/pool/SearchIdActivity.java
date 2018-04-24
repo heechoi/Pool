@@ -74,9 +74,10 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(name.getText().toString().isEmpty()||tell1.getText().toString().isEmpty()||tell2.getText().toString().isEmpty()||tell3.getText().toString().isEmpty()||age.getText().toString().isEmpty()){
+                if(name.getText().toString().equals("")||tell1.getText().toString().equals("")||tell2.getText().toString().equals("")||tell3.getText().toString().equals("")||age.getText().toString().equals("")){
                     Toast toast = Toast.makeText(SearchIdActivity.this,"모두 입력해주세요",Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
                     return;
                 }
 
@@ -197,9 +198,11 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(name.getText().toString().isEmpty()||email1.getText().toString().isEmpty()||email2.getText().toString().isEmpty()){
+
+                if(name.getText().toString().equals("")||email1.getText().toString().equals("")||email2.getText().toString().equals("")){
                     Toast toast = Toast.makeText(SearchIdActivity.this,"모두 입력해주세요",Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
                     return;
                 }
 

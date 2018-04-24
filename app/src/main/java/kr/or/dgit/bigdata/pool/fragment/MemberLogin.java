@@ -136,6 +136,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             m.setMno(object.getInt("mno"));
                             m.setId(object.getString("id"));
                             m.setTitle(object.getString("title"));
+                            m.setName(object.getString("name"));
 
                             SharedPreferences.Editor editor = login.edit();
                            //일단 삭제 후 데이터 저장
@@ -144,6 +145,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             editor.putString("id",object.getString("id"));
                             editor.putInt("mno",object.getInt("mno"));
                             editor.putString("title",object.getString("title"));
+                            editor.putString("name",object.getString("name"));
                             editor.commit();
 
 
