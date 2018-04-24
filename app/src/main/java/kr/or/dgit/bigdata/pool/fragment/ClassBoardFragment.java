@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.pool.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import kr.or.dgit.bigdata.pool.ClassBoardInsertActivity;
+import kr.or.dgit.bigdata.pool.LoginActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
@@ -143,12 +146,10 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
         cls_board_insert_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
-                tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
-                tr.addToBackStack(null);
-                ClassBoardInsert fgm = new ClassBoardInsert();
-                tr.replace(R.id.frame,fgm);
-                tr.commit();
+                Intent insertIntent = new Intent(getContext(),ClassBoardInsertActivity.class);
+                startActivity(insertIntent);
+
+                getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
             }
         });
         return root;

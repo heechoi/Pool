@@ -38,6 +38,12 @@
         <item name="android:textSize">13sp</item>
         <item name="android:textColorHighlight">@color/colorPrimary</item>
     </style>
+    <style name="ClassBoardTitle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
    <!-- <style name="SearchEditText" parent="Widget.AppCompat.EditText">
         <item name="android:textColorHighlight">@color/colorPrimary</item>
     </style>-->

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="kr.or.dgit.bigdata.pool.ClassBoardInsertActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/circle"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="5dp"/>
+                <TextView
+                    android:id="@+id/tvclass"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="5dp"
+                    android:text="반"
+
+                    />
+                <TextView
+                    android:id="@+id/tvclassselect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textSize="15sp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="5dp"
+                    android:gravity="right"
+                    android:text="반을 선택해주세요."
+                />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D0D0"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/selectImg"/>
+                <EditText
+                    android:id="@+id/etcontent"
+                    android:padding="10dp"
+                    android:hint="내용을 입력하세요."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textCursorDrawable="@drawable/classboard_cursor_color"
+
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#D3D0D0"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:padding="10dp"
+            android:id="@+id/img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gallery"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,8 +1,7 @@
-package kr.or.dgit.bigdata.pool.fragment;
+package kr.or.dgit.bigdata.pool;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -11,22 +10,22 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,12 +41,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import kr.or.dgit.bigdata.pool.BuildConfig;
-import kr.or.dgit.bigdata.pool.MainActivity;
-import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 
-
-public class ClassBoardInsert extends Fragment {
+public class ClassBoardInsertActivity extends AppCompatActivity {
     CustomDialog customDialog;
     File filePath;
     int reqWidth;
@@ -55,41 +51,18 @@ public class ClassBoardInsert extends Fragment {
     LinearLayout mLinearLayout;
     String galleryPath;
     String uploadHttp = "http://192.168.0.60:8080/pool/restclassboard/upload";
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.classboard_insert, container, false);
-        Button imgBtn = (Button) root.findViewById(R.id.img_btn);
-        Button upload = (Button)root.findViewById(R.id.uploadbtn);
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(){
-                    public void run(){
-                        DoFileUpload(uploadHttp,galleryPath);
-                        Bundle bun = new Bundle();
-                        bun.putString("upload","goodgood");
-                        Message msg = handler.obtainMessage();
-                        msg.setData(bun);
-                        handler.sendMessage(msg);
-                    }
-                }.start();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_class_board_insert);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.classboardtitle);
+        actionBar.setDisplayShowHomeEnabled(true);
 
-            }
-        });
-        mLinearLayout = root.findViewById(R.id.classboard_insert);
-        imgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                customDialog = new CustomDialog(getContext());
-                customDialog.show();
-            }
-        });
-        reqWidth = getResources().getDimensionPixelSize(R.dimen.request_image_width);
-        reqHeight = getResources().getDimensionPixelSize(R.dimen.request_image_height);
-        return root;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
-
     public class CustomDialog extends android.app.AlertDialog implements View.OnClickListener {
         Button camaraBtn;
         Button galleryBtn;
@@ -138,7 +111,7 @@ public class ClassBoardInsert extends Fragment {
                     }
 
                 } else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                    ActivityCompat.requestPermissions(ClassBoardInsertActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
                 }
             } else if (view.getId() == R.id.gallery) {
                 if (ContextCompat.checkSelfPermission(getContext(),
@@ -148,16 +121,22 @@ public class ClassBoardInsert extends Fragment {
                     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                     startActivityForResult(intent, 20);
                 } else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+                    ActivityCompat.requestPermissions(ClassBoardInsertActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
                 }
 
             }
         }
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.classboardinsert, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 10 && resultCode == getActivity().RESULT_OK) {
+        if (requestCode == 10 && resultCode == this.RESULT_OK) {
 
             if (filePath != null) {
                 customDialog.dismiss();
@@ -175,13 +154,13 @@ public class ClassBoardInsert extends Fragment {
 
                 Bitmap bitmap = BitmapFactory.decodeFile(filePath.getAbsolutePath());
                 Bitmap rotated = rotateImage(bitmap);
-                ImageView img = new ImageView(getContext());
+                ImageView img = new ImageView(this);
                 img.setImageBitmap(rotated);
                 img.setLayoutParams(lp);
                 mLinearLayout.addView(img);
             }
-        } else if (requestCode == 20 && resultCode == getActivity().RESULT_OK) {
-            Toast.makeText(getContext(), "완성", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == 20 && resultCode == this.RESULT_OK) {
+            Toast.makeText(this, "완성", Toast.LENGTH_SHORT).show();
 
             customDialog.dismiss();
             galleryPath = getRealPathFromURI(data.getData());
@@ -197,7 +176,7 @@ public class ClassBoardInsert extends Fragment {
             Bitmap bitmap = BitmapFactory.decodeFile(galleryPath);
             Matrix m = new Matrix();
             Bitmap rotated = rotateImage(bitmap);
-            ImageView img = new ImageView(getContext());
+            ImageView img = new ImageView(this);
             img.setImageBitmap(rotated);
             img.setLayoutParams(lp);
             mLinearLayout.addView(img);
@@ -237,7 +216,7 @@ public class ClassBoardInsert extends Fragment {
     private String getRealPathFromURI(Uri contentUri) {
         int column_index = 0;
         String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
+        Cursor cursor = ClassBoardInsertActivity.this.getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor.moveToFirst()) {
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
@@ -361,6 +340,15 @@ public class ClassBoardInsert extends Fragment {
 
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==android.R.id.home){
+            Toast t = Toast.makeText(this,"HOME AS UP Click",Toast.LENGTH_SHORT);
+            t.show();
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
