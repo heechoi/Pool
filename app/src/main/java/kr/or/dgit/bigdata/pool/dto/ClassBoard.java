@@ -1,12 +1,13 @@
 package kr.or.dgit.bigdata.pool.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by DGIT3-7 on 2018-04-19.
  */
 
-public class ClassBoard {
+public class ClassBoard implements Serializable{
     private int bno;
     private int cno;
     private String id;

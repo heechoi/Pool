@@ -58,9 +58,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".SearchPwActivity"
-            android:theme="@style/AppTheme.Search"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SearchPwActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Search" />
+        <activity android:name=".BarCodeActivity"></activity>
+        <activity android:name=".ClassBoardInsertActivity"
+            android:theme="@style/ClassBoardTitle">
+
+        </activity>
     </application>
 
 </manifest>

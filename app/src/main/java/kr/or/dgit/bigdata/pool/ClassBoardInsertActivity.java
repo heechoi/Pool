@@ -1,9 +1,11 @@
-package kr.or.dgit.bigdata.pool.fragment;
+package kr.or.dgit.bigdata.pool;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,25 +13,30 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -42,52 +49,91 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import kr.or.dgit.bigdata.pool.BuildConfig;
-import kr.or.dgit.bigdata.pool.MainActivity;
-import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.dto.ClassBoard;
+import kr.or.dgit.bigdata.pool.fragment.ClassBoardInsert;
+import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-
-public class ClassBoardInsert extends Fragment {
+public class ClassBoardInsertActivity extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
     CustomDialog customDialog;
     File filePath;
     int reqWidth;
     int reqHeight;
-    LinearLayout mLinearLayout;
     String galleryPath;
-    String uploadHttp = "http://192.168.0.60:8080/pool/restclassboard/upload";
-    @Nullable
+    String http = "http://192.168.0.60:8080/pool/restclassboard/";
+    ImageView img_btn;
+    ImageView imgSelect;
+    EditText etcontent;
+    EditText etTitle;
+    TextView tvclass;
+    String time;
+    String level;
+    ImageView check_Class;
+    ImageView check_title;
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.classboard_insert, container, false);
-        Button imgBtn = (Button) root.findViewById(R.id.img_btn);
-        Button upload = (Button)root.findViewById(R.id.uploadbtn);
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(){
-                    public void run(){
-                        DoFileUpload(uploadHttp,galleryPath);
-                        Bundle bun = new Bundle();
-                        bun.putString("upload","goodgood");
-                        Message msg = handler.obtainMessage();
-                        msg.setData(bun);
-                        handler.sendMessage(msg);
-                    }
-                }.start();
-
-            }
-        });
-        mLinearLayout = root.findViewById(R.id.classboard_insert);
-        imgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                customDialog = new CustomDialog(getContext());
-                customDialog.show();
-            }
-        });
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_class_board_insert);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.classboardtitle);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        img_btn = findViewById(R.id.img_btn);
+        img_btn.setOnClickListener(this);
+        imgSelect = findViewById(R.id.selectImg);
         reqWidth = getResources().getDimensionPixelSize(R.dimen.request_image_width);
         reqHeight = getResources().getDimensionPixelSize(R.dimen.request_image_height);
-        return root;
+        etcontent = findViewById(R.id.etcontent);
+        tvclass = findViewById(R.id.tvclassselect);
+        tvclass.setOnClickListener(this);
+        check_Class = findViewById(R.id.check_Class);
+        etTitle = findViewById(R.id.ettitle);
+        etTitle.setOnFocusChangeListener(this);
+        check_title = findViewById(R.id.check_title);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() ==R.id.img_btn){
+            customDialog = new CustomDialog(ClassBoardInsertActivity.this);
+            customDialog.show();
+        }else if(view.getId() ==R.id.tvclassselect){
+            Log.d("bum","tvclass click");
+            new AlertDialog.Builder(this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle("시간을 선택해주세요")
+                    .setItems(R.array.classboard_selected, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String[] arrays = getResources().getStringArray(R.array.classboard_selected);
+                            time = arrays[i];
+                            new AlertDialog.Builder(ClassBoardInsertActivity.this)
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .setTitle("시간을 선택해주세요")
+                                    .setItems(R.array.classboard_level,new DialogInterface.OnClickListener(){
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            String[] arrays2 = getResources().getStringArray(R.array.classboard_level);
+                                            level = arrays2[i];
+                                            tvclass.setText(time+"/"+level);
+                                            check_Class.setImageResource(R.drawable.circle_2);
+                                        }
+                                    })
+                                    .setNegativeButton("취소",null).create().show();
+                        }
+                    })
+                    .setNegativeButton("취소", null).create().show();
+        }
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        if(view.getId()==R.id.ettitle){
+            Log.d("bum","포커스");
+            if(!etTitle.getText().toString().equalsIgnoreCase("")){
+                check_title.setImageResource(R.drawable.circle_2);
+            }
+        }
     }
 
     public class CustomDialog extends android.app.AlertDialog implements View.OnClickListener {
@@ -110,6 +156,7 @@ public class ClassBoardInsert extends Fragment {
             galleryBtn = findViewById(R.id.gallery);
             camaraBtn.setOnClickListener(this);
             galleryBtn.setOnClickListener(this);
+
         }
 
         @Override
@@ -138,7 +185,7 @@ public class ClassBoardInsert extends Fragment {
                     }
 
                 } else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                    ActivityCompat.requestPermissions(ClassBoardInsertActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
                 }
             } else if (view.getId() == R.id.gallery) {
                 if (ContextCompat.checkSelfPermission(getContext(),
@@ -148,21 +195,28 @@ public class ClassBoardInsert extends Fragment {
                     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                     startActivityForResult(intent, 20);
                 } else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+                    ActivityCompat.requestPermissions(ClassBoardInsertActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
                 }
 
             }
         }
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.classboardinsert, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 10 && resultCode == getActivity().RESULT_OK) {
+        if (requestCode == 10 && resultCode == this.RESULT_OK) {
 
             if (filePath != null) {
                 customDialog.dismiss();
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
+                galleryPath = null;
                 try {
                     InputStream in = new FileInputStream(filePath);
                     BitmapFactory.decodeStream(in, null, options);
@@ -171,19 +225,20 @@ public class ClassBoardInsert extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, reqHeight);
 
                 Bitmap bitmap = BitmapFactory.decodeFile(filePath.getAbsolutePath());
                 Bitmap rotated = rotateImage(bitmap);
-                ImageView img = new ImageView(getContext());
-                img.setImageBitmap(rotated);
-                img.setLayoutParams(lp);
-                mLinearLayout.addView(img);
-            }
-        } else if (requestCode == 20 && resultCode == getActivity().RESULT_OK) {
-            Toast.makeText(getContext(), "완성", Toast.LENGTH_SHORT).show();
 
+                imgSelect.setImageBitmap(rotated);
+                imgSelect.setLayoutParams(lp);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    imgSelect.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
+                }
+            }
+        } else if (requestCode == 20 && resultCode == this.RESULT_OK) {
             customDialog.dismiss();
+            filePath = null;
             galleryPath = getRealPathFromURI(data.getData());
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -192,15 +247,17 @@ public class ClassBoardInsert extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(reqWidth, reqHeight);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, reqHeight);
 
             Bitmap bitmap = BitmapFactory.decodeFile(galleryPath);
             Matrix m = new Matrix();
-            Bitmap rotated = rotateImage(bitmap);
-            ImageView img = new ImageView(getContext());
-            img.setImageBitmap(rotated);
-            img.setLayoutParams(lp);
-            mLinearLayout.addView(img);
+           // Bitmap rotated = rotateImage(bitmap);
+            Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+            imgSelect.setImageBitmap(rotated);
+            imgSelect.setLayoutParams(lp);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                imgSelect.setForegroundGravity(Gravity.CENTER_HORIZONTAL);
+            }
         }
     }
 
@@ -237,7 +294,7 @@ public class ClassBoardInsert extends Fragment {
     private String getRealPathFromURI(Uri contentUri) {
         int column_index = 0;
         String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
+        Cursor cursor = ClassBoardInsertActivity.this.getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor.moveToFirst()) {
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
@@ -362,12 +419,86 @@ public class ClassBoardInsert extends Fragment {
         }
 
     }
-    Handler handler = new Handler() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==android.R.id.home){
+            Toast t = Toast.makeText(this,"HOME AS UP Click",Toast.LENGTH_SHORT);
+            t.show();
+            return true;
+        }else if(item.getItemId() ==R.id.action_search){
+            String content = etcontent.getText().toString();
+
+            if(content.equalsIgnoreCase("")){
+                Toast.makeText(this,"내용을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                return false;
+            }else if(etTitle.getText().toString().equalsIgnoreCase("")){
+                Toast.makeText(this,"제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                return false;
+            }else if(tvclass.getText().toString().equalsIgnoreCase("반을 선택해주세요.")){
+                Toast.makeText(this,"반을 선택해주세요.",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if(galleryPath !=null){
+                new Thread(){
+                    public void run(){
+                        DoFileUpload(http+"upload",galleryPath);
+                        Bundle bun = new Bundle();
+                        bun.putString("upload","goodgood");
+                        Message msg = Message.obtain(mhandler,1);
+                      //  msg.set
+                        mhandler.sendMessage(msg);
+                    }
+                }.start();
+            }else if(filePath !=null){
+                Log.d("bum",filePath.getName());
+                new Thread(){
+                    public void run(){
+
+                        DoFileUpload(http+"upload",filePath.getAbsolutePath());
+                        Bundle bun = new Bundle();
+                        bun.putString("upload","goodgood");
+                        Message msg = Message.obtain(mhandler,1);
+                        //  msg.set
+                        mhandler.sendMessage(msg);
+                    }
+                }.start();
+            }
+            insert();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+    @SuppressLint("HandlerLeak")
+    Handler mhandler = new Handler() {
         public void handleMessage(Message msg) {
-            Bundle bun = msg.getData();
-            Log.d("bum",bun.getString("upload"));
-
-
+            switch (msg.what){
+                case 1:
+                    Toast.makeText(ClassBoardInsertActivity.this,"업로드 성공",Toast.LENGTH_SHORT).show();
+                    insert();
+                    break;
+                case 2:
+                    String result = (String) msg.obj;
+                    Log.d("bum", "============= " + result);
+                    break;
+            }
         }
     };
+    private void insert(){
+        SharedPreferences sp = getSharedPreferences("member",MODE_PRIVATE);
+        String id = sp.getString("name","");
+        String contentReplace = etcontent.getText().toString();
+        String content = contentReplace.replace(System.getProperty("line.separator"),"<br>");
+        String title = etTitle.getText().toString();
+        String imgPathcheck = null;
+        if(filePath !=null){
+            imgPathcheck =  "/pool/resources/upload/classboard/"+filePath.getName();
+        }else if(galleryPath !=null){
+            imgPathcheck =  "/pool/resources/upload/classboard/"+galleryPath;
+        }
+        String[] arrname = new String[]{"time","level","id","content","title","imgPathcheck"};
+        String[] arr = {time,level,id,content,title,imgPathcheck};
+
+        String httpclasstime = http + "insert";
+        new HttpRequestTack(this, mhandler, arr, arrname, "POST", "글을 작성합니다.",2).execute(httpclasstime);
+    }
 }

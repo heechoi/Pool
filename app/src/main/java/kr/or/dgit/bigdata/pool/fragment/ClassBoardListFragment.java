@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +35,7 @@ import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener,AdapterView.OnItemClickListener {
+public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener,AdapterView.OnItemClickListener,Serializable {
     ListView mListView;
     ProgressBar progressBar;
     ArrayList<ClassBoard> mList;
@@ -50,7 +51,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
         View root = inflater.inflate(R.layout.classboard_list, container, false);
         Bundle bundle = getArguments();
         mList = (ArrayList<ClassBoard>) bundle.getSerializable("list");
-        ;
+
         if(mList.get(0).getBno()==-1){
             adapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
         }else{

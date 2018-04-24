@@ -130,7 +130,8 @@ public class MainActivity extends AppCompatActivity
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         }else if(id ==R.id.notice_alram){
-
+            Intent  intent = new Intent(getApplicationContext(),BarCodeActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
