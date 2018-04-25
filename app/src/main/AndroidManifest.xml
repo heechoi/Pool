@@ -62,11 +62,12 @@
             android:name=".SearchPwActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-        <activity android:name=".BarCodeActivity"></activity>
-        <activity android:name=".ClassBoardInsertActivity"
-            android:theme="@style/ClassBoardTitle">
-
-        </activity>
+        <activity android:name=".BarCodeActivity" />
+        <activity
+            android:name=".ClassBoardInsertActivity"
+            android:theme="@style/ClassBoardTitle"></activity>
+        <activity android:name=".MemberInfoActivity"  android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Search"></activity>
     </application>
 
 </manifest>

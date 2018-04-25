@@ -68,9 +68,8 @@ public class MainActivity extends AppCompatActivity
         login.setOnClickListener(this);
         //회원정보수정
         info = navigationView.getHeaderView(0).findViewById(R.id.info);
-        info.setOnClickListener(this);
         login_title = navigationView.getHeaderView(0).findViewById(R.id.login_title);
-
+        info.setOnClickListener(this);
         //로그아웃
         logOut = navigationView.getHeaderView(0).findViewById(R.id.logOut);
         logOut.setOnClickListener(this);
@@ -177,6 +176,11 @@ public class MainActivity extends AppCompatActivity
             finish();
             startActivity(getIntent());
 
+        }
+        if(v.getId()==R.id.info){
+            Intent MemberInfo = new Intent(this,MemberInfoActivity.class);
+            startActivity(MemberInfo);
+            overridePendingTransition(R.anim.login,R.anim.login_out);
         }
     }
 
