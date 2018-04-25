@@ -35,8 +35,9 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://211.107.111.85:8080/pool/restLogin/";
+    private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences login;
+    private SharedPreferences tlogin;
     private TextView join;
     private TextView searchId;
     private TextView searchPw;
@@ -56,6 +57,8 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         searchPw = view.findViewById(R.id.searchPw);
         searchPw.setOnClickListener(this);
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
+        tlogin = this.getActivity().getSharedPreferences("Admin",Context.MODE_PRIVATE);
+
         return view;
 
     }
@@ -134,6 +137,10 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             m.setTitle(object.getString("title"));
                             m.setName(object.getString("name"));
 
+                            //강사정보 삭제
+                            SharedPreferences.Editor tEditor = tlogin.edit();
+                            tEditor.clear();
+                            tEditor.commit();
                             SharedPreferences.Editor editor = login.edit();
                            //일단 삭제 후 데이터 저장
                             editor.clear();
