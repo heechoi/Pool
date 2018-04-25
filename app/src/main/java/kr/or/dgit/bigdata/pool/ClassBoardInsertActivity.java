@@ -449,6 +449,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                         mhandler.sendMessage(msg);
                     }
                 }.start();
+                return true;
             }else if(filePath !=null){
                 Log.d("bum",filePath.getName());
                 new Thread(){
@@ -462,6 +463,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                         mhandler.sendMessage(msg);
                     }
                 }.start();
+                return true;
             }
             insert();
             return true;

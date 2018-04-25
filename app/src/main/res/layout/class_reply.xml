@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+    <ImageView
+        android:id="@+id/user_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle_background"
+        android:src="@drawable/ic_person" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id"
+        android:layout_marginLeft="7dp"
+        android:text="1"
+        android:layout_toRightOf="@+id/user_img"
+        />
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id"
+        android:layout_marginLeft="7dp"
+        android:layout_toRightOf="@+id/user_img"
+        android:gravity="left"
+        android:paddingRight="5dp"
+        android:text="내용"
+        android:textSize="13sp" />
+    <TextView
+        android:id="@+id/regdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/content"
+        android:layout_marginLeft="7dp"
+        android:layout_toRightOf="@+id/user_img"
+        android:gravity="left"
+        android:paddingRight="5dp"
+        android:text="날짜"
+        android:textSize="13sp"/>
+</RelativeLayout>

@@ -36,6 +36,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
     private Button loginBtn;
     private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences tlogin;
+    private SharedPreferences mlogin;
 
 
     @Nullable
@@ -48,6 +49,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
         loginBtn.setOnClickListener(this);
 
         tlogin = this.getActivity().getSharedPreferences("Admin", Context.MODE_PRIVATE);
+        mlogin = this.getActivity().getSharedPreferences("member",0);
 
         return view;
     }
@@ -101,9 +103,12 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             t.setId(object.getString("id"));
                             t.setTitle(object.getString("title"));
 
+                            //회원로그인 정보
+                            SharedPreferences.Editor meditor = mlogin.edit();
+                            meditor.clear();
+                            meditor.commit();
 
                             SharedPreferences.Editor editor = tlogin.edit();
-                            editor.clear();
                                 //일단 삭제 후 데이터 저장
                             editor.clear();
 
