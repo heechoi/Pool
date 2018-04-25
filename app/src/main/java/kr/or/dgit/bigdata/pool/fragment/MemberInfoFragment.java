@@ -4,6 +4,8 @@ package kr.or.dgit.bigdata.pool.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +37,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class MemberInfoFragment extends Fragment implements View.OnClickListener{
 
-    private String http = "http://192.168.0.12:8080/pool";
+    private String http = "http://192.168.0.239:8080/pool";
     Button btn;
     String[] arrays;
     int[] cno;
@@ -58,7 +60,18 @@ public class MemberInfoFragment extends Fragment implements View.OnClickListener
         btn = root.findViewById(R.id.call);
         btn.setOnClickListener(this);
         mno = 0;
-        mno= (int) getArguments().getSerializable("mno");
+
+        SharedPreferences sp = this.getActivity().getSharedPreferences("member",Context.MODE_PRIVATE);
+
+        if(sp.getInt("mno",0) != 0){
+            mno = (int)sp.getInt("mno",0);
+            btn.setVisibility(View.GONE);
+
+        }else if(getArguments().getSerializable("mno") !=null){
+            mno= (int) getArguments().getSerializable("mno");
+            btn.setVisibility(View.VISIBLE);
+        }
+
 
         new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restregister/member?mno="+mno);
 

@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,8 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Map;
+
+import kr.or.dgit.bigdata.pool.fragment.BusFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
+import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -47,14 +51,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+ 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -126,11 +123,13 @@ public class MainActivity extends AppCompatActivity
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
             viewFragment(cf);
         }else if(id ==R.id.user_attendance){
-
+           MemberInfoFragment mf = MemberInfoFragment.newInstance();
+            viewFragment(mf);
         }else if(id ==R.id.classtime){
 
         }else if(id ==R.id.bus){
-
+           Intent intent = new Intent(this,MapsActivity.class);
+           startActivity(intent);
         }else if(id ==R.id.clinic){
 
         }else if(id ==R.id.classboard){
