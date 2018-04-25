@@ -149,10 +149,16 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                             editor.putInt("mno",object.getInt("mno"));
                             editor.putString("title",object.getString("title"));
                             editor.putString("name",object.getString("name"));
+                            editor.putString("age",object.getString("age"));
+                            editor.putString("gender",object.getString("gender"));
+                            editor.putString("tell",object.getString("tell"));
+                            editor.putString("email",object.getString("email"));
+
                             editor.commit();
 
 
                             Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
                             startActivity(intent);
                         }
