@@ -59,7 +59,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             adapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
             cno = mList.get(0).getCno();
         }
-
+        adapter.notifyDataSetChanged();
         mListView = root.findViewById(R.id.listview);
         mListView.setAdapter(adapter);
         progressBar = root.findViewById(R.id.progressbar);

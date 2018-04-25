@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,21 +15,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,11 +45,12 @@ import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
+public class ClassBoardFragment extends Fragment {
     private String http = "http://192.168.0.60:8080/pool/restclassboard/";
     private String time = "";
-    ViewPager viewpager;
-    TabLayout tabs;
+    private String level = "";
+    ListView listview;
+
 
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
@@ -59,50 +66,35 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
                     String result = (String) msg.obj;
                     Log.d("bum", "=============3 " + result);
                     try {
-                        viewpager.removeAllViews();
-                        JSONObject jObj = new JSONObject(result);
+                        ArrayList<ClassBoard> mList = new ArrayList<>();
 
-                        List<Fragment> arFragment = new ArrayList<>();
-                        String arName;
-                        for (int i = 0; i < 5; i++) {
-                            arName ="lists_"+i;
-                            ArrayList<ClassBoard> mList = new ArrayList<>();
-
-                            Log.d("bum", arName);
-                            JSONArray ja = jObj.getJSONArray(arName);
-                            if(ja.length() >0){
-                                for (int j = 0; j < ja.length(); j++) {
-                                    JSONObject order = ja.getJSONObject(j);
-                                    ClassBoard board = new ClassBoard();
-                                    board.setCno(order.getInt("cno"));
-                                    board.setBno(order.getInt("bno"));
-                                    board.setId(order.getString("id"));
-                                    Date date = new Date(order.getLong("regdate"));
-                                    board.setRegdate(date);
-                                    board.setTitle(order.getString("title"));
-                                    mList.add(board);
-
-                                }
-                            }else{
+                        JSONArray ja = new JSONArray(result);
+                        BaseAdapter adapter;
+                        if (ja.length() > 0) {
+                            for (int j = 0; j < ja.length(); j++) {
+                                JSONObject order = ja.getJSONObject(j);
                                 ClassBoard board = new ClassBoard();
-                                board.setBno(-1);
-                                board.setId("없음");
-                                Date date = new Date();
+                                board.setCno(order.getInt("cno"));
+                                board.setBno(order.getInt("bno"));
+                                board.setId(order.getString("id"));
+                                Date date = new Date(order.getLong("regdate"));
                                 board.setRegdate(date);
-                                board.setTitle("등록된 게시글이 없습니다. ");
+                                board.setTitle(order.getString("title"));
                                 mList.add(board);
                             }
-                            ClassBoardListFragment cf = new ClassBoardListFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("list", mList);
-                            cf.setArguments(bundle);
-
-                            arFragment.add(cf);
+                            adapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
+                        } else {
+                            ClassBoard board = new ClassBoard();
+                            board.setBno(-1);
+                            board.setId("없음");
+                            Date date = new Date();
+                            board.setRegdate(date);
+                            board.setTitle("등록된 게시글이 없습니다. ");
+                            mList.add(board);
+                            adapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
                         }
-
-                        MyPagerAdapter adapter = new MyPagerAdapter(getFragmentManager(),arFragment);
                         adapter.notifyDataSetChanged();
-                        viewpager.setAdapter(adapter);
+                        listview.setAdapter(adapter);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -117,17 +109,13 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View root = inflater.inflate(R.layout.classboard, container, false);
-        viewpager = root.findViewById(R.id.viewPager);
-        tabs = root.findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewpager);
-        tabs.addOnTabSelectedListener(this);
+        listview = root.findViewById(R.id.listview);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 new AlertDialog.Builder(getActivity())
                         .setIcon(R.mipmap.ic_launcher)
                         .setTitle("시간을 선택해주세요")
@@ -135,67 +123,144 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String[] arrays = getResources().getStringArray(R.array.classboard_selected);
-                                String[] arrname = new String[]{"time"};
-                                Log.d("bum", "==================" + arrays[i]);
-                                String[] arr = {arrays[i]};
                                 time = arrays[i];
-                                String httpclasstime = http + "classlist";
-                                new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(httpclasstime);
+                                new AlertDialog.Builder(getActivity())
+                                        .setIcon(R.mipmap.ic_launcher)
+                                        .setTitle("시간을 선택해주세요")
+                                        .setItems(R.array.classboard_level, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                String[] arrays = getResources().getStringArray(R.array.classboard_level);
+                                                String[] arrname = new String[]{"time", "level"};
+                                                Log.d("bum", "==================" + arrays[i]);
+                                                level = arrays[i];
+                                                String[] arr = {time, level};
+                                                String httpclasstime = http + "classlist";
+                                                new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(httpclasstime);
+                                            }
+                                        })
+                                        .setNegativeButton("취소", null).create().show();
                             }
                         })
                         .setNegativeButton("취소", null).create().show();
+
             }
         });
-        Button cls_board_insert_btn = (Button)root.findViewById(R.id.cls_board_insert_btn);
-        cls_board_insert_btn.setOnClickListener(new View.OnClickListener(){
+        Button cls_board_insert_btn = (Button) root.findViewById(R.id.cls_board_insert_btn);
+        cls_board_insert_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent insertIntent = new Intent(getContext(),ClassBoardInsertActivity.class);
+                Intent insertIntent = new Intent(getContext(), ClassBoardInsertActivity.class);
                 startActivity(insertIntent);
 
-                getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+                getActivity().overridePendingTransition(R.anim.login, R.anim.login_out);
             }
         });
         return root;
     }
 
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        viewpager.setCurrentItem(tab.getPosition());
-    }
+    class MyNoListAdapter extends BaseAdapter {
+        private static final String TAG = "MyListAdapter";
+        private Context mContext;  //MyListAdapter 가 Activity가 아니므로
+        private int mItemRowLayout; //항목레이아웃
+        private LayoutInflater mInflater; //항목레이아웃을 전개할 전개자
+        private List<ClassBoard> arItem;
 
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
+        public MyNoListAdapter(Context context, int itemRowLayout, List<ClassBoard> list) {
+            mContext = context;
+            mItemRowLayout = itemRowLayout;
+            arItem = list;
+            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
-
-    class MyPagerAdapter extends FragmentPagerAdapter {
-
-        private List<Fragment> fragment;
-        private String title[] = new String[]{"초급","중급","고급","상급","연수"};
-
-        public MyPagerAdapter(FragmentManager fm,List<Fragment> list) {
-            super(fm);
-            this.fragment = list;
-        }
-        @Override
-        public Fragment getItem(int position) {
-            return this.fragment.get(position);
         }
 
         @Override
         public int getCount() {
-            return this.fragment.size();
+            Log.d(TAG, "getCount()");
+            return arItem.size();
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return title[position];
+        public Object getItem(int i) {
+            Log.d(TAG, "getItem()");
+            return arItem.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            Log.d(TAG, "getItemId()");
+            return i;
+        }
+
+        @Override
+        public View getView(final int position, View convertview, ViewGroup viewGroup) {
+            Log.d(TAG, "getView()");
+            if (convertview == null) {
+                convertview = mInflater.inflate(mItemRowLayout, viewGroup, false);
+            }
+            TextView title = convertview.findViewById(R.id.title);
+            title.setText(arItem.get(position).getTitle());
+
+            return convertview;
+        }
+    }
+
+    class MyListAdapter extends BaseAdapter {
+        private static final String TAG = "MyListAdapter";
+        private Context mContext;  //MyListAdapter 가 Activity가 아니므로
+        private int mItemRowLayout; //항목레이아웃
+        private LayoutInflater mInflater; //항목레이아웃을 전개할 전개자
+        private List<ClassBoard> arItem;
+
+        public MyListAdapter(Context context, int itemRowLayout, List<ClassBoard> list) {
+            mContext = context;
+            mItemRowLayout = itemRowLayout;
+            arItem = list;
+            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
+
+        @Override
+        public int getCount() {
+            Log.d(TAG, "getCount()");
+            return arItem.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            Log.d(TAG, "getItem()");
+            return arItem.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            Log.d(TAG, "getItemId()");
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertview, ViewGroup viewGroup) {
+            Log.d(TAG, "getView()");
+            if (convertview == null) {
+                convertview = mInflater.inflate(mItemRowLayout, viewGroup, false);
+            }
+
+            TextView bno = convertview.findViewById(R.id.bno);
+            bno.setText(arItem.get(position).getBno() + "");
+
+            TextView writer = convertview.findViewById(R.id.writer);
+            writer.setText(arItem.get(position).getId());
+
+            TextView title = convertview.findViewById(R.id.title);
+            title.setText(arItem.get(position).getTitle());
+
+            TextView date = convertview.findViewById(R.id.date);
+            Date date2 = arItem.get(position).getRegdate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String strDate = sdf.format(date2);
+            date.setText(strDate);
+
+            return convertview;
         }
     }
 }
