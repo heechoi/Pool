@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +29,12 @@ import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
 
-    private TextView login;
-
+    private LinearLayout login;
+    private TextView info;
+    private TextView login_title;
+    private TextView logOut;
+    private SharedPreferences mlogin;
+    private SharedPreferences admin;
 
     int mStart = 10;
     @Override
@@ -61,10 +66,22 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         login = navigationView.getHeaderView(0).findViewById(R.id.login);
         login.setOnClickListener(this);
+        //회원정보수정
+        info = navigationView.getHeaderView(0).findViewById(R.id.info);
+        info.setOnClickListener(this);
+        login_title = navigationView.getHeaderView(0).findViewById(R.id.login_title);
+
+        //로그아웃
+        logOut = navigationView.getHeaderView(0).findViewById(R.id.logOut);
+        logOut.setOnClickListener(this);
 
         TestFragment cf = TestFragment.newInstance(mStart);
 
         getSupportFragmentManager().beginTransaction().add(R.id.frame,cf).commit();
+
+        mlogin = getSharedPreferences("member",MODE_PRIVATE);
+        admin = getSharedPreferences("Admin",MODE_PRIVATE);
+        getLoginInfo();
 
     }
 
@@ -146,6 +163,21 @@ public class MainActivity extends AppCompatActivity
             startActivity(loginIntent);
             overridePendingTransition(R.anim.login,R.anim.login_out);
         }
+        if(v.getId()==R.id.logOut){
+            //회원정보 삭제
+            SharedPreferences.Editor logOutm = mlogin.edit();
+            logOutm.clear();
+            logOutm.commit();
+            //강사정보 삭제
+            SharedPreferences.Editor logOutT = admin.edit();
+            logOutT.clear();
+            logOutT.commit();
+            //main activity 재요청
+
+            finish();
+            startActivity(getIntent());
+
+        }
     }
 
     private void viewFragment(Fragment fgm){
@@ -154,6 +186,30 @@ public class MainActivity extends AppCompatActivity
         tr.addToBackStack(null);
         tr.replace(R.id.frame,fgm);
         tr.commit();
+    }
+
+    private void getLoginInfo() {
+        int tno = admin.getInt("tno",0);
+        String title = admin.getString("title","");
+        int mno = mlogin.getInt("mno",0);
+
+        //회원,강사일때
+        if(mno!=0||(tno!=0&&!title.equals("사장"))){
+            info.setVisibility(View.VISIBLE);
+            login_title.setVisibility(View.GONE);
+            logOut.setVisibility(View.VISIBLE);
+        }
+        //모든 정보가 없을때 로그인 할 수 있는 화면으로
+        if(mno==0&&tno==0){
+            info.setVisibility(View.GONE);
+            logOut.setVisibility(View.GONE);
+            login_title.setVisibility(View.VISIBLE);
+        }
+        //사장님일때
+        if(mno==0&&(title.equals("사장")&&tno!=0)){
+            Toast.makeText(this,"사장님 로그인: "+tno,Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
