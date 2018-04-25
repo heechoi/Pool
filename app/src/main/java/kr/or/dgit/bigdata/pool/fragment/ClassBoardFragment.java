@@ -40,7 +40,7 @@ import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/";
     private String time = "";
     ViewPager viewpager;
     TabLayout tabs;

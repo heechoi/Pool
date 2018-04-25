@@ -35,7 +35,7 @@ import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener,AdapterView.OnItemClickListener,Serializable {
+public class ClassBoardListFragment extends Fragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, Serializable {
     ListView mListView;
     ProgressBar progressBar;
     ArrayList<ClassBoard> mList;
@@ -45,6 +45,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
     private String http = "http://192.168.0.60:8080/pool/restclassboard/classboardlist";
     int page = 1;
     int cno = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("bum", "===================createView");
@@ -52,9 +53,9 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
         Bundle bundle = getArguments();
         mList = (ArrayList<ClassBoard>) bundle.getSerializable("list");
 
-        if(mList.get(0).getBno()==-1){
+        if (mList.get(0).getBno() == -1) {
             adapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
-        }else{
+        } else {
             adapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
             cno = mList.get(0).getCno();
         }
@@ -76,8 +77,8 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
             progressBar.setVisibility(View.VISIBLE);
             page++;
-            String[] arr = {cno+"",page+""};
-            String[] arrname = {"cno","page"};
+            String[] arr = {cno + "", page + ""};
+            String[] arrname = {"cno", "page"};
 
             new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar...").execute(http);
         }
@@ -91,20 +92,22 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
-        tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
-        tr.addToBackStack(null);
-        ClassBoardRead fgm = new ClassBoardRead();
-        tr.replace(R.id.frame,fgm);
-        tr.commit();
+
+
+        String bno = mList.get(position).getBno() + "";
+        String[] arrname = {"bno"};
+        String[] arr = {bno};
+        String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
+        new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
     }
 
-    class MyNoListAdapter extends BaseAdapter{
+    class MyNoListAdapter extends BaseAdapter {
         private static final String TAG = "MyListAdapter";
         private Context mContext;  //MyListAdapter 가 Activity가 아니므로
         private int mItemRowLayout; //항목레이아웃
         private LayoutInflater mInflater; //항목레이아웃을 전개할 전개자
         private List<ClassBoard> arItem;
+
         public MyNoListAdapter(Context context, int itemRowLayout, List<ClassBoard> list) {
             mContext = context;
             mItemRowLayout = itemRowLayout;
@@ -112,6 +115,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         }
+
         @Override
         public int getCount() {
             Log.d(TAG, "getCount()");
@@ -142,6 +146,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             return convertview;
         }
     }
+
     class MyListAdapter extends BaseAdapter {
         private static final String TAG = "MyListAdapter";
         private Context mContext;  //MyListAdapter 가 Activity가 아니므로
@@ -200,17 +205,18 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             return convertview;
         }
     }
+
     @SuppressLint("HandlerLeak")
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 1 :
-                    String result = (String)msg.obj;
-                    Log.d("bum",result);
+                case 1:
+                    String result = (String) msg.obj;
+                    Log.d("bum", result);
                     try {
                         JSONArray ja = new JSONArray(result);
-                        if(ja.length() >0) {
+                        if (ja.length() > 0) {
                             for (int j = 0; j < ja.length(); j++) {
                                 JSONObject order = ja.getJSONObject(j);
                                 ClassBoard board = new ClassBoard();
@@ -229,6 +235,31 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
                     }
                     adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    String result2 = (String) msg.obj;
+                    Bundle bundle = new Bundle();
+                    try {
+                        JSONObject jObj = new JSONObject(result2);
+
+                        bundle.putInt("bno",jObj.getInt("bno"));
+                        bundle.putInt("regdate",jObj.getInt("regdate"));
+                        bundle.putLong("readcnt",jObj.getLong("readcnt"));
+                        bundle.putString("imgpath",jObj.getString("imgpath"));
+                        bundle.putString("title",jObj.getString("title"));
+                        bundle.putString("id",jObj.getString("id"));
+                        bundle.putString("content",jObj.getString("content"));
+                        bundle.putInt("cno",jObj.getInt("cno"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
+                    tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
+                    tr.addToBackStack(null);
+                    ClassBoardRead fgm = new ClassBoardRead();
+                    fgm.setArguments(bundle);
+                    tr.replace(R.id.frame, fgm);
+                    tr.commit();
                     break;
             }
 
