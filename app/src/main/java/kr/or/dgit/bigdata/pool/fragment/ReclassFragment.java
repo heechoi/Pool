@@ -18,7 +18,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
@@ -35,13 +38,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class ReclassFragment extends Fragment implements View.OnClickListener{
 
     private String http = "http://192.168.0.12:8080/pool";
-    Button classBtn;
-    String[] arrays;
-    int[] cno;
-    int tno;
-    ListView listView;
-    ArrayList<Member> mList;
-    String d;
+    Spinner s;
     public static ReclassFragment newInstance(){
         ReclassFragment cf = new ReclassFragment();
         return cf;
@@ -51,42 +48,28 @@ public class ReclassFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.classinfo, container, false);
+        View root = inflater.inflate(R.layout.reclass, container, false);
+        s = root.findViewById(R.id.spinner);
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               s.getItemAtPosition(i);
+            }
 
-        classBtn = root.findViewById(R.id.btn_class);
-        classBtn.setOnClickListener(this);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
-
-        tno = 0;
-
-        listView = root.findViewById(R.id.member_list);
         return root;
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.btn_class){
-            Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    month= month+1;
-                    if(month<10){
-                        d = year+"0"+month+"01";
-                    }else{
-                        d = year+""+month+"01";
-                    }
 
-                    new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restclassinfo/classlist?tno=1004&s_day="+d);
-
-                }
-            },year,month,day);
-
-            datePickerDialog.show();
         }
     }
 
@@ -99,36 +82,17 @@ public class ReclassFragment extends Fragment implements View.OnClickListener{
 
                     try {
                         JSONArray ja = new JSONArray(result);
-                        arrays = new String[ja.length()];
-                        cno = new int[ja.length()];
-                        for (int i = 0; i < ja.length(); i++) {
-                            JSONObject order = ja.getJSONObject(i);
-                            Object no = order.get("cno");
-                            Object time = order.get("time");
-                            Object level =order.get("level");
-                            cno[i] = (int) no;
-                            arrays[i]=(time+" "+level);
-                        }
+
+
                     } catch (JSONException e) {
                         Log.i("Json_parser", e.getMessage());
                     }
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
-                            .setIcon(R.mipmap.ic_launcher)
-                            .setTitle("반을 선택하세요")
-                            .setItems(arrays, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i){
-                                    TextView title=getActivity().findViewById(R.id.class_name);
-                                    title.setText(arrays[i]);
-                                    new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...",2).execute(http+"/restregister/memberList?cno="+cno[i]);
-                                }
-                            })
-                            .setNegativeButton("취소", null).create().show();
+
                 }
                 break;
                 case 2:{
                     String result = (String)msg.obj;
-                     mList = new ArrayList<>();
+
 
                     try {
                         JSONArray ja = new JSONArray(result);
@@ -141,32 +105,14 @@ public class ReclassFragment extends Fragment implements View.OnClickListener{
                             member.setName((String)order.get("name"));
                             member.setAge((int)order.get("age"));
                             member.setTell((String)order.get("tell"));
-                            mList.add(member);
+
                         }
                     } catch (JSONException e) {
                         Log.i("Json_parser", e.getMessage());
                     }
 
 
-                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.member_item,mList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                            FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
-                            tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
-                            tr.addToBackStack(null);
-                            MemberInfoFragment mf = new MemberInfoFragment();
-                            Bundle bundle = new Bundle();
-                           /* new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...",3).execute(http+"/restregister/member?mno="+mList.get(i).getMno());*/
-                            bundle.putSerializable("mno", mList.get(i).getMno());
-                            mf.setArguments(bundle);
-                            tr.replace(R.id.frame,mf);
-                            tr.commit();
-
-                        }
-                    });
 
 
 
