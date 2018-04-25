@@ -45,17 +45,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -187,7 +176,6 @@ public class MainActivity extends AppCompatActivity
         tr.replace(R.id.frame,fgm);
         tr.commit();
     }
-
     private void getLoginInfo() {
         int tno = admin.getInt("tno",0);
         String title = admin.getString("title","");
@@ -209,7 +197,5 @@ public class MainActivity extends AppCompatActivity
         if(mno==0&&(title.equals("사장")&&tno!=0)){
             Toast.makeText(this,"사장님 로그인: "+tno,Toast.LENGTH_SHORT).show();
         }
-
     }
-
 }

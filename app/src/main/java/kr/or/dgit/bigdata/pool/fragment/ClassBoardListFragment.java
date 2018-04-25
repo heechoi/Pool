@@ -60,7 +60,6 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             cno = mList.get(0).getCno();
         }
 
-
         mListView = root.findViewById(R.id.listview);
         mListView.setAdapter(adapter);
         progressBar = root.findViewById(R.id.progressbar);
@@ -92,8 +91,6 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-
         String bno = mList.get(position).getBno() + "";
         String[] arrname = {"bno"};
         String[] arr = {bno};
@@ -243,8 +240,8 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
                         JSONObject jObj = new JSONObject(result2);
 
                         bundle.putInt("bno",jObj.getInt("bno"));
-                        bundle.putInt("regdate",jObj.getInt("regdate"));
-                        bundle.putLong("readcnt",jObj.getLong("readcnt"));
+                        bundle.putInt("readcnt",jObj.getInt("readcnt"));
+                        bundle.putLong("regdate",jObj.getLong("regdate"));
                         bundle.putString("imgpath",jObj.getString("imgpath"));
                         bundle.putString("title",jObj.getString("title"));
                         bundle.putString("id",jObj.getString("id"));
