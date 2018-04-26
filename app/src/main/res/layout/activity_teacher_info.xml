@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/main_layout"
-    tools:context="kr.or.dgit.bigdata.pool.MemberInfoActivity">
+    tools:context="kr.or.dgit.bigdata.pool.TeacherInfoActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,14 +15,35 @@
         android:background="@color/colorPrimary"
         android:padding="10dp" />
     <ScrollView
-        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="강사 프로필"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    android:textColor="#000" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:id="@+id/tImage"
+                    android:padding="10dp"/>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,7 +53,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="회원번호"
+                    android:text="강사번호"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -47,7 +67,7 @@
                     android:textSize="14dp"
                     android:minHeight="40dp"
                     android:padding="10dp"
-                    android:id="@+id/mno"/>
+                    android:id="@+id/tno"/>
             </LinearLayout>
 
 
@@ -61,7 +81,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="회원이름"
+                    android:text="이름"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -382,6 +402,6 @@
         </LinearLayout>
 
 
-    </ScrollView>
 
+    </ScrollView>
 </LinearLayout>

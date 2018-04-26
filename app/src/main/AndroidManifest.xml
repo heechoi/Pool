@@ -78,12 +78,16 @@
 
         <activity
             android:name=".fragment.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".ClassBoardInsertActivity"
-            android:theme="@style/ClassBoardTitle"></activity>
-        <activity android:name=".MemberInfoActivity"  android:screenOrientation="portrait"
+            android:theme="@style/ClassBoardTitle" />
+        <activity
+            android:name=".MemberInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Search" />
+        <activity android:name=".TeacherInfoActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search"></activity>
     </application>
 
