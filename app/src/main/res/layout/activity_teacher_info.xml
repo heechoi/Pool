@@ -15,17 +15,20 @@
         android:background="@color/colorPrimary"
         android:padding="10dp" />
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -40,11 +43,15 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="40dp"
                     android:id="@+id/tImage"
-                    android:padding="10dp"/>
+                    android:minHeight="40dp"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingBottom="5dp"/>
             </LinearLayout>
+
             <LinearLayout
+                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -108,7 +115,63 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="기본정보"
+                    android:text="성별"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    android:textColor="#000" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+
+                <TextView
+                    android:id="@+id/gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:padding="10dp"
+                    android:minHeight="40dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="연락처"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    android:textColor="#000" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+
+                <TextView
+                    android:id="@+id/tell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:padding="10dp"
+                    android:minHeight="40dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="내 정보"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -384,23 +447,13 @@
                         android:id="@+id/isleqve_pw"
                         android:textSize="13dp"
                         android:inputType="textPassword"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:text="탈퇴신청"
-                        android:background="@color/colorPrimaryDark"
-                        android:textColor="#fff"
-                        android:textSize="13dp"
-                        android:id="@+id/btnisleave"
-                        android:onClick="clickIsleave"
-                        android:layout_gravity="right"/>
+
                 </LinearLayout>
 
             </LinearLayout>
 
 
         </LinearLayout>
-
 
 
     </ScrollView>
