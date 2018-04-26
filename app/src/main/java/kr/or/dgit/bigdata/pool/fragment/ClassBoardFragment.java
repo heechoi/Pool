@@ -168,7 +168,8 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-
+        ClassBoardRead fragment = new ClassBoardRead();
+        getFragmentManager().beginTransaction().remove(fragment).commit();
         View root = inflater.inflate(R.layout.classboard, container, false);
         listview = root.findViewById(R.id.listview);
         listview.setOnItemClickListener(this);
