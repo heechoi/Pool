@@ -486,6 +486,11 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                 case 2:
                     String result = (String) msg.obj;
                     Log.d("bum", "============= " + result);
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    intent.putExtra("classboard","success");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.login,R.anim.login_out);
                     break;
             }
         }

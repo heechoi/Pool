@@ -25,6 +25,7 @@ import java.util.Map;
 
 import kr.or.dgit.bigdata.pool.fragment.BusFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
+import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
@@ -75,6 +76,12 @@ public class MainActivity extends AppCompatActivity
         mlogin = getSharedPreferences("member", MODE_PRIVATE);
         admin = getSharedPreferences("Admin", MODE_PRIVATE);
         getLoginInfo();
+
+        Intent intent = getIntent();
+        if(intent.getStringExtra("classboard") !=null){
+            ClassBoardFragment tf = new ClassBoardFragment();
+            viewFragment(tf);
+        }
 
     }
 
