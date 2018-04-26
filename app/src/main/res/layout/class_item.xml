@@ -1,50 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    android:background="@color/colorWhtie"
+    android:padding="10dp"
     >
-    <TextView
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/user_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/circle_background"
+            android:src="@drawable/ic_person" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@+id/user_img"
+            android:text="제목 나타나는 곳"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="InvalidId" />
+        <TextView
+            android:id="@+id/writer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@+id/user_img"
+            android:gravity="left"
+            android:paddingRight="5dp"
+            android:text="작성자"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvRegdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/writer"
+            android:layout_toRightOf="@+id/writer"
+            android:text="2018년 4월 24일 ㆍ 5 읽음 "
+            android:textSize="13sp" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bno"
-        android:textSize="12sp"
-        android:layout_weight="1"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:gravity="center|center_vertical"
-        android:background="@drawable/classboard_list2"
-        />
-    <TextView
-        android:layout_width="0dp"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:id="@+id/imgview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            />
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/writer"
-        android:textSize="12sp"
-        android:gravity="center|center_vertical"
-        android:padding="10dp"
-        android:background="@drawable/classboard_list2"
-        android:layout_weight="2"/>
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/title"
-        android:gravity="left|center_vertical"
-        android:background="@drawable/classboard_list2"
-        android:textSize="12sp"
-        android:padding="10dp"
-        android:layout_weight="5"/>
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/date"
-        android:gravity="center|center_vertical"
-        android:background="@drawable/classboard_list2"
-        android:textSize="12sp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:layout_weight="2"/>
+        android:layout_gravity="center"
+        android:padding="5dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:paddingTop="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/paper_plane"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="게시글 보기"/>
+    </LinearLayout>
 </LinearLayout>

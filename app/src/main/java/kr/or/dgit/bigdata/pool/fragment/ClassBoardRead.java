@@ -131,7 +131,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
         String replyhttps = url+"/pool/restclassboard/readreply";
         new HttpRequestTack(getContext(),mHandler,new String[]{bno+""},new String[]{"bno"},"POST","댓글을 읽어오고 있습니다...").execute(replyhttps);
         return root;
-    }
+}
 
     @Override
     public void onClick(View view) {
@@ -154,6 +154,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
                         new HttpRequestTack(getContext(),mHandler,new String[]{bno+""},new String[]{"bno"},"POST","게시글을 삭제하는중입니다...",2).execute(deleteHttp);
                         dialog.cancel();
                         dialog.dismiss();
+                        getActivity().finish();
                     }
                 }).setNegativeButton("취소",null);
                 alert.create();

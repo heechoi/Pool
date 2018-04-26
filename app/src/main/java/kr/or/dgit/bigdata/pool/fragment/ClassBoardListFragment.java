@@ -2,7 +2,13 @@ package kr.or.dgit.bigdata.pool.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -16,6 +22,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,7 +33,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,9 +58,13 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
     private boolean lastItemVisibleFlag = false;
     private boolean mLockListView = false;
     private String http = "http://192.168.0.60:8080/pool/restclassboard/classboardlist";
+    String imgurl = "http://192.168.0.60:8080";
+    Bitmap bmImg;
+    back tack;
+    Bitmap rotate;
     int page = 1;
     int cno = 0;
-
+    File filePath;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("bum", "===================createView");
@@ -59,7 +78,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             adapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
             cno = mList.get(0).getCno();
         }
-
+        adapter.notifyDataSetChanged();
         mListView = root.findViewById(R.id.listview);
         mListView.setAdapter(adapter);
         progressBar = root.findViewById(R.id.progressbar);
@@ -110,7 +129,6 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             mItemRowLayout = itemRowLayout;
             arItem = list;
             mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         }
 
         @Override
@@ -184,8 +202,8 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
                 convertview = mInflater.inflate(mItemRowLayout, viewGroup, false);
             }
 
-            TextView bno = convertview.findViewById(R.id.bno);
-            bno.setText(arItem.get(position).getBno() + "");
+            /*TextView bno = convertview.findViewById(R.id.bno);
+            bno.setText(arItem.get(position).getBno() + "");*/
 
             TextView writer = convertview.findViewById(R.id.writer);
             writer.setText(arItem.get(position).getId());
@@ -193,7 +211,7 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
             TextView title = convertview.findViewById(R.id.title);
             title.setText(arItem.get(position).getTitle());
 
-            TextView date = convertview.findViewById(R.id.date);
+            TextView date = convertview.findViewById(R.id.tvRegdate);
             Date date2 = arItem.get(position).getRegdate();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String strDate = sdf.format(date2);
@@ -262,4 +280,87 @@ public class ClassBoardListFragment extends Fragment implements AbsListView.OnSc
 
         }
     };
+    private class back extends AsyncTask<String, Integer, Bitmap> {
+        ImageView imgview;
+
+        public back(ImageView imgview) {
+            this.imgview = imgview;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+
+            try {
+
+                URL myFileUrl = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/pool";
+                File dir = new File(dirPath);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+
+                filePath = new File("/storage/emulated/0/pool/test.jpg");
+                filePath.createNewFile();
+                Log.d("bum","파일패스 "+filePath.getAbsolutePath());
+                OutputStream out = new FileOutputStream(filePath);
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                //out.close();
+                bmImg = BitmapFactory.decodeFile(filePath.getAbsolutePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            rotate = rotateImage(bmImg);
+            return rotate;
+        }
+
+        protected void onPostExecute(Bitmap img) {
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1400);
+            imgview.setLayoutParams(lp);
+            imgview.setImageBitmap(rotate);
+        }
+    }
+    private Bitmap rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        Log.d("bum","===========시작");
+        Log.d("bum","===========1");
+        try {
+            if (filePath != null) {
+                Log.d("bum","===========2");
+                exifInterface = new ExifInterface(filePath.getAbsolutePath());
+                Log.d("bum","===========3");
+            } else {
+                //  exifInterface = new ExifInterface(galleryPath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix m = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                m.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                m.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                m.setRotate(270);
+                break;
+            default:
+                m.setRotate(0);
+        }
+        Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+        return rotated;
+    }
 }
