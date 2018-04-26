@@ -71,9 +71,8 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     ListView listview;
     File filePath;
     String imgurl = "http://192.168.0.60:8080";
-    MyListAdapter mListAdapter;
+    BaseAdapter mListAdapter;
     ArrayList<ClassBoard> mList;
-
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -91,7 +90,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                         mList = new ArrayList<>();
 
                         JSONArray ja = new JSONArray(result);
-                        BaseAdapter adapter;
+
                         if (ja.length() > 0) {
                             for (int j = 0; j < ja.length(); j++) {
                                 JSONObject order = ja.getJSONObject(j);
@@ -115,7 +114,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                             board.setRegdate(date);
                             board.setTitle("등록된 게시글이 없습니다. ");
                             mList.add(board);
-                            adapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
+                            mListAdapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
                         }
                         mListAdapter.notifyDataSetChanged();
                         listview.setAdapter(mListAdapter);
@@ -160,6 +159,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                     tr.replace(R.id.frame, fgm);
                     tr.commit();
                     break;
+
             }
         }
     };
@@ -401,8 +401,6 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             ClassBoard board = mList.get(position);
             board.setRotateImage(rotate);
             mListAdapter.notifyDataSetChanged();
-
-
         }
     }
 

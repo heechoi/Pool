@@ -99,6 +99,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
             customDialog.show();
         }else if(view.getId() ==R.id.tvclassselect){
             Log.d("bum","tvclass click");
+            etTitle.clearFocus();
             new AlertDialog.Builder(this)
                     .setIcon(R.mipmap.ic_launcher)
                     .setTitle("시간을 선택해주세요")
@@ -422,8 +423,12 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId()==android.R.id.home){
-            Toast t = Toast.makeText(this,"HOME AS UP Click",Toast.LENGTH_SHORT);
-            t.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("작성중인 내용을 저장하지 않고 나가시겠습니까?");
+            builder.setPositiveButton("확인",dialogListener);
+            builder.setNegativeButton("취소",dialogListener);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
             return true;
         }else if(item.getItemId() ==R.id.action_search){
             String content = etcontent.getText().toString();
@@ -503,4 +508,24 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         String httpclasstime = http + "insert";
         new HttpRequestTack(this, mhandler, arr, arrname, "POST", "글을 작성합니다.",2).execute(httpclasstime);
     }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("작성중인 내용을 저장하지 않고 나가시겠습니까?");
+        builder.setPositiveButton("확인",dialogListener);
+        builder.setNegativeButton("취소",dialogListener);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+
+        @Override
+        public void onClick(DialogInterface dialog, int i) {
+            if (i == DialogInterface.BUTTON_POSITIVE) {
+                finish();
+            }
+        }
+    };
 }
