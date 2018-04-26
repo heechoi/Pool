@@ -54,6 +54,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -237,5 +241,7 @@ public class MainActivity extends AppCompatActivity
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
             Toast.makeText(this, "사장님 로그인: " + tno, Toast.LENGTH_SHORT).show();
         }
+
     }
+
 }
