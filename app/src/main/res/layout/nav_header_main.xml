@@ -32,6 +32,12 @@
                 android:id="@+id/info_id"
                 android:textColor="#fff"
                 android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:id="@+id/barCode"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/card_img"
+                android:background="@drawable/circle_white"/>
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"

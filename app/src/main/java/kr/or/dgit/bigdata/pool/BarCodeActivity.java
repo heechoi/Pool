@@ -53,6 +53,7 @@ public class BarCodeActivity extends AppCompatActivity {
         Log.d("dahee",String.valueOf(layout.getWidth()));
         Log.d("dahee",String.valueOf(layout.getHeight()));
         MultiFormatWriter gen =  new MultiFormatWriter();
+        Log.d("dahee","barcode========:"+mno);
         String data = mno+"";
 
         code.setText(mno+"");
@@ -72,6 +73,7 @@ public class BarCodeActivity extends AppCompatActivity {
                 view.invalidate();
 
             }
+
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/main_layout"
-    tools:context="kr.or.dgit.bigdata.pool.MemberInfoActivity">
+    tools:context="kr.or.dgit.bigdata.pool.TeacherInfoActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +32,35 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="회원번호"
+                    android:text="강사 프로필"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    android:textColor="#000" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tImage"
+                    android:minHeight="40dp"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingBottom="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="강사번호"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -47,7 +74,7 @@
                     android:textSize="14dp"
                     android:minHeight="40dp"
                     android:padding="10dp"
-                    android:id="@+id/mno"/>
+                    android:id="@+id/tno"/>
             </LinearLayout>
 
 
@@ -61,7 +88,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="회원이름"
+                    android:text="이름"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -88,7 +115,63 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="기본정보"
+                    android:text="성별"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    android:textColor="#000" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+
+                <TextView
+                    android:id="@+id/gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:padding="10dp"
+                    android:minHeight="40dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="연락처"
+                    android:textSize="16dp"
+                    android:padding="10dp"
+                    android:textColor="#000" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+
+                <TextView
+                    android:id="@+id/tell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:padding="10dp"
+                    android:minHeight="40dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="내 정보"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -364,16 +447,7 @@
                         android:id="@+id/isleqve_pw"
                         android:textSize="13dp"
                         android:inputType="textPassword"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:text="탈퇴신청"
-                        android:background="@color/colorPrimaryDark"
-                        android:textColor="#fff"
-                        android:textSize="13dp"
-                        android:id="@+id/btnisleave"
-                        android:onClick="clickIsleave"
-                        android:layout_gravity="right"/>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -383,5 +457,4 @@
 
 
     </ScrollView>
-
 </LinearLayout>

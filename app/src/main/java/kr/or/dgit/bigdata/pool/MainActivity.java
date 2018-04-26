@@ -17,12 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Map;
 
+import kr.or.dgit.bigdata.pool.dto.Teacher;
 import kr.or.dgit.bigdata.pool.fragment.BusFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private TextView logOut;
     private SharedPreferences mlogin;
     private SharedPreferences admin;
+    private ImageView barcode;
 
     int mStart = 10;
 
@@ -50,6 +53,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -68,6 +75,9 @@ public class MainActivity extends AppCompatActivity
         //로그아웃
         logOut = navigationView.getHeaderView(0).findViewById(R.id.logOut);
         logOut.setOnClickListener(this);
+
+        barcode = navigationView.getHeaderView(0).findViewById(R.id.barCode);
+        barcode.setOnClickListener(this);
 
         TestFragment cf = TestFragment.newInstance(mStart);
 
@@ -149,8 +159,7 @@ public class MainActivity extends AppCompatActivity
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
-            Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
-            startActivity(intent);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -174,16 +183,32 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor logOutT = admin.edit();
             logOutT.clear();
             logOutT.commit();
-            //main activity 재요청
+            //main activity 재요청0
 
             finish();
             startActivity(getIntent());
 
         }
+        if(v.getId()==R.id.barCode){
+            Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
+            startActivity(intent);
+        }
         if (v.getId() == R.id.info) {
-            Intent MemberInfo = new Intent(this, MemberInfoActivity.class);
-            startActivity(MemberInfo);
-            overridePendingTransition(R.anim.login, R.anim.login_out);
+            int mno = mlogin.getInt("mno", 0);
+            int tno = admin.getInt("tno", 0);
+            String title = admin.getString("title","");
+            if(mno!=0 &&tno==0){
+                Intent MemberInfo = new Intent(this, MemberInfoActivity.class);
+                startActivity(MemberInfo);
+                overridePendingTransition(R.anim.login, R.anim.login_out);
+            }
+
+            if(tno!=0&&mno==0){
+                Intent TeacherInfo = new Intent(this, TeacherInfoActivity.class);
+                startActivity(TeacherInfo);
+                overridePendingTransition(R.anim.login, R.anim.login_out);
+            }
+
         }
     }
 
@@ -216,5 +241,7 @@ public class MainActivity extends AppCompatActivity
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
             Toast.makeText(this, "사장님 로그인: " + tno, Toast.LENGTH_SHORT).show();
         }
+
     }
+
 }
