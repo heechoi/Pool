@@ -118,6 +118,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             editor.commit();
 
                             Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
                             startActivity(intent);
 

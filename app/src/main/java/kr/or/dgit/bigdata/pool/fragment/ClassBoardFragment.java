@@ -59,6 +59,7 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
                     String result = (String) msg.obj;
                     Log.d("bum", "=============3 " + result);
                     try {
+                        viewpager.removeAllViews();
                         JSONObject jObj = new JSONObject(result);
 
                         List<Fragment> arFragment = new ArrayList<>();
@@ -98,7 +99,9 @@ public class ClassBoardFragment extends Fragment implements  TabLayout.OnTabSele
 
                             arFragment.add(cf);
                         }
+
                         MyPagerAdapter adapter = new MyPagerAdapter(getFragmentManager(),arFragment);
+                        adapter.notifyDataSetChanged();
                         viewpager.setAdapter(adapter);
 
                     } catch (Exception e) {

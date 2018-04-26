@@ -51,7 +51,6 @@ public class ReclassFragment extends Fragment{
         level = sdf.format(d);
         tno = (int)sp.getInt("tno",0);
         new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restregister/reclass?tno="+tno+"&level="+level);
-
         return root;
     }
 

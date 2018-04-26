@@ -31,7 +31,7 @@ import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private LinearLayout login;
     private TextView info;
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences admin;
 
     int mStart = 10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,19 +66,18 @@ public class MainActivity extends AppCompatActivity
         login.setOnClickListener(this);
         //회원정보수정
         info = navigationView.getHeaderView(0).findViewById(R.id.info);
-        info.setOnClickListener(this);
         login_title = navigationView.getHeaderView(0).findViewById(R.id.login_title);
-
+        info.setOnClickListener(this);
         //로그아웃
         logOut = navigationView.getHeaderView(0).findViewById(R.id.logOut);
         logOut.setOnClickListener(this);
 
         TestFragment cf = TestFragment.newInstance(mStart);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.frame,cf).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frame, cf).commit();
 
-        mlogin = getSharedPreferences("member",MODE_PRIVATE);
-        admin = getSharedPreferences("Admin",MODE_PRIVATE);
+        mlogin = getSharedPreferences("member", MODE_PRIVATE);
+        admin = getSharedPreferences("Admin", MODE_PRIVATE);
         getLoginInfo();
 
     }
@@ -123,30 +123,30 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.classboard) {
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
             viewFragment(cf);
-        }else if(id ==R.id.user_attendance){
-           MemberInfoFragment mf = MemberInfoFragment.newInstance();
+        } else if (id == R.id.user_attendance) {
+            MemberInfoFragment mf = MemberInfoFragment.newInstance();
             viewFragment(mf);
-        }else if(id ==R.id.classtime){
+        } else if (id == R.id.classtime) {
 
-        }else if(id ==R.id.bus){
-           Intent intent = new Intent(this,MapsActivity.class);
-           startActivity(intent);
-        }else if(id ==R.id.clinic){
+        } else if (id == R.id.bus) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.clinic) {
 
-        }else if(id ==R.id.classboard){
+        } else if (id == R.id.classboard) {
 
-        }else if(id ==R.id.qnaboard){
+        } else if (id == R.id.qnaboard) {
 
-        }else if(id ==R.id.noticeboard){
+        } else if (id == R.id.noticeboard) {
 
-        }else if(id ==R.id.classinfo){
+        } else if (id == R.id.classinfo) {
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
             viewFragment(cf);
-        }else if(id ==R.id.reclass){
+        } else if (id == R.id.reclass) {
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
-        }else if(id ==R.id.notice_alram){
-            Intent  intent = new Intent(getApplicationContext(),BarCodeActivity.class);
+        } else if (id == R.id.notice_alram) {
+            Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
             startActivity(intent);
         }
 
@@ -157,12 +157,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.login){
-            Intent loginIntent = new Intent(this,LoginActivity.class);
+        if (v.getId() == R.id.login) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
-            overridePendingTransition(R.anim.login,R.anim.login_out);
+            overridePendingTransition(R.anim.login, R.anim.login_out);
         }
-        if(v.getId()==R.id.logOut){
+        if (v.getId() == R.id.logOut) {
             //회원정보 삭제
             SharedPreferences.Editor logOutm = mlogin.edit();
             logOutm.clear();
@@ -177,36 +177,41 @@ public class MainActivity extends AppCompatActivity
             startActivity(getIntent());
 
         }
+        if (v.getId() == R.id.info) {
+            Intent MemberInfo = new Intent(this, MemberInfoActivity.class);
+            startActivity(MemberInfo);
+            overridePendingTransition(R.anim.login, R.anim.login_out);
+        }
     }
 
-    private void viewFragment(Fragment fgm){
+    private void viewFragment(Fragment fgm) {
         FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
-        tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
+        tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
         tr.addToBackStack(null);
-        tr.replace(R.id.frame,fgm);
+        tr.replace(R.id.frame, fgm);
         tr.commit();
     }
 
     private void getLoginInfo() {
-        int tno = admin.getInt("tno",0);
-        String title = admin.getString("title","");
-        int mno = mlogin.getInt("mno",0);
+        int tno = admin.getInt("tno", 0);
+        String title = admin.getString("title", "");
+        int mno = mlogin.getInt("mno", 0);
 
         //회원,강사일때
-        if(mno!=0||(tno!=0&&!title.equals("사장"))){
+        if (mno != 0 || (tno != 0 && !title.equals("사장"))) {
             info.setVisibility(View.VISIBLE);
             login_title.setVisibility(View.GONE);
             logOut.setVisibility(View.VISIBLE);
         }
         //모든 정보가 없을때 로그인 할 수 있는 화면으로
-        if(mno==0&&tno==0){
+        if (mno == 0 && tno == 0) {
             info.setVisibility(View.GONE);
             logOut.setVisibility(View.GONE);
             login_title.setVisibility(View.VISIBLE);
         }
         //사장님일때
-        if(mno==0&&(title.equals("사장")&&tno!=0)){
-            Toast.makeText(this,"사장님 로그인: "+tno,Toast.LENGTH_SHORT).show();
+        if (mno == 0 && (title.equals("사장") && tno != 0)) {
+            Toast.makeText(this, "사장님 로그인: " + tno, Toast.LENGTH_SHORT).show();
         }
 
     }
