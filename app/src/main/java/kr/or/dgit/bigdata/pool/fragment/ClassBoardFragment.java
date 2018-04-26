@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.icu.text.LocaleDisplayNames;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,7 +63,7 @@ import kr.or.dgit.bigdata.pool.dto.ClassboardReply;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener{
-    private String http = "http://192.168.0.60:8080/pool/restclassboard/";
+    private String http = "http://192.168.123.113:8080/pool/restclassboard/";
     private String time = "";
     private String level = "";
     Bitmap bmImg;
@@ -70,7 +71,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     Bitmap rotate;
     ListView listview;
     File filePath;
-    String imgurl = "http://192.168.0.60:8080";
+    String imgurl = "http://192.168.123.113:8080";
     BaseAdapter mListAdapter;
     ArrayList<ClassBoard> mList;
     public static ClassBoardFragment newInstance() {
@@ -167,9 +168,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        ClassBoardRead fragment = new ClassBoardRead();
-        getFragmentManager().beginTransaction().remove(fragment).commit();
+
         View root = inflater.inflate(R.layout.classboard, container, false);
         listview = root.findViewById(R.id.listview);
         listview.setOnItemClickListener(this);
@@ -212,12 +211,24 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View view) {
                 Intent insertIntent = new Intent(getContext(), ClassBoardInsertActivity.class);
+                if(mList !=null){
+                    Log.d("bumbum",mList.get(0).getCno()+"");
+                    insertIntent.putExtra("cno",mList.get(0).getCno()+"");
+                }
                 startActivity(insertIntent);
 
                 getActivity().overridePendingTransition(R.anim.login, R.anim.login_out);
             }
         });
-
+        Bundle bundle = getArguments();
+        if(bundle !=null){
+            Log.d("bumbum",bundle.getString("cno"));
+            int c = Integer.parseInt(bundle.getString("cno"));
+            String[] arr = {c+""};
+            String[] arrname = {"cno"};
+            String searchhttp = http+"classboardlist";
+            new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(searchhttp);
+        }
         return root;
     }
     @Override
@@ -225,7 +236,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         String bno = mList.get(position).getBno() + "";
         String[] arrname = {"bno"};
         String[] arr = {bno};
-        String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
+        String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
         new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
     }
 

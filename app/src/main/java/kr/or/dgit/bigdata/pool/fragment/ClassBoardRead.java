@@ -70,7 +70,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
     back tack;
     Bitmap rotate;
     File filePath;
-    String url = "http://192.168.0.60:8080";
+    String url = "http://192.168.123.113:8080";
     ProgressDialog mProgressDialog;
     int bno;
     List<ClassboardReply> list;
@@ -159,7 +159,6 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
                         ClassBoardFragment fgm = new ClassBoardFragment();
                         FragmentTransaction tr =getActivity().getSupportFragmentManager().beginTransaction();
                         tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
-                        tr.addToBackStack(null);
                         tr.replace(R.id.frame, fgm);
                         tr.commit();
 
