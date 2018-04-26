@@ -38,7 +38,7 @@ import java.net.URL;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class TeacherInfoActivity extends AppCompatActivity {
+public class TeacherInfoActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView tImage;
     private TextView no;
     private TextView basic;
@@ -46,6 +46,10 @@ public class TeacherInfoActivity extends AppCompatActivity {
     private File filePath;
     private Bitmap bmImg;
     private Bitmap rotate;
+    private TextView gender;
+    private TextView tell;
+    private ImageView showEmail;
+
     int tno;
     private back tack;
     private String imgUrl = "http://192.168.0.239:8080";
@@ -66,7 +70,10 @@ public class TeacherInfoActivity extends AppCompatActivity {
         no = findViewById(R.id.tno);
         basic = findViewById(R.id.basic_info);
         name = findViewById(R.id.name);
-
+        gender = findViewById(R.id.gender);
+        tell = findViewById(R.id.tell);
+        showEmail= findViewById(R.id.show_email);
+        showEmail.setOnClickListener(this);
         HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","강사정보 가져오는 중..",1);
         httpRequestTack.execute(isleave);
 
@@ -89,6 +96,21 @@ public class TeacherInfoActivity extends AppCompatActivity {
                             tack = new back();
                             tack.execute(imgUrl+imgpath);
                         }
+                        gender.setText(object.getString("gender"));
+                        String ttell = object.getString("tell");
+                        String t1 = ttell.substring(0,ttell.indexOf("-")+1);
+                        String t2 = ttell.substring(ttell.indexOf("-")+1,ttell.indexOf("-")+2)+"***-";
+                        String t3 = ttell.substring(ttell.lastIndexOf("-")+1,ttell.lastIndexOf("-")+2)+"***";
+
+                        tell.setText(t1+t2+t3);
+
+                        if(!object.getString("info").equals("null")){
+                            basic.setText(object.getString("info"));
+                        }else{
+                            basic.setText("");
+                        }
+
+
                     }catch (Exception e){
 
                     }
@@ -102,6 +124,13 @@ public class TeacherInfoActivity extends AppCompatActivity {
     }
 
     public void clickChangePw(View view) {
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId()==R.id.show_email){
+
+        }
     }
 
 
