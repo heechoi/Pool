@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.pool.dto;
 
 import android.graphics.Bitmap;
+import android.widget.LinearLayout;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +21,15 @@ public class ClassBoard implements Serializable{
     private String imgpath;
     private int readcnt;
     private Bitmap rotateImage;
+    private LinearLayout replyList;
+
+    public LinearLayout getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(LinearLayout replyList) {
+        this.replyList = replyList;
+    }
 
     public ClassBoard() {}
 
