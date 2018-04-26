@@ -1,13 +1,17 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
@@ -17,23 +21,33 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,16 +55,24 @@ import java.util.List;
 
 import kr.or.dgit.bigdata.pool.ClassBoardInsertActivity;
 import kr.or.dgit.bigdata.pool.LoginActivity;
+import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
+import kr.or.dgit.bigdata.pool.dto.ClassboardReply;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassBoardFragment extends Fragment {
+public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener{
     private String http = "http://192.168.0.60:8080/pool/restclassboard/";
     private String time = "";
     private String level = "";
+    Bitmap bmImg;
+    back tack;
+    Bitmap rotate;
     ListView listview;
-
+    File filePath;
+    String imgurl = "http://192.168.0.60:8080";
+    MyListAdapter mListAdapter;
+    ArrayList<ClassBoard> mList;
 
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
@@ -66,7 +88,7 @@ public class ClassBoardFragment extends Fragment {
                     String result = (String) msg.obj;
                     Log.d("bum", "=============3 " + result);
                     try {
-                        ArrayList<ClassBoard> mList = new ArrayList<>();
+                        mList = new ArrayList<>();
 
                         JSONArray ja = new JSONArray(result);
                         BaseAdapter adapter;
@@ -79,10 +101,12 @@ public class ClassBoardFragment extends Fragment {
                                 board.setId(order.getString("id"));
                                 Date date = new Date(order.getLong("regdate"));
                                 board.setRegdate(date);
+                                board.setContent(order.getString("content"));
+                                board.setImgpath(order.getString("imgpath"));
                                 board.setTitle(order.getString("title"));
                                 mList.add(board);
                             }
-                            adapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
+                            mListAdapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
                         } else {
                             ClassBoard board = new ClassBoard();
                             board.setBno(-1);
@@ -93,15 +117,49 @@ public class ClassBoardFragment extends Fragment {
                             mList.add(board);
                             adapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
                         }
-                        adapter.notifyDataSetChanged();
-                        listview.setAdapter(adapter);
+                        mListAdapter.notifyDataSetChanged();
+                        listview.setAdapter(mListAdapter);
+                        Log.d("bum", "끝끝");
+                        for(int i=0; i< mList.size(); i++){
+                            Log.d("bum",mList.get(i).toString());
+                            if (!mList.get(i).getImgpath().toString().equalsIgnoreCase("null") && !mList.get(i).getImgpath().toString().equalsIgnoreCase("") && mList.get(i).getImgpath().toString() != null) {
+                                Log.d("bum", mList.get(i).getBno() + "널아님");
+                                tack = new back(i);
+                                tack.execute(imgurl + mList.get(i).getImgpath());
+                            }
+                        }
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 break;
+                case 2:
+                    String result2 = (String) msg.obj;
+                    Bundle bundle = new Bundle();
+                    try {
+                        JSONObject jObj = new JSONObject(result2);
 
+                        bundle.putInt("bno",jObj.getInt("bno"));
+                        bundle.putInt("readcnt",jObj.getInt("readcnt"));
+                        bundle.putLong("regdate",jObj.getLong("regdate"));
+                        bundle.putString("imgpath",jObj.getString("imgpath"));
+                        bundle.putString("title",jObj.getString("title"));
+                        bundle.putString("id",jObj.getString("id"));
+                        bundle.putString("content",jObj.getString("content"));
+                        bundle.putInt("cno",jObj.getInt("cno"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
+                    tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
+                    tr.addToBackStack(null);
+                    ClassBoardRead fgm = new ClassBoardRead();
+                    fgm.setArguments(bundle);
+                    tr.replace(R.id.frame, fgm);
+                    tr.commit();
+                    break;
             }
         }
     };
@@ -109,9 +167,11 @@ public class ClassBoardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
         View root = inflater.inflate(R.layout.classboard, container, false);
         listview = root.findViewById(R.id.listview);
+        listview.setOnItemClickListener(this);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +216,16 @@ public class ClassBoardFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.login, R.anim.login_out);
             }
         });
+
         return root;
+    }
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        String bno = mList.get(position).getBno() + "";
+        String[] arrname = {"bno"};
+        String[] arr = {bno};
+        String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
+        new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
     }
 
     class MyNoListAdapter extends BaseAdapter {
@@ -244,23 +313,131 @@ public class ClassBoardFragment extends Fragment {
             if (convertview == null) {
                 convertview = mInflater.inflate(mItemRowLayout, viewGroup, false);
             }
-
-            TextView bno = convertview.findViewById(R.id.bno);
-            bno.setText(arItem.get(position).getBno() + "");
-
             TextView writer = convertview.findViewById(R.id.writer);
             writer.setText(arItem.get(position).getId());
+
+            TextView content = convertview.findViewById(R.id.content);
+            content.setText(arItem.get(position).getContent());
 
             TextView title = convertview.findViewById(R.id.title);
             title.setText(arItem.get(position).getTitle());
 
-            TextView date = convertview.findViewById(R.id.date);
+            TextView date = convertview.findViewById(R.id.tvRegdate);
             Date date2 = arItem.get(position).getRegdate();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String strDate = sdf.format(date2);
             date.setText(strDate);
 
+            ImageView imgView = convertview.findViewById(R.id.imgview);
+
+            if (!arItem.get(position).getImgpath().toString().equalsIgnoreCase("null") && !arItem.get(position).getImgpath().toString().equalsIgnoreCase("") && arItem.get(position).getImgpath().toString() != null) {{
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1400);
+                imgView.setLayoutParams(lp);
+                imgView.setImageBitmap(arItem.get(position).getRotateImage());
+            }}else{
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                imgView.setLayoutParams(lp);
+                imgView.setImageBitmap(null);
+            }
+
             return convertview;
         }
+    }
+
+    private class back extends AsyncTask<String, Integer, Bitmap> {
+
+        ProgressDialog mProgressDialog = null;
+        private int position;
+
+        public back(int position) {
+            this.position = position;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("bum1", "로그인");
+            mProgressDialog = ProgressDialog.show(getContext(), "Wait", "이미지를 불러오는 중입니다.");
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+
+            try {
+
+                URL myFileUrl = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/pool";
+                File dir = new File(dirPath);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+
+                filePath = new File("/storage/emulated/0/pool/test.jpg");
+                filePath.createNewFile();
+                Log.d("bum", "파일패스 " + filePath.getAbsolutePath());
+                OutputStream out = new FileOutputStream(filePath);
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                //out.close();
+                bmImg = BitmapFactory.decodeFile(filePath.getAbsolutePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            rotate = rotateImage(bmImg);
+            return rotate;
+        }
+
+        protected void onPostExecute(Bitmap img) {
+            mProgressDialog.dismiss();
+            Log.d("bum1", "로그아웃");
+            ClassBoard board = mList.get(position);
+            board.setRotateImage(rotate);
+            mListAdapter.notifyDataSetChanged();
+
+
+        }
+    }
+
+    private Bitmap rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        Log.d("bum", "===========시작");
+        Log.d("bum", "===========1");
+        try {
+            if (filePath != null) {
+                Log.d("bum", "===========2");
+                exifInterface = new ExifInterface(filePath.getAbsolutePath());
+                Log.d("bum", "===========3");
+            } else {
+                //  exifInterface = new ExifInterface(galleryPath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix m = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                m.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                m.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                m.setRotate(270);
+                break;
+            default:
+                m.setRotate(0);
+        }
+        Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+        return rotated;
     }
 }

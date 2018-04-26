@@ -1,5 +1,7 @@
 package kr.or.dgit.bigdata.pool.dto;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,6 +19,7 @@ public class ClassBoard implements Serializable{
     private Date updatedate;
     private String imgpath;
     private int readcnt;
+    private Bitmap rotateImage;
 
     public ClassBoard() {}
 
@@ -90,6 +93,14 @@ public class ClassBoard implements Serializable{
 
     public void setReadcnt(int readcnt) {
         this.readcnt = readcnt;
+    }
+
+    public Bitmap getRotateImage() {
+        return rotateImage;
+    }
+
+    public void setRotateImage(Bitmap rotateImage) {
+        this.rotateImage = rotateImage;
     }
 
     @Override
