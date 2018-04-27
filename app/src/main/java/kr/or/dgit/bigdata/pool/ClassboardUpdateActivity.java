@@ -245,7 +245,7 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
                     String result = (String) msg.obj;
                     Log.d("bum", "============= " + result);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    ;
+
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.login,R.anim.login_out);
