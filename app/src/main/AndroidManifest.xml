@@ -87,10 +87,11 @@
             android:name=".MemberInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-        <activity android:name=".TeacherInfoActivity"
+        <activity
+            android:name=".TeacherInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Search"/>
-
+            android:theme="@style/AppTheme.Search" />
+        <activity android:name=".ClassboardUpdateActivity"></activity>
     </application>
 
 </manifest>

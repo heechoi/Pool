@@ -49,8 +49,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import kr.or.dgit.bigdata.pool.dto.ClassBoard;
-import kr.or.dgit.bigdata.pool.fragment.ClassBoardInsert;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassBoardInsertActivity extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
@@ -59,7 +57,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
     int reqWidth;
     int reqHeight;
     String galleryPath;
-    String http = "http://192.168.0.60:8080/pool/restclassboard/";
+    String http = "http://192.168.123.113:8080/pool/restclassboard/";
     ImageView img_btn;
     ImageView imgSelect;
     EditText etcontent;
@@ -69,6 +67,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
     String level;
     ImageView check_Class;
     ImageView check_title;
+    int cno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +89,12 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         etTitle = findViewById(R.id.ettitle);
         etTitle.setOnFocusChangeListener(this);
         check_title = findViewById(R.id.check_title);
+        Intent intent = getIntent();
+        if(intent.getStringExtra("cno") !=null){
+            Log.d("bum1",intent.getStringExtra("cno"));
+            cno = Integer.parseInt(intent.getStringExtra("cno"));
+
+        }
     }
 
     @Override
@@ -369,56 +374,34 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                 int bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
 
                 while (bytesRead > 0) {
-
                     dos.write(buffer, 0, bufferSize);
-
                     bytesAvailable = mFileInputStream.available();
-
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
-
                     bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
-
                 }
 
 
                 dos.writeBytes(lineEnd);
-
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
                 mFileInputStream.close();
-
                 dos.flush(); // finish upload...
-
                 if (conn.getResponseCode() == 200) {
-
                     InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
-
                     BufferedReader reader = new BufferedReader(tmp);
-
                     StringBuffer stringBuffer = new StringBuffer();
-
                     String line;
-
                     while ((line = reader.readLine()) != null) {
-
                         stringBuffer.append(line);
-
                     }
-
                 }
 
                 mFileInputStream.close();
-
                 dos.close();
-
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -487,7 +470,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                     String result = (String) msg.obj;
                     Log.d("bum", "============= " + result);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    intent.putExtra("classboard","success");
+                    intent.putExtra("classboard",cno+"");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.login,R.anim.login_out);
@@ -529,6 +512,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         @Override
         public void onClick(DialogInterface dialog, int i) {
             if (i == DialogInterface.BUTTON_POSITIVE) {
+
                 finish();
             }
         }

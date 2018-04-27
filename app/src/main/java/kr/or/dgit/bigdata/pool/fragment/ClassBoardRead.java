@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -69,7 +70,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
     back tack;
     Bitmap rotate;
     File filePath;
-    String url = "http://192.168.0.60:8080";
+    String url = "http://192.168.123.113:8080";
     ProgressDialog mProgressDialog;
     int bno;
     List<ClassboardReply> list;
@@ -84,6 +85,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
     @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View root = inflater.inflate(R.layout.classboard_read, container, false);
         imgview = root.findViewById(R.id.imgview);
         tvTitle = root.findViewById(R.id.title);
@@ -154,7 +156,12 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener{
                         new HttpRequestTack(getContext(),mHandler,new String[]{bno+""},new String[]{"bno"},"POST","게시글을 삭제하는중입니다...",2).execute(deleteHttp);
                         dialog.cancel();
                         dialog.dismiss();
-                        getActivity().finish();
+                        ClassBoardFragment fgm = new ClassBoardFragment();
+                        FragmentTransaction tr =getActivity().getSupportFragmentManager().beginTransaction();
+                        tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
+                        tr.replace(R.id.frame, fgm);
+                        tr.commit();
+
                     }
                 }).setNegativeButton("취소",null);
                 alert.create();

@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity
         Intent intent = getIntent();
         if(intent.getStringExtra("classboard") !=null){
             ClassBoardFragment tf = new ClassBoardFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("cno",intent.getStringExtra("classboard"));
+            tf.setArguments(bundle);
             viewFragment(tf);
         }
 
