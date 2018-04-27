@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,7 +26,6 @@ import android.widget.Toast;
 import java.util.Map;
 
 import kr.or.dgit.bigdata.pool.dto.Teacher;
-import kr.or.dgit.bigdata.pool.fragment.BusFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
@@ -117,23 +117,16 @@ public class MainActivity extends AppCompatActivity
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             } else {
-                super.onBackPressed();
-            }
-        }
+                toolbar_title.setText("대구아이티수영장");
+                FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
+                int count = fm.getBackStackEntryCount();
+                for(int i = 0; i < count; ++i) {
+                    fm.popBackStack();
+                }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            toolbar_title.setText("대구아이티수영장");
-            FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
-            int count = fm.getBackStackEntryCount();
-            for(int i = 0; i < count; ++i) {
-                fm.popBackStack();
-            }
-
-            if(count==0){
-                super.onBackPressed();
+                if(count==0){
+                    super.onBackPressed();
+                }
             }
         }
     }
