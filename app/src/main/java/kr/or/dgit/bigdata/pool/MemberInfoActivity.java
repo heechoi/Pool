@@ -284,6 +284,29 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this,R.style.AlertDialog);
+        alert.setTitle("개인정보 수정");
+        alert.setMessage("개인정보 수정을 종료하시겠습니까?").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                dialog.dismiss();
+                finish();
+            }
+        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                dialogInterface.dismiss();
+            }
+        });
+        alert.create();
+        alert.show();
+
+    }
+
     public void clickChangePw(View view) {
         if(nowPw.getText().toString().isEmpty()||newPw.getText().toString().isEmpty()||newPw2.getText().toString().isEmpty()){
             Toast toast = Toast.makeText(this,"비밀번호를 모두 입력해주세요",Toast.LENGTH_SHORT);

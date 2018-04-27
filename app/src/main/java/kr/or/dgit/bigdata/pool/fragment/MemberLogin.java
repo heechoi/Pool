@@ -116,14 +116,11 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
 
                         int mno = object.getInt("mno");
                         Log.d("da","===========0"+mno+"");
-                        if(mno==-1){
-                            Toast.makeText(getContext(),"회원이 아닙니다.", Toast.LENGTH_LONG).show();
+                         if(mno==-2||mno==-1) {
+                            Toast.makeText(getContext(), "아이디,비밀번호 중 일치하지 않은 정보가 있습니다.", Toast.LENGTH_LONG).show();
                             id.setText("");
-                            id.requestFocus();
-                        }else if(mno==-2) {
-                            Toast.makeText(getContext(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_LONG).show();
                             pw.setText("");
-                            pw.requestFocus();
+                            id.requestFocus();
                         }else if(mno==-3){
                             Toast.makeText(getContext(), "탈퇴한 회원입니다 로그인 할 수 없습니다", Toast.LENGTH_LONG).show();
                             id.requestFocus();

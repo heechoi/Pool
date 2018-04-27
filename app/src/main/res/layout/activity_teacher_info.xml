@@ -28,14 +28,31 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/colorWhtie">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="강사 프로필"
-                    android:textSize="16dp"
-                    android:padding="10dp"
-                    android:textColor="#000" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:layout_height="wrap_content"
+                        android:text="강사 프로필"
+                        android:textSize="16dp"
+                        android:padding="10dp"
+                        android:textColor="#000" />
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="2"
+                        android:text="프로필 변경"
+                        android:textSize="12dp"
+                        android:layout_marginRight="7dp"
+                        android:textColor="#fff"
+                        android:textAlignment="center"
+                        android:background="@drawable/info_btn"
+                        android:onClick="clickPhoto"/>
+                </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -115,7 +132,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="성별"
+                    android:text="직급"
                     android:textSize="16dp"
                     android:padding="10dp"
                     android:textColor="#000" />
@@ -123,14 +140,107 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#D3D0D0" />
-
                 <TextView
-                    android:id="@+id/gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14dp"
                     android:padding="10dp"
-                    android:minHeight="40dp"/>
+                    android:minHeight="40dp"
+                    android:id="@+id/title"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorWhtie">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:layout_height="wrap_content"
+                        android:text="내 정보"
+                        android:textSize="16dp"
+                        android:padding="10dp"
+                        android:textColor="#000" />
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="35dp"
+                        android:text="수정"
+                        android:textSize="12dp"
+                        android:layout_marginRight="7dp"
+                        android:textColor="#fff"
+                        android:textAlignment="center"
+                        android:background="@drawable/info_btn"
+                        android:id="@+id/changeInfo"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D0D0" />
+
+
+                        <TextView
+                            android:id="@+id/basic_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="90dp"
+                            android:maxHeight="100dp"
+                            android:scrollbars="vertical"
+                            android:padding="10dp"
+                            android:textSize="14dp" />
+
+                    <EditText
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="100dp"
+                            android:minHeight="100dp"
+                            android:scrollbars="vertical"
+                            android:textSize="14dp"
+                            android:padding="5dp"
+                            android:background="@null"
+                            android:id="@+id/editInfo"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/btn_layout"
+                    android:layout_gravity="right"
+                    android:visibility="gone"
+                    android:layout_marginBottom="7dp">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:text="취소"
+                        android:id="@+id/back"
+                        android:background="@drawable/info_btn"
+                        android:textColor="#fff"
+                        android:textAlignment="center"
+                        android:textSize="12dp"
+                        android:onClick="clickBack"
+                        android:layout_marginRight="5dp"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:background="@drawable/info_btn"
+                        android:textColor="#fff"
+                        android:text="저장"
+                        android:textSize="12dp"
+                        android:onClick="clickStore"
+                        android:id="@+id/storeInfo"
+                        android:layout_marginRight="7dp" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -144,65 +254,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="연락처"
-                    android:textSize="16dp"
-                    android:padding="10dp"
-                    android:textColor="#000" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#D3D0D0" />
-
-                <TextView
-                    android:id="@+id/tell"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14dp"
-                    android:padding="10dp"
-                    android:minHeight="40dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/colorWhtie">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="내 정보"
-                    android:textSize="16dp"
-                    android:padding="10dp"
-                    android:textColor="#000" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#D3D0D0" />
-
-                <TextView
-                    android:id="@+id/basic_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="90dp"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="10dp"
-                    android:textSize="14dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/colorWhtie">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="이메일"
                     android:padding="10dp"
                     android:textSize="16dp"
                     android:textColor="#000" />
@@ -221,13 +272,13 @@
                         android:textSize="13dp"
                         android:padding="10dp"
                         android:minHeight="40dp"
-                        android:id="@+id/nowEmail"/>
+                        android:id="@+id/tell"/>
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:src="@drawable/arrow_down"
-                        android:id="@+id/show_email"/>
+                        android:id="@+id/show_tell"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -236,32 +287,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:id="@+id/change_email_layout"
+                android:id="@+id/change_tell_layout"
                 android:padding="10dp"
-                android:visibility="gone">
+                android:visibility="gone" >
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="새 이메일"/>
+                    android:layout_weight="2"
+                    android:text="새 연락처"/>
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="2"
                     android:textSize="13dp"
-                    android:hint="test@test.com"
-                    android:inputType="textEmailAddress"
-                    android:id="@+id/changeEmail"/>
+                    android:inputType="numberDecimal"
+                    android:id="@+id/tell1"
+                    android:maxLength="3"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="13dp"
+                    android:text="-"
+                    android:textColor="#000"
+                    android:textAlignment="center"/>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textSize="13dp"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/tell2"
+                    android:maxLength="4"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="13dp"
+                    android:text="-"
+                    android:textColor="#000"
+                    android:textAlignment="center"/>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textSize="13dp"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/tell3"
+                    android:maxLength="4"/>
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:layout_weight="2"
                     android:textSize="12dp"
                     android:textColor="#fff"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@drawable/info_btn"
                     android:text="변경"
-                    android:onClick="clickCheckEmail"
-                    android:id="@+id/checkEmail"/>
+                    android:onClick="clickCheckTell"
+                    android:id="@+id/newtell"/>
             </LinearLayout>
 
             <LinearLayout
@@ -351,7 +434,7 @@
                         <EditText
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:textSize="13dp"
                             android:maxLength="20"
                             android:id="@+id/newPw"
@@ -380,78 +463,17 @@
                     </LinearLayout>
                     <Button
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="35dp"
                         android:textSize="12dp"
                         android:text="변경"
                         android:textColor="#fff"
-                        android:background="@color/colorPrimaryDark"
+                        android:background="@drawable/info_btn"
                         android:id="@+id/pwChageBtn"
                         android:onClick="clickChangePw"
                         android:layout_gravity="right"/>
                 </LinearLayout>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/colorWhtie">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="탈퇴신청"
-                    android:textSize="16dp"
-                    android:padding="10dp"
-                    android:textColor="#000" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#D3D0D0" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="6"
-                        android:layout_height="wrap_content"
-                        android:textSize="13dp"
-                        android:padding="10dp"
-                        android:text="홈페이지와 앱 이용에 제한을 받을 수 잇습니다"
-                        android:id="@+id/isleave"/>
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_down"
-                        android:id="@+id/show_isleave"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:id="@+id/isleave_layout"
-                    android:visibility="gone">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="보안을 위해 비밀번호를 입력해주세요"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/isleqve_pw"
-                        android:textSize="13dp"
-                        android:inputType="textPassword"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
 
         </LinearLayout>
 
