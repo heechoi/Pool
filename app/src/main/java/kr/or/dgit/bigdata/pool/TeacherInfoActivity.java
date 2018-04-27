@@ -409,6 +409,14 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         //프로필 사진 변경
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+    }
 
     private class back extends AsyncTask<String, Integer, Bitmap> {
 

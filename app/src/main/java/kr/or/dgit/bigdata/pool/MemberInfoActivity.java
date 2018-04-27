@@ -113,6 +113,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void finish() {
         super.finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
     }
 
