@@ -102,6 +102,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             t.setTno(object.getInt("tno"));
                             t.setId(object.getString("id"));
                             t.setTitle(object.getString("title"));
+                            t.setName(object.getString("name"));
 
                             //회원로그인 정보
                             SharedPreferences.Editor meditor = mlogin.edit();
@@ -115,6 +116,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             editor.putString("id",object.getString("id"));
                             editor.putInt("tno",object.getInt("tno"));
                             editor.putString("title",object.getString("title"));
+                            editor.putString("name",object.getString("name"));
                             editor.commit();
 
                             Intent intent = new Intent(getActivity(), MainActivity.class);

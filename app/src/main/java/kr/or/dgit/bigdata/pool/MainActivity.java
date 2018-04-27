@@ -43,6 +43,11 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences mlogin;
     private SharedPreferences admin;
     private ImageView barcode;
+    private onKeyBackPressedListener mOnKeyBackPressedListener;
+
+    public void setOnKeyBackPressedListener(onKeyBackPressedListener onKeyBackPressedListener) {
+        mOnKeyBackPressedListener = onKeyBackPressedListener;
+    }
 
     int mStart = 10;
 
@@ -100,12 +105,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if(mOnKeyBackPressedListener !=null){
+            mOnKeyBackPressedListener.onBack();
+            mOnKeyBackPressedListener = null;
+        }else{
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
+
+
     }
 
     @Override
@@ -246,5 +258,6 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
 
 }

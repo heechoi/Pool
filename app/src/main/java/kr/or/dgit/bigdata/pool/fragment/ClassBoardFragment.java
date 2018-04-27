@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -36,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,8 +64,10 @@ import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.dto.ClassboardReply;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener{
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String http = "http://192.168.0.60:8080/pool/restclassboard/";
     private String time = "";
     private String level = "";
     Bitmap bmImg;
@@ -71,9 +75,11 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     Bitmap rotate;
     ListView listview;
     File filePath;
-    String imgurl = "http://192.168.123.113:8080";
+    String imgurl = "http://192.168.0.60:8080";
     BaseAdapter mListAdapter;
     ArrayList<ClassBoard> mList;
+    SharedPreferences sp;
+    SharedPreferences sp2;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -154,7 +160,6 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                     }
                     FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
                     tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
-                    tr.addToBackStack(null);
                     ClassBoardRead fgm = new ClassBoardRead();
                     fgm.setArguments(bundle);
                     tr.replace(R.id.frame, fgm);
@@ -172,6 +177,8 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         View root = inflater.inflate(R.layout.classboard, container, false);
         listview = root.findViewById(R.id.listview);
         listview.setOnItemClickListener(this);
+        sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
+        sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
         cls_board_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,14 +217,15 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         cls_board_insert_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent insertIntent = new Intent(getContext(), ClassBoardInsertActivity.class);
-                if(mList !=null){
-                    Log.d("bumbum",mList.get(0).getCno()+"");
-                    insertIntent.putExtra("cno",mList.get(0).getCno()+"");
+                String id2 = sp2.getString("name","");
+                String id = sp.getString("name","");
+                if ((id.equalsIgnoreCase("") || id==null) && (id2.equalsIgnoreCase("") || id2==null)){
+                    Toast.makeText(getContext(),"로그인이 필요합니다.",Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent insertIntent = new Intent(getContext(), ClassBoardInsertActivity.class);
+                    startActivity(insertIntent);
+                    getActivity().overridePendingTransition(R.anim.login, R.anim.login_out);
                 }
-                startActivity(insertIntent);
-
-                getActivity().overridePendingTransition(R.anim.login, R.anim.login_out);
             }
         });
         Bundle bundle = getArguments();
@@ -229,6 +237,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             String searchhttp = http+"classboardlist";
             new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(searchhttp);
         }
+
         return root;
     }
     @Override
@@ -236,7 +245,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         String bno = mList.get(position).getBno() + "";
         String[] arrname = {"bno"};
         String[] arr = {bno};
-        String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+        String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
         new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
     }
 
