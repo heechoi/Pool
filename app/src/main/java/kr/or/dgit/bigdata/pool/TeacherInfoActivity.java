@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,11 +40,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
+import static android.speech.tts.TextToSpeech.ERROR;
 
 public class TeacherInfoActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView tImage;
@@ -72,8 +75,14 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
     private Button back;
     private LinearLayout btnLayout;
     private back tack;
-    private String imgUrl = "http://192.168.0.239:8080";
-    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
+    private EditText check;
+    private TextView auto;
+    private Button refresh;
+    private Button voice;
+    private TextToSpeech speech;
+
+    private String imgUrl = "http://211.107.115.62:8080";
+    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +90,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences t = getSharedPreferences("Admin",MODE_PRIVATE);
         tno = t.getInt("tno",0);
 
-        String isleave = http+"findTeacher";
+        String findHttp = http+"findTeacher";
 
         String[] arrQueryname ={"tno"};
         String[] arrQuery={String.valueOf(tno)};
@@ -100,6 +109,18 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
             }
 
         });
+        speech = new TextToSpeech(this,new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status !=ERROR){
+                    speech.setLanguage(Locale.KOREA);
+                }
+            }
+        });
+        check =  findViewById(R.id.check);
+        auto = findViewById(R.id.auto);
+        refresh = findViewById(R.id.refresh);
+        voice = findViewById(R.id.voice);
 
         editInfo = findViewById(R.id.editInfo);
         editInfo.setMovementMethod(new ScrollingMovementMethod());
@@ -135,11 +156,19 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         changeInfo.setOnClickListener(this);
 
         HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","강사정보 가져오는 중..",1);
-        httpRequestTack.execute(isleave);
+        httpRequestTack.execute(findHttp);
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(speech !=null){
+            speech.stop();
+            speech.shutdown();
+            speech=null;
+        }
+    }
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler(){
@@ -283,6 +312,20 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
             toast.show();
             return;
         }
+        if(check.getText().toString().isEmpty()){
+            Toast toast = Toast.makeText(this,"자동입력방지를 입력해주세요",Toast.LENGTH_SHORT);
+            check.requestFocus();
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            return;
+        }
+        if(!auto.getText().toString().equals(check.getText().toString())){
+            Toast toast = Toast.makeText(this,"자동입력방지가 일치하지 않습니다",Toast.LENGTH_SHORT);
+            check.requestFocus();
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            return;
+        }
 
         String updatePw = http+"tupdatePw";
         String[] arrQuery = {id,nowPw.getText().toString(),newPw.getText().toString()};
@@ -416,6 +459,12 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+    }
+
+    public void clickVoice(View view) {
+        speech.setPitch(1.0f);
+        speech.setSpeechRate(0.5f);
+        speech.speak(auto.getText().toString(),TextToSpeech.QUEUE_FLUSH,null);
     }
 
     private class back extends AsyncTask<String, Integer, Bitmap> {

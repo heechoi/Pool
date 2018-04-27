@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView"
+    android:background="#fff">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,24 +29,8 @@
                 android:id="@+id/writer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:textAlignment="center"
-                android:textSize="12dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="이메일"
-                android:textAlignment="textStart"
-                android:textSize="12dp" />
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textSize="12dp" />
         </LinearLayout>
 
@@ -75,34 +61,10 @@
                 android:layout_weight="7"
                 android:background="@null"
                 android:inputType="text"
+                android:id="@+id/title"
                 android:textCursorDrawable="@drawable/classboard_cursor_color"
                 android:textSize="14dp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D0D0" />
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="문의"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-
-        <EditText
-            android:id="@+id/qna"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="문의 내용을 입력하세요"
-            android:paddingLeft="8dp"
-            android:textCursorDrawable="@drawable/classboard_cursor_color"
-            android:textSize="14dp" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -111,13 +73,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:background="#fff"
+            android:minHeight="300dp"
+            android:id="@+id/contentLayout">
+            <EditText
+                android:id="@+id/qna"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="문의 내용을 입력하세요"
+                android:padding="10dp"
+                android:background="@null"
+                android:maxHeight="300dp"
+                android:scrollbars="vertical"
+                android:textCursorDrawable="@drawable/classboard_cursor_color"
+                android:textSize="14dp" />
 
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D3D0D0" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -129,10 +114,15 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4" />
+                    android:layout_weight="4"
+                    android:inputType="textPassword"
+                    android:maxLength="8"
+                    android:textSize="14dp"
+                    android:id="@+id/pw"
+                    android:textCursorDrawable="@drawable/classboard_cursor_color"
+                    android:backgroundTint="@color/colorPrimaryDark"/>
             </LinearLayout>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

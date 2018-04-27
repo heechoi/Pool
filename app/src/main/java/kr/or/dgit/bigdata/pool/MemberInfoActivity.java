@@ -53,7 +53,12 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
     private Button checkEmail;
     private EditText chageEmail;
     private TextView nowEmail;
-    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
+    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
+    private ImageView showTell;
+    private TextView tell;
+    private EditText tell1;
+    private EditText tell2;
+    private EditText tell3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +66,6 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_member_info);
         member =  getSharedPreferences("member",MODE_PRIVATE);
         int no = member.getInt("mno",0);
-        String mName = member.getString("name","");
-        String email = member.getString("email","");
-        String tell = member.getString("tell","");
 
         mno = findViewById(R.id.mno);
         name = findViewById(R.id.name);
@@ -91,22 +93,22 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         nowEmail = findViewById(R.id.nowEmail);
 
         mno.setText(no+"");
-        name.setText(mName);
-        String t1 = tell.substring(0,tell.indexOf("-")+1);
-        String t2 = tell.substring(tell.indexOf("-")+1,tell.indexOf("-")+2)+"***-";
-        String t3 = tell.substring(tell.lastIndexOf("-")+1,tell.lastIndexOf("-")+2)+"***";
 
-        basic.setText("성별 : "+member.getString("gender","")+"\n\n\n연락처 : "+t1+t2+t3+"\n");
-        String e = email.substring(0,2);
-        String star = email.substring(2,email.indexOf("@"));
-        String str ="";
-        String e1 = email.substring(email.indexOf("@"));
-        for(int i=0;i<star.length();i++){
-            str+="*";
-        }
+        showTell= findViewById(R.id.show_tell);
+        showTell.setOnClickListener(this);
 
-        nowEmail.setText(e+str+e1);
+        tell = findViewById(R.id.tell);
+        tell1 = findViewById(R.id.tell1);
+        tell2 = findViewById(R.id.tell2);
+        tell3 = findViewById(R.id.tell3);
 
+        String findHttp = http+"findMember";
+
+        String[] arrQueryname ={"mno"};
+        String[] arrQuery={String.valueOf(no)};
+
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","회원정보 가져오는 중..",4);
+        httpRequestTack.execute(findHttp);
 
     }
 
@@ -169,6 +171,20 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                 editText.requestFocus();
             }
 
+        }
+
+        if(view.getId()==R.id.show_tell){
+            LinearLayout layout = findViewById(R.id.change_tell_layout);
+            EditText editText = layout.findViewById(R.id.tell1);
+            if(layout.getVisibility()==View.VISIBLE){
+                showTell.setImageResource(R.drawable.arrow_down);
+                layout.setVisibility(View.GONE);
+                editText.setFocusable(false);
+            }else if(layout.getVisibility()==View.GONE){
+                showTell.setImageResource(R.drawable.arrow_up);
+                layout.setVisibility(View.VISIBLE);
+                editText.requestFocus();
+            }
         }
 
 
@@ -282,6 +298,59 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         alert.show();
                     }
                 }
+                case 4:{
+                    String result = (String) msg.obj;
+                    try{
+                        JSONObject object = new JSONObject(result);
+
+                        String ttell = object.getString("tell");
+                        String t1 = ttell.substring(0,ttell.indexOf("-")+1);
+                        String t2 = ttell.substring(ttell.indexOf("-")+1,ttell.indexOf("-")+2)+"***-";
+                        String t3 = ttell.substring(ttell.lastIndexOf("-")+1,ttell.lastIndexOf("-")+2)+"***";
+
+                        tell.setText(t1+t2+t3);
+                        name.setText(object.getString("name"));
+                        basic.setText(object.getString("gender"));
+
+                        String e = object.getString("email");
+                        String email1 = e.substring(2,e.indexOf("@"));
+                        String email2 = e.substring(0,2);
+                        String email3 = e.substring(e.indexOf("@"));
+                        String str="";
+                        for(int i=0;i<email1.length();i++){
+                            str +="*";
+                        }
+
+                        nowEmail.setText(email2+str+email3);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+                case 5:{
+                    String result = (String) msg.obj;
+                    if(result.equals("success")){
+                        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(MemberInfoActivity.this, R.style.SearchAlertDialog);
+                        alert.setTitle("연락처 변경");
+                        alert.setMessage("연락처가 변경 되었습니다");
+                        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
+                                SharedPreferences.Editor  editor = member.edit();
+                                //기존꺼 삭제 후
+                                editor.remove("tell");
+                                String ttell = tell1.getText().toString()+"-"+tell2.getText().toString()+"-"+tell3.getText().toString();
+                                editor.putString("tell",ttell);
+                                editor.commit();
+                                finish();
+                                startActivity(getIntent());
+                            }
+                        });
+                        alert.show();
+                    }
+                }
                 break;
             }
         }
@@ -368,5 +437,37 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         httpRequestTack.execute(updateEmail);
 
 
+    }
+
+    public void clickVoice(View view) {
+    }
+
+    public void clickCheckTell(View view) {
+        if(tell1.getText().toString().isEmpty()||tell2.getText().toString().isEmpty()||tell3.getText().toString().isEmpty()){
+            Toast toast = Toast.makeText(getApplicationContext(),"연락처를 모두 입력해주세요",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            return;
+        }
+
+        Pattern patternTell = Pattern.compile("(^[0-9]{3,4}$)");
+        Matcher matcherTell1 = patternTell.matcher(tell1.getText().toString());
+        Matcher matcherTell2 = patternTell.matcher(tell2.getText().toString());
+        Matcher matcherTell3 = patternTell.matcher(tell3.getText().toString());
+
+        if(!matcherTell1.find()||!matcherTell2.find()||!matcherTell3.find()){
+            Toast toast = Toast.makeText(this,"연락처가 형식에 맞지 않습니다\n연락처를 확인해주세요",Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            tell1.requestFocus();
+            return;
+        }
+
+        String ttell = tell1.getText().toString()+"-"+tell2.getText().toString()+"-"+tell3.getText().toString();
+        String tellHttp = http+"updateTell";
+        String[] arrQuery ={mno.getText().toString(),ttell};
+        String[] arrQueryname ={"mno","tell"};
+        HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","연락처 변경 중..",5);
+        httpRequestTack.execute(tellHttp);
     }
 }

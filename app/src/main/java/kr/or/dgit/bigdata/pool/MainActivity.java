@@ -60,12 +60,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar_title =findViewById(R.id.toolbar_title);
+        toolbar_title.setText("대구아이티수영장");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -128,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                     super.onBackPressed();
                 }
             }
-        }
+       }
     }
 
     @Override
@@ -160,9 +158,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.classboard) {
+            toolbar_title.setText("반별게시판");
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.user_attendance) {
+            toolbar_title.setText("출석보기");
             MemberInfoFragment mf = MemberInfoFragment.newInstance();
             viewFragment(mf);
         } else if (id == R.id.classtime) {
@@ -171,17 +171,19 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         } else if (id == R.id.clinic) {
-
-        } else if (id == R.id.classboard) {
-
+            toolbar_title.setText("클리닉");
         } else if (id == R.id.qnaboard) {
-
+            toolbar_title.setText("문의하기");
+            QnaInsertFragment qna = QnaInsertFragment.newInstance();
+            viewFragment(qna);
         } else if (id == R.id.noticeboard) {
 
         } else if (id == R.id.classinfo) {
+            toolbar_title.setText("반별정보");
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.reclass) {
+            toolbar_title.setText("재등록률");
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
