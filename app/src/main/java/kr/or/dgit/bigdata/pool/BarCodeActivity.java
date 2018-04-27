@@ -31,7 +31,7 @@ public class BarCodeActivity extends AppCompatActivity {
     private LinearLayout layout;
     SharedPreferences member;
     private int mno;
-
+    private TextView name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +40,21 @@ public class BarCodeActivity extends AppCompatActivity {
         setTitle("회원코드");
         code = findViewById(R.id.code);
         view = findViewById(R.id.barcode);
+        name = findViewById(R.id.name);
 
         layout = (LinearLayout)findViewById(R.id.layout);
         member = getSharedPreferences("member",MODE_PRIVATE);
 
         mno = member.getInt("mno",0);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-
-        Log.d("dahee",String.valueOf(layout.getWidth()));
-        Log.d("dahee",String.valueOf(layout.getHeight()));
+        name.setText(member.getString("name","")+" 회원 님");
         MultiFormatWriter gen =  new MultiFormatWriter();
         Log.d("dahee","barcode========:"+mno);
         String data = mno+"";
 
         code.setText(mno+"");
         try{
-            final int WIDTH = layout.getWidth();
-            final int HEIGHT = layout.getHeight()/2;
+            final int WIDTH = 900;
+            final int HEIGHT = 400;
 
             BitMatrix byteamap = gen.encode(data, BarcodeFormat.CODE_128,WIDTH,HEIGHT);
             Bitmap bitmap = Bitmap.createBitmap(WIDTH,HEIGHT,Bitmap.Config.ARGB_8888);

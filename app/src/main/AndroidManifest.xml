@@ -70,7 +70,8 @@
             android:name=".SearchPwActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-        <activity android:name=".BarCodeActivity" />
+
+        <activity android:name=".BarCodeActivity" android:screenOrientation="landscape" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

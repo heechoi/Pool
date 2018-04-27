@@ -245,16 +245,19 @@ public class MainActivity extends AppCompatActivity
             info.setVisibility(View.VISIBLE);
             login_title.setVisibility(View.GONE);
             logOut.setVisibility(View.VISIBLE);
+            barcode.setVisibility(View.VISIBLE);
         }
         //모든 정보가 없을때 로그인 할 수 있는 화면으로
         if (mno == 0 && tno == 0) {
             info.setVisibility(View.GONE);
             logOut.setVisibility(View.GONE);
             login_title.setVisibility(View.VISIBLE);
+            barcode.setVisibility(View.GONE);
         }
         //사장님일때
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
             Toast.makeText(this, "사장님 로그인: " + tno, Toast.LENGTH_SHORT).show();
+            barcode.setVisibility(View.GONE);
         }
 
     }
