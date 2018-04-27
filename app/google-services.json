@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "273017787433",
+    "firebase_url": "https://valued-clarity-202207.firebaseio.com",
+    "project_id": "valued-clarity-202207",
+    "storage_bucket": "valued-clarity-202207.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273017787433:android:8118f7d9296f3ffd",
+        "android_client_info": {
+          "package_name": "kr.or.dgit.bigdata.pool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273017787433-7qfh4d3a683mfqor0lfnkc9ib5k9s6ni.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.or.dgit.bigdata.pool",
+            "certificate_hash": "7e9a0dc37d89e6fe0bad8522be759cda50535602"
+          }
+        },
+        {
+          "client_id": "273017787433-3o2s70vif0qs7lp33vifjc48ulc2p9ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGvCL1hFMKnD72sDakORn1arSCv6P_LPQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "273017787433-3o2s70vif0qs7lp33vifjc48ulc2p9ru.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
