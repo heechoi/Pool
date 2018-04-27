@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -130,7 +131,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String result = (String)msg.obj;
                     String[] s = result.split("/");
                     LatLng bus = new LatLng(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
-                    mBus = mMap.addMarker(new MarkerOptions().position(bus).title("버스위치"));
+
+                    mBus = mMap.addMarker(new MarkerOptions().position(bus).title("버스위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)));
+
+
                     CameraPosition cp = new CameraPosition.Builder().target(bus).zoom(16).build();
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
 
@@ -142,7 +146,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String result = (String)msg.obj;
                     String[] s = result.split("/");
                     LatLng bus = new LatLng(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
-                    mBus = mMap.addMarker(new MarkerOptions().position(bus).title("버스위치"));
+                    mBus = mMap.addMarker(new MarkerOptions().position(bus).title("버스위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)));
+
                 }
 
                 break;

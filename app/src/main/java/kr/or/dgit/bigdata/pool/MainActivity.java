@@ -3,8 +3,6 @@ package kr.or.dgit.bigdata.pool;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -16,21 +14,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Map;
-
-import kr.or.dgit.bigdata.pool.dto.Teacher;
-import kr.or.dgit.bigdata.pool.fragment.BusFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
-import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.NoticeFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -162,7 +155,8 @@ public class MainActivity extends AppCompatActivity
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
-
+            NoticeFragment nf = NoticeFragment.newInstance();
+            viewFragment(nf);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
