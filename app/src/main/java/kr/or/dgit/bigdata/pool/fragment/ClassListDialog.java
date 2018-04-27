@@ -9,14 +9,8 @@ import android.os.Bundle;
 
 import kr.or.dgit.bigdata.pool.R;
 
-/**
- * Created by DGIT3-10 on 2018-04-17.
- */
-
 public class ClassListDialog extends DialogFragment {
     NoticeListDialogLIstener mListener;
-
-
 
     @Override
     public void onAttach(Context context) {

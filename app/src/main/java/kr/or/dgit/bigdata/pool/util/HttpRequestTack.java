@@ -123,7 +123,6 @@ public class HttpRequestTack extends AsyncTask<String, Void, String> {
                 writer.flush();
                 writer.close();
 
-
                 os.close();
             }
 

@@ -57,7 +57,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
     int reqWidth;
     int reqHeight;
     String galleryPath;
-    String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    String http = "http://192.168.0.60:8080/pool/restclassboard/";
     ImageView img_btn;
     ImageView imgSelect;
     EditText etcontent;
@@ -89,12 +89,6 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         etTitle = findViewById(R.id.ettitle);
         etTitle.setOnFocusChangeListener(this);
         check_title = findViewById(R.id.check_title);
-        Intent intent = getIntent();
-        if(intent.getStringExtra("cno") !=null){
-            Log.d("bum1",intent.getStringExtra("cno"));
-            cno = Integer.parseInt(intent.getStringExtra("cno"));
-
-        }
     }
 
     @Override
@@ -103,7 +97,6 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
             customDialog = new CustomDialog(ClassBoardInsertActivity.this);
             customDialog.show();
         }else if(view.getId() ==R.id.tvclassselect){
-            Log.d("bum","tvclass click");
             etTitle.clearFocus();
             new AlertDialog.Builder(this)
                     .setIcon(R.mipmap.ic_launcher)
@@ -257,7 +250,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
 
             Bitmap bitmap = BitmapFactory.decodeFile(galleryPath);
             Matrix m = new Matrix();
-           // Bitmap rotated = rotateImage(bitmap);
+
             Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
             imgSelect.setImageBitmap(rotated);
             imgSelect.setLayoutParams(lp);
@@ -307,6 +300,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
 
         return cursor.getString(column_index);
     }
+
     public void DoFileUpload(String apiUrl, String absolutePath) {
 
         HttpFileUpload(apiUrl, "", absolutePath);
@@ -433,7 +427,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                         Bundle bun = new Bundle();
                         bun.putString("upload","goodgood");
                         Message msg = Message.obtain(mhandler,1);
-                      //  msg.set
+                        //  msg.set
                         mhandler.sendMessage(msg);
                     }
                 }.start();
@@ -470,6 +464,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                     String result = (String) msg.obj;
                     Log.d("bum", "============= " + result);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    cno = Integer.parseInt(result);
                     intent.putExtra("classboard",cno+"");
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -512,8 +507,10 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         @Override
         public void onClick(DialogInterface dialog, int i) {
             if (i == DialogInterface.BUTTON_POSITIVE) {
-
-                finish();
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.login,R.anim.login_out);
             }
         }
     };

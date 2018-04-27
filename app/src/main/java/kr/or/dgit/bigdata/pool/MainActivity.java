@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +32,7 @@ import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.QnaInsertFragment;
+import kr.or.dgit.bigdata.pool.fragment.NoticeFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -48,17 +47,24 @@ public class MainActivity extends AppCompatActivity
     private ImageView barcode;
     private  Toolbar toolbar;
     private TextView toolbar_title;
+    private onKeyBackPressedListener mOnKeyBackPressedListener;
+
+    public void setOnKeyBackPressedListener(onKeyBackPressedListener onKeyBackPressedListener) {
+        mOnKeyBackPressedListener = onKeyBackPressedListener;
+    }
+
     int mStart = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar_title = toolbar.findViewById(R.id.toolbar_title);
-        toolbar_title.setText("대구아이티수영장");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -103,6 +109,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        if(mOnKeyBackPressedListener !=null){
+            mOnKeyBackPressedListener.onBack();
+            mOnKeyBackPressedListener = null;
+        }else{
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -150,11 +167,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.classboard) {
-            toolbar_title.setText("반별 게시판");
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.user_attendance) {
-            toolbar_title.setText("출석보기");
             MemberInfoFragment mf = MemberInfoFragment.newInstance();
             viewFragment(mf);
         } else if (id == R.id.classtime) {
@@ -163,19 +178,17 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         } else if (id == R.id.clinic) {
-            toolbar_title.setText("클리닉");
+
+        } else if (id == R.id.classboard) {
+
         } else if (id == R.id.qnaboard) {
-            toolbar_title.setText("문의하기");
-            QnaInsertFragment qna = QnaInsertFragment.newInstance();
-            viewFragment(qna);
+
         } else if (id == R.id.noticeboard) {
 
         } else if (id == R.id.classinfo) {
-            toolbar_title.setText("반별정보");
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.reclass) {
-            toolbar_title.setText("재등록률");
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
