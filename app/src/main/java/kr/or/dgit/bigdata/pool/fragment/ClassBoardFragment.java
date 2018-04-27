@@ -338,7 +338,8 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             writer.setText(arItem.get(position).getId());
 
             TextView content = convertview.findViewById(R.id.content);
-            content.setText(arItem.get(position).getContent());
+            String contenttext = arItem.get(position).getContent().replace("<br>",System.getProperty("line.separator"));
+            content.setText(contenttext);
 
             TextView title = convertview.findViewById(R.id.title);
             title.setText(arItem.get(position).getTitle());

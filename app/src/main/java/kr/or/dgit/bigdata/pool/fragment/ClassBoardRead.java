@@ -121,7 +121,8 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
 
         Bundle bundle = getArguments();
         tvTitle.setText((String)bundle.get("title"));
-        tvContent.setText((String) bundle.get("content"));
+        String contexttext =  bundle.get("content").toString().replace("<br>",System.getProperty("line.separator"));
+        tvContent.setText(contexttext);
         tvWriter.setText((String)bundle.get("id"));
         list = new ArrayList<>();
         Long l =bundle.getLong("regdate");
@@ -415,19 +416,10 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     break;
                 case 4:
                     String result4 = (String)msg.obj;
-                    Log.d("bum",result4);
+
                     Intent intent = new Intent(getContext(),ClassboardUpdateActivity.class);
-
-                    try{
-                        JSONObject jObj = new JSONObject(result4);
-                        intent.putExtra("bno",jObj.getInt("bno"));
-                    }catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                    intent.putExtra("bno",bno);
                     startActivity(intent);
-
-
             }
         }
     };

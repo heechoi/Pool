@@ -89,7 +89,6 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         etTitle = findViewById(R.id.ettitle);
         etTitle.setOnFocusChangeListener(this);
         check_title = findViewById(R.id.check_title);
-
     }
 
     @Override
@@ -428,7 +427,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
                         Bundle bun = new Bundle();
                         bun.putString("upload","goodgood");
                         Message msg = Message.obtain(mhandler,1);
-                      //  msg.set
+                        //  msg.set
                         mhandler.sendMessage(msg);
                     }
                 }.start();
