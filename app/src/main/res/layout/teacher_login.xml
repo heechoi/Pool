@@ -58,7 +58,62 @@
                 android:text="로그인"
                 android:textColor="@color/colorPrimary"
                 android:background="@drawable/login_btn_background"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="12dp"
+                android:id="@+id/state">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/state_img"
+                    android:src="@drawable/login_check_before"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="로그인 유지"
+                    android:textSize="15dp"
+                    android:hint="전"
+                    android:id="@+id/state_label"
+                    android:textColor="#e4e4e4"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="아이디찾기"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    android:id="@+id/searchId"
+                    android:textColor="#fff"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:layout_height="wrap_content"
+                    android:text="비밀번호찾기"
+                    android:id="@+id/searchPw"
+                    android:textAlignment="center"
+                    android:textColor="#fff"/>
+            </LinearLayout>
+
         </LinearLayout>
 
 </ScrollView>

@@ -73,6 +73,9 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
         tlogin = this.getActivity().getSharedPreferences("Admin",Context.MODE_PRIVATE);
         state = this.getActivity().getSharedPreferences("state",Context.MODE_PRIVATE);
+
+
+
         return view;
 
     }
@@ -118,17 +121,10 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                 stateLable.setHint("후");
                 stateImg.setImageResource(R.drawable.login_check_after);
                 stateLable.setTextColor(Color.WHITE);
-                SharedPreferences.Editor edit = state.edit();
-                edit.clear();
-                edit.putInt("state",1);
-                edit.commit();
             }else if(stateLable.getHint().toString().equals("후")){
               stateLable.setHint("전");
               stateLable.setTextColor(Color.parseColor("#e4e4e4"));
                 stateImg.setImageResource(R.drawable.login_check_before);
-                SharedPreferences.Editor edit = state.edit();
-                edit.clear();
-                edit.commit();
             }
 
         }
@@ -188,8 +184,20 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
 
                             editor.commit();
 
+                             if(stateLable.getHint().toString().equals("전")){
+                                 SharedPreferences.Editor edit = state.edit();
+                                 edit.clear();
+                                 edit.putInt("state",1);
+                                 edit.commit();
+                             }else if(stateLable.getHint().toString().equals("후")){
+                                 SharedPreferences.Editor edit = state.edit();
+                                 edit.clear();
+                                 edit.commit();
+                             }
 
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
+
+
+                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
                             startActivity(intent);

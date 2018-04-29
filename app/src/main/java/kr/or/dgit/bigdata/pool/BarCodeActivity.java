@@ -53,8 +53,8 @@ public class BarCodeActivity extends AppCompatActivity {
 
         code.setText(mno+"");
         try{
-            final int WIDTH = 900;
-            final int HEIGHT = 400;
+            final int WIDTH = 300;
+            final int HEIGHT = 150;
 
             BitMatrix byteamap = gen.encode(data, BarcodeFormat.CODE_128,WIDTH,HEIGHT);
             Bitmap bitmap = Bitmap.createBitmap(WIDTH,HEIGHT,Bitmap.Config.ARGB_8888);

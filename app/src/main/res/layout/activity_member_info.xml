@@ -422,19 +422,23 @@
                             <Button
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
-                                android:background="@color/colorRed"
+                                android:background="#22741C"
+                                android:padding="5dp"
                                 android:text="새로고침"
                                 android:textColor="#fff"
-                                android:textSize="12dp"
+                                android:drawableLeft="@drawable/refresh"
+                                android:textSize="13dp"
                                 android:layout_margin="5dp"
                                 android:id="@+id/refresh"/>
                             <Button
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
-                                android:textSize="12dp"
-                                android:background="@color/colorRed"
+                                android:textSize="13dp"
+                                android:padding="5dp"
+                                android:background="#22741C"
                                 android:textColor="#fff"
-                                android:text="음성으로 듣기"
+                                android:text="음성듣기"
+                                android:drawableLeft="@drawable/mic"
                                 android:layout_margin="5dp"
                                 android:onClick="clickVoice"
                                 android:id="@+id/voice"/>

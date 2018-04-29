@@ -145,10 +145,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void finish() {
-        Toast.makeText(this,"finish",Toast.LENGTH_SHORT).show();
-
         int store = state.getInt("state",0);
-        Toast.makeText(this,store+"",Toast.LENGTH_SHORT).show();
         if(store==0){
             SharedPreferences.Editor logOutm = mlogin.edit();
             logOutm.clear();
