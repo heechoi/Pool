@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +38,16 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://192.168.123.113:8080/pool/restLogin/";
+    private String http ="http://211.107.115.62:8080/pool/restLogin/";
     private SharedPreferences login;
     private SharedPreferences tlogin;
+    private SharedPreferences state;
     private TextView join;
     private TextView searchId;
     private TextView searchPw;
+    private ImageView stateImg;
+    private TextView stateLable;
+    private LinearLayout stateLayout;
 
     @Nullable
     @Override
@@ -56,9 +63,16 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
         join.setOnClickListener(this);
         searchPw = view.findViewById(R.id.searchPw);
         searchPw.setOnClickListener(this);
+
+        stateImg = view.findViewById(R.id.state_img);
+        stateLable = view.findViewById(R.id.state_label);
+        stateLayout = view.findViewById(R.id.state);
+
+        stateLayout.setOnClickListener(this);
+
         login = this.getActivity().getSharedPreferences("member", Context.MODE_PRIVATE);
         tlogin = this.getActivity().getSharedPreferences("Admin",Context.MODE_PRIVATE);
-
+        state = this.getActivity().getSharedPreferences("state",Context.MODE_PRIVATE);
         return view;
 
     }
@@ -96,6 +110,27 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(getActivity(),SearchPwActivity.class);
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+        }
+
+        if(view.getId()==R.id.state){
+
+            if(stateLable.getHint().toString().equals("전")){
+                stateLable.setHint("후");
+                stateImg.setImageResource(R.drawable.login_check_after);
+                stateLable.setTextColor(Color.WHITE);
+                SharedPreferences.Editor edit = state.edit();
+                edit.clear();
+                edit.putInt("state",1);
+                edit.commit();
+            }else if(stateLable.getHint().toString().equals("후")){
+              stateLable.setHint("전");
+              stateLable.setTextColor(Color.parseColor("#e4e4e4"));
+                stateImg.setImageResource(R.drawable.login_check_before);
+                SharedPreferences.Editor edit = state.edit();
+                edit.clear();
+                edit.commit();
+            }
+
         }
     }
 

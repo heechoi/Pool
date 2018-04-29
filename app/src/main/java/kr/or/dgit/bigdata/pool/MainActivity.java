@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private TextView logOut;
     private SharedPreferences mlogin;
     private SharedPreferences admin;
+    private SharedPreferences state;
     private ImageView barcode;
     private  Toolbar toolbar;
     private TextView toolbar_title;
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         mlogin = getSharedPreferences("member", MODE_PRIVATE);
         admin = getSharedPreferences("Admin", MODE_PRIVATE);
+        state  = getSharedPreferences("state",0);
         getLoginInfo();
 
         Intent intent = getIntent();
@@ -139,6 +141,25 @@ public class MainActivity extends AppCompatActivity
                 }
             }
        }
+    }
+
+    @Override
+    public void finish() {
+        Toast.makeText(this,"finish",Toast.LENGTH_SHORT).show();
+
+        int store = state.getInt("state",0);
+        Toast.makeText(this,store+"",Toast.LENGTH_SHORT).show();
+        if(store==0){
+            SharedPreferences.Editor logOutm = mlogin.edit();
+            logOutm.clear();
+            logOutm.commit();
+            //강사정보 삭제
+            SharedPreferences.Editor logOutT = admin.edit();
+            logOutT.clear();
+            logOutT.commit();
+
+        }
+        super.finish();
     }
 
     @Override
@@ -224,6 +245,11 @@ public class MainActivity extends AppCompatActivity
             logOutT.clear();
             logOutT.commit();
             //main activity 재요청0
+
+            //로그인 유지 상태
+            SharedPreferences.Editor edit = state.edit();
+            edit.clear();
+            edit.commit();
 
             finish();
             startActivity(getIntent());
