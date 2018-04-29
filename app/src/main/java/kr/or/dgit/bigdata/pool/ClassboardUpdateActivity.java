@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.pool;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -22,11 +24,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,37 +45,53 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class ClassboardUpdateActivity extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
+public class ClassboardUpdateActivity extends AppCompatActivity implements View.OnClickListener{
     CustomDialog customDialog;
-    File filePath;
     int reqWidth;
     int reqHeight;
     String galleryPath;
-    String http = "http://192.168.0.60:8080/pool/restclassboard/";
+    File filePath;
+    String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String imgUrl = "http://192.168.123.113:8080";
     ImageView img_btn;
     ImageView imgSelect;
     EditText etcontent;
     EditText etTitle;
     TextView tvclass;
+    String original_imgPath;
     String time;
     String level;
+    private Bitmap bmImg;
+    private Bitmap rotate;
     int bno;
     SharedPreferences sp;
     SharedPreferences sp2;
-
+    back tack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classboard_update);
         Intent intent = getIntent();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.classboard_update_title);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         bno = intent.getIntExtra("bno",0);
         Log.d("bum5",bno+"");
         img_btn = findViewById(R.id.img_btn);
@@ -81,7 +103,6 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
         tvclass = findViewById(R.id.tvclassselect);
         tvclass.setOnClickListener(this);
         etTitle = findViewById(R.id.ettitle);
-        etTitle.setOnFocusChangeListener(this);
         String read = http+"readupdate";
         new HttpRequestTack(this,mHandler,new String[]{bno+""},new String[]{"bno"},"POST","정보를 가져오는 중입니다.").execute(read);
     }
@@ -104,13 +125,33 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
                         level = cls.getString("level");
                         String clstype = time + "/" +level;
                         tvclass.setText(clstype);
+                        Log.d("bum","================img"+classboard.getString("imgpath"));
+                        if(!classboard.getString("imgpath").equalsIgnoreCase("") && !classboard.getString("imgpath").equalsIgnoreCase("null")){
+                            original_imgPath = classboard.getString("imgpath");
+                            tack = new back();
+                            tack.execute(imgUrl+original_imgPath);
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
+                case 2:
+                    updateClassboard();
+                    break;
+                case 3:
+                    break;
+
             }
         }
     };
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.classbardupdate, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.tvclassselect){
@@ -142,11 +183,6 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
             customDialog = new CustomDialog(ClassboardUpdateActivity.this);
             customDialog.show();
         }
-    }
-
-    @Override
-    public void onFocusChange(View view, boolean b) {
-
     }
 
     public class CustomDialog extends android.app.AlertDialog implements View.OnClickListener {
@@ -242,13 +278,17 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
                     Toast.makeText(ClassboardUpdateActivity.this,"업로드 성공",Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
-                    String result = (String) msg.obj;
-                    Log.d("bum", "============= " + result);
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    updateClassboard();
 
+                    break;
+                case 3:
+                    Log.d("bum","update 성공");
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    intent.putExtra("bno",bno+"");
                     overridePendingTransition(R.anim.login,R.anim.login_out);
+                    startActivity(intent);
+
                     break;
             }
         }
@@ -345,5 +385,231 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
         }
 
         return cursor.getString(column_index);
+    }
+
+    private  void updateClassboard(){
+        SharedPreferences sp = getSharedPreferences("member",MODE_PRIVATE);
+        String id = sp.getString("name","");
+        String contentReplace = etcontent.getText().toString();
+        String content = contentReplace.replace(System.getProperty("line.separator"),"<br>");
+        String title = etTitle.getText().toString();
+        String imgPathcheck = null;
+        if(filePath !=null){
+            imgPathcheck =  "/pool/resources/upload/teacher/"+filePath.getName();
+        }else if(galleryPath !=null){
+            imgPathcheck =  "/pool/resources/upload/teacher/"+galleryPath;
+        }
+        String[] arrname = new String[]{"time","level","id","content","title","imgPathcheck","oriImgPath","bno"};
+        String[] arr = {time,level,id,content,title,imgPathcheck,original_imgPath,bno+""};
+
+        String httpclasstime = http + "update";
+        new HttpRequestTack(this, mhandler, arr, arrname, "POST", "글을 작성합니다.",3).execute(httpclasstime);
+    }
+
+    private class back extends AsyncTask<String, Integer, Bitmap> {
+
+        ProgressDialog mProgressDialog = null;
+
+
+        @Override
+        protected void onPreExecute() {
+
+            mProgressDialog = ProgressDialog.show(ClassboardUpdateActivity.this, "Wait", "이미지를 불러오는 중입니다.");
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+
+            try {
+
+                URL myFileUrl = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/pool";
+                File dir = new File(dirPath);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+
+                filePath = new File("/storage/emulated/0/pool/test.jpg");
+                filePath.createNewFile();
+
+                OutputStream out = new FileOutputStream(filePath);
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                //out.close();
+                bmImg = BitmapFactory.decodeFile(filePath.getAbsolutePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            rotate = rotateImage(bmImg);
+            return rotate;
+        }
+
+        protected void onPostExecute(Bitmap img) {
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, reqHeight);
+            imgSelect.setLayoutParams(lp);
+            imgSelect.setImageBitmap(rotate);
+            mProgressDialog.dismiss();
+
+        }
+    }
+    public void DoFileUpload(String apiUrl, String absolutePath) {
+
+        HttpFileUpload(apiUrl, "", absolutePath);
+
+    }
+    public void HttpFileUpload(String urlString, String params, String fileName) {
+
+
+        String lineEnd = "\r\n";
+
+        String twoHyphens = "--";
+
+        String boundary = "*****";
+
+        try {
+
+            File sourceFile = new File(fileName);
+
+            DataOutputStream dos;
+
+            if (!sourceFile.isFile()) {
+
+                Log.e("uploadFile", "Source File not exist :" + fileName);
+
+            } else {
+
+                FileInputStream mFileInputStream = new FileInputStream(sourceFile);
+
+                URL connectUrl = new URL(urlString);
+
+                // open connection
+
+                HttpURLConnection conn = (HttpURLConnection) connectUrl.openConnection();
+
+                conn.setDoInput(true);
+
+                conn.setDoOutput(true);
+
+                conn.setUseCaches(false);
+
+                conn.setRequestMethod("POST");
+
+                conn.setRequestProperty("Connection", "Keep-Alive");
+
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+                conn.setRequestProperty("uploaded_file", fileName);
+
+                // write data
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + fileName + "\"" + lineEnd);
+
+                dos.writeBytes(lineEnd);
+                int bytesAvailable = mFileInputStream.available();
+                int maxBufferSize = 1024 * 1024;
+                int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                byte[] buffer = new byte[bufferSize];
+
+                int bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
+
+                while (bytesRead > 0) {
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = mFileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
+                }
+
+
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                mFileInputStream.close();
+                dos.flush(); // finish upload...
+                if (conn.getResponseCode() == 200) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuffer.append(line);
+                    }
+                }
+
+                mFileInputStream.close();
+                dos.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==android.R.id.home){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("작성중인 내용을 저장하지 않고 나가시겠습니까?");
+            builder.setPositiveButton("확인",dialogListener);
+            builder.setNegativeButton("취소",dialogListener);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
+        }else if(item.getItemId() ==R.id.action_search){
+            String content = etcontent.getText().toString();
+
+            if(content.equalsIgnoreCase("")){
+                Toast.makeText(this,"내용을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                return false;
+            }else if(etTitle.getText().toString().equalsIgnoreCase("")){
+                Toast.makeText(this,"제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                return false;
+            }else if(tvclass.getText().toString().equalsIgnoreCase("반을 선택해주세요.")){
+                Toast.makeText(this,"반을 선택해주세요.",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if(galleryPath !=null){
+                new Thread(){
+                    public void run(){
+                        DoFileUpload(http+"upload",galleryPath);
+                        Bundle bun = new Bundle();
+                        bun.putString("upload","goodgood");
+                        Message msg = Message.obtain(mhandler,2);
+                        //  msg.set
+                        mhandler.sendMessage(msg);
+                    }
+                }.start();
+                return true;
+            }else if(filePath !=null){
+                Log.d("bum",filePath.getName());
+                new Thread(){
+                    public void run(){
+
+                        DoFileUpload(http+"upload",filePath.getAbsolutePath());
+                        Bundle bun = new Bundle();
+                        bun.putString("upload","goodgood");
+                        Message msg = Message.obtain(mhandler,2);
+                        //  msg.set
+                        mhandler.sendMessage(msg);
+                    }
+                }.start();
+                return true;
+            }
+            updateClassboard();
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }

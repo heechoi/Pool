@@ -93,7 +93,8 @@
             android:name=".TeacherInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-        <activity android:name=".ClassboardUpdateActivity" />
+        <activity android:name=".ClassboardUpdateActivity"
+            android:theme="@style/ClassBoardTitle"/>
 
         <service
             android:name=".MyFirebaseMessagingService">

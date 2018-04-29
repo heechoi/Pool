@@ -35,7 +35,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://211.107.115.62:8080/pool/restLogin/";
+    private String http ="http://192.168.123.113:8080/pool/restLogin/";
     private SharedPreferences login;
     private SharedPreferences tlogin;
     private TextView join;

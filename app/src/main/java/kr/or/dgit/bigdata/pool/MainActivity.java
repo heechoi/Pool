@@ -1,13 +1,17 @@
 package kr.or.dgit.bigdata.pool;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +27,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
 
 import kr.or.dgit.bigdata.pool.dto.Teacher;
@@ -34,6 +42,7 @@ import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.QnaInsertFragment;
 import kr.or.dgit.bigdata.pool.fragment.NoticeFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
+import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -101,6 +110,9 @@ public class MainActivity extends AppCompatActivity
             bundle.putString("cno",intent.getStringExtra("classboard"));
             tf.setArguments(bundle);
             viewFragment(tf);
+        }else if(intent.getStringExtra("bno") !=null){
+            String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+            new HttpRequestTack(this, mHandler, new String[] {intent.getStringExtra("bno")}, new String[]{"bno"}, "POST", "글을 불러옵니다.",1).execute(httpread);
         }
 
     }
@@ -274,5 +286,35 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    String result = (String) msg.obj;
+                    Bundle bundle = new Bundle();
+                    try {
+                        JSONObject jObj = new JSONObject(result);
+                        bundle.putInt("bno",jObj.getInt("bno"));
+                        bundle.putInt("readcnt",jObj.getInt("readcnt"));
+                        bundle.putLong("regdate",jObj.getLong("regdate"));
+                        bundle.putString("imgpath",jObj.getString("imgpath"));
+                        bundle.putString("title",jObj.getString("title"));
+                        bundle.putString("id",jObj.getString("id"));
+                        bundle.putString("content",jObj.getString("content"));
+                        bundle.putInt("cno",jObj.getInt("cno"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+                    tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
+                    ClassBoardRead fgm = new ClassBoardRead();
+                    fgm.setArguments(bundle);
+                    tr.replace(R.id.frame, fgm);
+                    tr.commit();
 
+            }
+        }
+    };
 }
