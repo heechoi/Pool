@@ -45,6 +45,7 @@ import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.NoticeListFragment;
 import kr.or.dgit.bigdata.pool.fragment.QnaInsertFragment;
 import kr.or.dgit.bigdata.pool.fragment.NoticeFragment;
+import kr.or.dgit.bigdata.pool.fragment.QnaListFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     private TextView info;
     private TextView login_title;
     private TextView logOut;
+    private TextView qna_list;
     private SharedPreferences mlogin;
     private SharedPreferences admin;
     private SharedPreferences state;
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity
         //회원정보수정
         info = navigationView.getHeaderView(0).findViewById(R.id.info);
         login_title = navigationView.getHeaderView(0).findViewById(R.id.login_title);
+        qna_list = navigationView.getHeaderView(0).findViewById(R.id.qna_list);
+        qna_list.setOnClickListener(this);
         info.setOnClickListener(this);
         //로그아웃
         logOut = navigationView.getHeaderView(0).findViewById(R.id.logOut);
@@ -181,9 +185,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -268,6 +270,12 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
             startActivity(intent);
         }
+
+        if(v.getId()==R.id.qna_list){
+            QnaListFragment qf = QnaListFragment.newInstance();
+            viewFragment(qf);
+        }
+
         if (v.getId() == R.id.info) {
             int mno = mlogin.getInt("mno", 0);
             int tno = admin.getInt("tno", 0);
@@ -306,6 +314,7 @@ public class MainActivity extends AppCompatActivity
             login_title.setVisibility(View.GONE);
             logOut.setVisibility(View.VISIBLE);
             barcode.setVisibility(View.VISIBLE);
+            qna_list.setVisibility(View.VISIBLE);
         }
         //모든 정보가 없을때 로그인 할 수 있는 화면으로
         if (mno == 0 && tno == 0) {
@@ -313,6 +322,7 @@ public class MainActivity extends AppCompatActivity
             logOut.setVisibility(View.GONE);
             login_title.setVisibility(View.VISIBLE);
             barcode.setVisibility(View.GONE);
+            qna_list.setVisibility(View.GONE);
         }
         //사장님일때
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
