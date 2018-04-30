@@ -9,11 +9,17 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.view.menu.ActionMenuItem;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
+import kr.or.dgit.bigdata.pool.fragment.NoticeListFragment;
 import kr.or.dgit.bigdata.pool.util.MyJobService;
 
 /**
@@ -97,7 +103,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
+        MainActivity m = new MainActivity();
+        NoticeListFragment nl = NoticeListFragment.newInstance();
+        m.viewFragment(nl);
+
         Intent intent = new Intent(this, MainActivity.class);
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

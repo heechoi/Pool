@@ -120,6 +120,8 @@
         <activity android:name=".SearchIdTeacherActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search"/>
+
+
     </application>
 
 </manifest>
