@@ -53,7 +53,7 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
     private Button checkEmail;
     private EditText chageEmail;
     private TextView nowEmail;
-    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
+    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
     private ImageView showTell;
     private TextView tell;
     private EditText tell1;

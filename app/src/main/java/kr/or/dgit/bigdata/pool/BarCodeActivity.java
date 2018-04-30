@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,13 +27,14 @@ import com.google.zxing.common.BitMatrix;
 
 import org.w3c.dom.Text;
 
-public class BarCodeActivity extends AppCompatActivity {
+public class BarCodeActivity extends AppCompatActivity{
     private ImageView view;
     private TextView code;
     private LinearLayout layout;
     SharedPreferences member;
     private int mno;
     private TextView name;
+    private LinearLayout card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,9 @@ public class BarCodeActivity extends AppCompatActivity {
         code = findViewById(R.id.code);
         view = findViewById(R.id.barcode);
         name = findViewById(R.id.name);
+
+        card = findViewById(R.id.card);
+
 
         layout = (LinearLayout)findViewById(R.id.layout);
         member = getSharedPreferences("member",MODE_PRIVATE);
