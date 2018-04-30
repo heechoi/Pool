@@ -68,7 +68,7 @@ public class TestFragment extends Fragment implements View.OnClickListener{
         nameTv = root.findViewById(R.id.name);
         card = root.findViewById(R.id.card);
         card.setOnClickListener(this);
-        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list");
+        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list?page=1");
         member = getContext().getSharedPreferences("member",0);
         mno = member.getInt("mno",0);
         if(mno !=0){
@@ -96,20 +96,22 @@ public class TestFragment extends Fragment implements View.OnClickListener{
                     try {
                         JSONArray ja = new JSONArray(result);
 
+                        if (ja.length() > 0) {
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject order = ja.getJSONObject(i);
+                                NoticeBoard nBoard = new NoticeBoard();
+                                nBoard.setNno((Integer) order.get("nno"));
+                                nBoard.setTitle((String) order.get("title"));
+                                nBoard.setContent((String) order.get("content"));
+                                Date d = new Date((long)order.get("regdate"));
 
-                        for (int i = 0; i < ja.length(); i++) {
-                            JSONObject order = ja.getJSONObject(i);
-                            NoticeBoard nBoard = new NoticeBoard();
-                            nBoard.setNno((Integer) order.get("nno"));
-                            nBoard.setTitle((String) order.get("title"));
-                            nBoard.setContent((String) order.get("content"));
-                            Date d = new Date((long)order.get("regdate"));
+                                nBoard.setRegdate(d);
 
-                            nBoard.setRegdate(d);
-
-                            nBoard.setReadcnt((Integer) order.get("readcnt"));
-                            nList.add(nBoard);
+                                nBoard.setReadcnt((Integer) order.get("readcnt"));
+                                nList.add(nBoard);
+                            }
                         }
+
                     } catch (JSONException e) {
                         Log.i("Json_parser", e.getMessage());
                     }
