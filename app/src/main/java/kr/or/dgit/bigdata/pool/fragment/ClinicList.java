@@ -148,7 +148,8 @@ public class ClinicList extends Fragment {
             title.setText(arItem.get(position).getClinic_title());
 
             TextView content = convertview.findViewById(R.id.content);
-            content.setText(arItem.get(position).getClinic_content());
+            String contentText = arItem.get(position).getClinic_content().replace("<br>",System.getProperty("line.separator"));
+            content.setText(contentText);
 
             imgview = convertview.findViewById(R.id.clinic_img);
             if (!arItem.get(position).getClinic_path().toString().equalsIgnoreCase("null") && !arItem.get(position).getClinic_path().toString().equalsIgnoreCase("") && arItem.get(position).getClinic_path().toString() != null) {{

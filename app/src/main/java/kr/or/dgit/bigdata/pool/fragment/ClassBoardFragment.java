@@ -87,6 +87,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     private boolean lastItemVisibleFlag = false;
     int page =1;
     int c = 0;
+    ProgressBar mProgressBar;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -171,10 +172,32 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                     tr.commit();
                     break;
                 case 3:
+                    String result3 = (String) msg.obj;
+                    Log.d("bum", "=============5 " + result3);
+                    try {
+                        JSONArray ja = new JSONArray(result3);
 
+                        if (ja.length() > 0) {
+                            for (int j = 0; j < ja.length(); j++) {
+                                JSONObject order = ja.getJSONObject(j);
+                                ClassBoard board = new ClassBoard();
+                                board.setCno(order.getInt("cno"));
+                                board.setBno(order.getInt("bno"));
+                                board.setId(order.getString("id"));
+                                Date date = new Date(order.getLong("regdate"));
+                                board.setRegdate(date);
+                                board.setContent(order.getString("content"));
+                                board.setImgpath(order.getString("imgpath"));
+                                board.setTitle(order.getString("title"));
+                                mList.add(board);
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    mListAdapter.notifyDataSetChanged();
+                    mProgressBar.setVisibility(View.GONE);
                     break;
-
-
             }
         }
     };
@@ -188,8 +211,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.classboard, container, false);
         listview = root.findViewById(R.id.listview);
@@ -255,7 +277,8 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             String searchhttp = http+"classboardlist";
             new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(searchhttp);
         }
-
+        mProgressBar = root.findViewById(R.id.progressbar);
+        mProgressBar.setVisibility(View.GONE);
         return root;
     }
     @Override
@@ -396,7 +419,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         @Override
         protected void onPreExecute() {
             Log.d("bum1", "로그인");
-            mProgressDialog = ProgressDialog.show(getContext(), "Wait", "이미지를 불러오는 중입니다.");
+            //mProgressDialog = ProgressDialog.show(getContext(), "Wait", "이미지를 불러오는 중입니다.");
         }
 
         @Override
@@ -436,7 +459,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         }
 
         protected void onPostExecute(Bitmap img) {
-            mProgressDialog.dismiss();
+            //mProgressDialog.dismiss();
             Log.d("bum1", "로그아웃");
             ClassBoard board = mList.get(position);
             board.setRotateImage(rotate);
@@ -482,12 +505,12 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
             Log.d("bum","끝 스크롤");
-
+            mProgressBar.setVisibility(View.VISIBLE);
             String[] arr = {mList.get(0).getCno()+"",page+""};
             String[] arrname = {"cno","page"};
             String searchhttp = http+"classboardlist";
             page++;
-            new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(searchhttp);
+            new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar",3).execute(searchhttp);
         }
     }
 
