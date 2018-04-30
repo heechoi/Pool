@@ -60,6 +60,16 @@
             android:textStyle="bold"
             android:textColor="#fff"
             android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="문의내역보기"
+            android:id="@+id/qna_list"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:visibility="gone"/>
     </LinearLayout>
 
 
