@@ -8,17 +8,30 @@
     android:orientation="vertical"
 
     tools:context="kr.or.dgit.bigdata.pool.TestFragment">
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/logo_white"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/logo_white"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
         android:padding="10dp"
         >
         <LinearLayout
@@ -81,6 +94,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/card_bg"
             android:orientation="vertical"
+            android:id="@+id/card"
             android:padding="10dp">
             <LinearLayout
                 android:layout_width="match_parent"

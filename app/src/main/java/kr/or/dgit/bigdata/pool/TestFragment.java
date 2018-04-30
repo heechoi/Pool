@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class TestFragment extends Fragment implements View.OnClickListener{
     ImageView imgView;
     TextView nameTv;
     SharedPreferences member;
+    LinearLayout card;
     int mno;
     public static TestFragment newInstance(){
         TestFragment cf = new TestFragment();
@@ -64,10 +66,13 @@ public class TestFragment extends Fragment implements View.OnClickListener{
         nList = new ArrayList<>();
         imgView = root.findViewById(R.id.barcode);
         nameTv = root.findViewById(R.id.name);
+        card = root.findViewById(R.id.card);
+        card.setOnClickListener(this);
         new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list");
         member = getContext().getSharedPreferences("member",0);
-        if(member !=null){
-            mno = member.getInt("mno",0);
+        mno = member.getInt("mno",0);
+        if(mno !=0){
+
             nameTv.setText(member.getString("name","")+" 님");
         }
 
@@ -141,6 +146,15 @@ public class TestFragment extends Fragment implements View.OnClickListener{
             intent.setAction(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:01041229404"));
             startActivity(intent);
+        }else if(view.getId()==R.id.card){
+            if(mno == 0){
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(getActivity(), BarCodeActivity.class);
+                startActivity(intent);
+            }
+
         }
 
     }
@@ -186,7 +200,6 @@ public class TestFragment extends Fragment implements View.OnClickListener{
                 convertview = mInflater.inflate(mItemRowLayout,viewGroup,false);
             }
 
-
             TextView title  = convertview.findViewById(R.id.tv_title);
             title.setText(arItem.get(position).getTitle());
 
@@ -194,8 +207,6 @@ public class TestFragment extends Fragment implements View.OnClickListener{
             SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd");
             String d= sf.format(arItem.get(position).getRegdate());
             date.setText(d);
-
-
 
             return convertview;
         }
