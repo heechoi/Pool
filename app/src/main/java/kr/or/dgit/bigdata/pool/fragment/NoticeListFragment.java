@@ -1,9 +1,8 @@
-package kr.or.dgit.bigdata.pool;
+package kr.or.dgit.bigdata.pool.fragment;
+
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,9 +15,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,29 +29,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.dto.NoticeBoard;
-import kr.or.dgit.bigdata.pool.fragment.NoticeBoardRead;
-import kr.or.dgit.bigdata.pool.fragment.NoticeListFragment;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-/**
- * Created by DGIT3-7 on 2018-04-17.
- */
+public class NoticeListFragment extends Fragment implements View.OnClickListener{
 
-public class TestFragment extends Fragment implements View.OnClickListener{
     private String http = "http://192.168.0.12:8080/pool";
-    ListView mListView;
+    String[] arrays;
     List<NoticeBoard> nList;
-    Button btn_tel;
-    ImageView imgView;
-    TextView nameTv;
-    SharedPreferences member;
-    int mno;
-    public static TestFragment newInstance(){
-        TestFragment cf = new TestFragment();
-        Bundle args = new Bundle();
+    ListView listView;
 
-        cf.setArguments(args);
+
+    public static NoticeListFragment newInstance(){
+        NoticeListFragment cf = new NoticeListFragment();
         return cf;
     }
 
@@ -59,26 +51,19 @@ public class TestFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_counter, container, false);
-        mListView = root.findViewById(R.id.main_notice_list);
-        nList = new ArrayList<>();
-        imgView = root.findViewById(R.id.barcode);
-        nameTv = root.findViewById(R.id.name);
+        View root = inflater.inflate(R.layout.notice_list, container, false);
+        listView = root.findViewById(R.id.notice_list);
+        nList= new ArrayList<>();
         new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list");
-        member = getContext().getSharedPreferences("member",0);
-        if(member !=null){
-            mno = member.getInt("mno",0);
-            nameTv.setText(member.getString("name","")+" 님");
-        }
 
-        Bundle args = getArguments();
-        int start=0;
-        if(args !=null){
-            start = args.getInt("start");
-        }
-        btn_tel = root.findViewById(R.id.phone_qna);
-        btn_tel.setOnClickListener(this);
         return root;
+    }
+
+
+    @Override
+    public void onClick(View view) {
+
+
     }
 
     Handler mHandler = new Handler(){
@@ -109,9 +94,9 @@ public class TestFragment extends Fragment implements View.OnClickListener{
                         Log.i("Json_parser", e.getMessage());
                     }
 
-                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.main_notice_item,nList);
-                    mListView.setAdapter(adapter);
-                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.notice_item,nList);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -133,17 +118,6 @@ public class TestFragment extends Fragment implements View.OnClickListener{
             }
         }
     };
-
-    @Override
-    public void onClick(View view) {
-        if(view.getId()==R.id.phone_qna){
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:01041229404"));
-            startActivity(intent);
-        }
-
-    }
 
 
     class MyListAdapter extends BaseAdapter {
@@ -186,13 +160,18 @@ public class TestFragment extends Fragment implements View.OnClickListener{
                 convertview = mInflater.inflate(mItemRowLayout,viewGroup,false);
             }
 
+            TextView name = convertview.findViewById(R.id.tv_name);
+            name.setText("관리자");
+
+            TextView nno = convertview.findViewById(R.id.tv_nno);
+            nno.setText(String.valueOf(arItem.get(position).getNno()));
 
             TextView title  = convertview.findViewById(R.id.tv_title);
             title.setText(arItem.get(position).getTitle());
 
             TextView date  = convertview.findViewById(R.id.tv_date);
             SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd");
-            String d= sf.format(arItem.get(position).getRegdate());
+           String d= sf.format(arItem.get(position).getRegdate());
             date.setText(d);
 
 
@@ -200,4 +179,5 @@ public class TestFragment extends Fragment implements View.OnClickListener{
             return convertview;
         }
     }
+
 }

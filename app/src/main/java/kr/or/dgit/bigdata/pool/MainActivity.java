@@ -27,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +42,7 @@ import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClinicFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.NoticeListFragment;
 import kr.or.dgit.bigdata.pool.fragment.QnaInsertFragment;
 import kr.or.dgit.bigdata.pool.fragment.NoticeFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
@@ -64,12 +67,15 @@ public class MainActivity extends AppCompatActivity
         mOnKeyBackPressedListener = onKeyBackPressedListener;
     }
 
-    int mStart = 10;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("pool");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar_title =findViewById(R.id.toolbar_title);
         toolbar_title.setText("대구아이티수영장");
@@ -97,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         barcode = navigationView.getHeaderView(0).findViewById(R.id.barCode);
         barcode.setOnClickListener(this);
 
-        TestFragment cf = TestFragment.newInstance(mStart);
+        TestFragment cf = TestFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction().add(R.id.frame, cf).commit();
 
@@ -211,7 +217,8 @@ public class MainActivity extends AppCompatActivity
             QnaInsertFragment qna = QnaInsertFragment.newInstance();
             viewFragment(qna);
         } else if (id == R.id.noticeboard) {
-
+            NoticeListFragment nl = NoticeListFragment.newInstance();
+            viewFragment(nl);
         } else if (id == R.id.classinfo) {
             toolbar_title.setText("반별정보");
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
@@ -221,7 +228,8 @@ public class MainActivity extends AppCompatActivity
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
-
+            NoticeFragment nf = NoticeFragment.newInstance();
+            viewFragment(nf);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -279,7 +287,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void viewFragment(Fragment fgm) {
+    public void viewFragment(Fragment fgm) {
         FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
         tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
         tr.addToBackStack(null);
