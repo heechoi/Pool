@@ -24,6 +24,9 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class SearchPwActivity extends AppCompatActivity {
@@ -248,12 +251,38 @@ public class SearchPwActivity extends AppCompatActivity {
                                             ok.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
+                                                    Pattern patternPw = Pattern.compile("(^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*])[A-Za-z0-9~!@#$%^&*]{8,20}$)");
+                                                    Matcher matcherPw = patternPw.matcher(newpw.getText().toString());
+
                                                     if(newpw.getText().toString().isEmpty()||newpw2.getText().toString().isEmpty()){
                                                         Toast toast = Toast.makeText(getApplication(),"공백이 존재합니다",Toast.LENGTH_SHORT);
                                                         toast.setGravity(Gravity.CENTER,0,0);
                                                         toast.show();
                                                         return;
                                                     }
+                                                    if(!matcherPw.find()){
+                                                        AlertDialog.Builder alert = new AlertDialog.Builder(SearchPwActivity.this,R.style.AlertDialog);
+                                                        alert.setTitle("비밀번호 사용 불가");
+                                                        alert.setMessage("비밀번호 정규식이 일치하지 않습니다\n비밀번호는8~20자,최소한 한번 이상의 영문,숫자,특수문자(~!@#$%^&*)만 허용됩니다").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                dialog.cancel();
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                        alert.create();
+                                                        alert.show();
+                                                        return;
+                                                    }
+
+                                                    if(!newpw.getText().toString().equals(newpw2.getText().toString())){
+                                                        Toast toast = Toast.makeText(getApplication(),"두 비밀번호가 일치하지 않습니다\n비밀번호를 확인해주세요",Toast.LENGTH_SHORT);
+                                                        toast.setGravity(Gravity.CENTER,0,0);
+                                                        toast.show();
+                                                        newpw2.requestFocus();
+                                                        return;
+                                                    }
+
 
                                                     String updatePw = http+"updatePw";
                                                     String[] arrQueryname = {"id","pw"};
@@ -299,11 +328,12 @@ public class SearchPwActivity extends AppCompatActivity {
                        PendingIntent sentIntent = PendingIntent.getBroadcast(SearchPwActivity.this,0,new Intent("SMS_SENT_ACTION"),0);
                         SmsManager smsManager = SmsManager.getDefault();
                         sms = "";
+                        String content = "[대구아이티수영장]\n비밀번호 찾기 입니다\n아래의 임시번호를 입력해주세요\n(본인이 아닐시 신고바랍니다)\n";
                         for(int i=0;i<8;i++){
                             int num = (int)(Math.random()*10);
                             sms+=num+"";
                         }
-                        smsManager.sendTextMessage(result,null,sms,sentIntent,null);
+                        smsManager.sendTextMessage(result,null,content+sms,sentIntent,null);
 
 
 
@@ -324,9 +354,7 @@ public class SearchPwActivity extends AppCompatActivity {
                                 dialogInterface.dismiss();
                                 dialog.cancel();
                                 dialog.dismiss();
-
                                 finish();
-
 
                             }
                         });
