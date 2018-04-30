@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +31,8 @@ public class SearchPwActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private String http = "http://192.168.0.239:8080/pool/restLogin/";
     private String sms;
+    private String mid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +123,7 @@ public class SearchPwActivity extends AppCompatActivity {
                 String[] arrQueryname = {"id","name","tell","age"};
                 String tell = tell1.getText().toString()+"-"+tell2.getText().toString()+"-"+tell3.getText().toString();
                 String[] arrQuery ={id.getText().toString(),name.getText().toString(),tell,age.getText().toString()} ;
-
+                    mid=id.getText().toString();
                 HttpRequestTack httpRequestTack = new HttpRequestTack(SearchPwActivity.this, mHandler, arrQuery, arrQueryname, "POST", "정보확인 중...", 2);
                 httpRequestTack.execute(searchPw);
 
@@ -204,6 +207,91 @@ public class SearchPwActivity extends AppCompatActivity {
                                 dialog.cancel();
                                 dialog.dismiss();
 
+                                mBuilder = new AlertDialog.Builder(SearchPwActivity.this);
+                                View v = getLayoutInflater().inflate(R.layout.input_temp_pw, null);
+                                TextView title = (TextView) v.findViewById(R.id.title);
+                                title.setText("임시번호를 입력하세요");
+                                final EditText input = (EditText) v.findViewById(R.id.input);
+                                Button ok = (Button) v.findViewById(R.id.sendBtn);
+                                Button cancel = (Button) v.findViewById(R.id.cancelBtn);
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.cancel();
+                                        dialog.dismiss();
+                                    }
+                                });
+                                mBuilder.setView(v);
+                                dialog = mBuilder.create();
+                                dialog.show();
+
+
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if(input.getText().toString().equals(sms)){
+                                            mBuilder = new AlertDialog.Builder(SearchPwActivity.this);
+                                            mBuilder.setCancelable(false);
+                                            View v = getLayoutInflater().inflate(R.layout.new_pw, null);
+                                            final EditText newpw = (EditText) v.findViewById(R.id.pw1);
+                                            final EditText newpw2 = (EditText)v.findViewById(R.id.pw2);
+                                            Button ok = (Button) v.findViewById(R.id.sendBtn);
+                                            Button cancel = (Button) v.findViewById(R.id.cancelBtn);
+                                            cancel.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    dialog.cancel();
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    if(newpw.getText().toString().isEmpty()||newpw2.getText().toString().isEmpty()){
+                                                        Toast toast = Toast.makeText(getApplication(),"공백이 존재합니다",Toast.LENGTH_SHORT);
+                                                        toast.setGravity(Gravity.CENTER,0,0);
+                                                        toast.show();
+                                                        return;
+                                                    }
+
+                                                    String updatePw = http+"updatePw";
+                                                    String[] arrQueryname = {"id","pw"};
+                                                    String[] arrQuery = {mid,newpw.getText().toString()};
+
+                                                    HttpRequestTack httpRequestTack = new HttpRequestTack(SearchPwActivity.this, mHandler, arrQuery, arrQueryname, "POST", "비밀번호 변경중...", 3);
+                                                    httpRequestTack.execute(updatePw);
+
+                                                        dialog.dismiss();
+                                                        dialog.cancel();
+                                                }
+                                            });
+                                            mBuilder.setView(v);
+                                            dialog = mBuilder.create();
+                                            dialog.show();
+                                        }else{
+                                            android.app.AlertDialog.Builder malert = new android.app.AlertDialog.Builder(SearchPwActivity.this, R.style.SearchAlertDialog);
+                                            malert.setTitle("불일치");
+                                            malert.setMessage("입력하신 내용이 일치하지 않습니다\n문자를 다시 확인해주세요");
+
+                                            malert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.cancel();
+                                                    dialogInterface.dismiss();
+                                                    dialog.cancel();
+                                                    dialog.dismiss();
+
+                                                }
+                                            });
+                                            malert.show();
+                                        }
+                                    }
+                                });
+
+
+
+
                             }
                         });
                         malert.show();
@@ -217,75 +305,32 @@ public class SearchPwActivity extends AppCompatActivity {
                         }
                         smsManager.sendTextMessage(result,null,sms,sentIntent,null);
 
-                        mBuilder = new AlertDialog.Builder(SearchPwActivity.this);
-                        View v = getLayoutInflater().inflate(R.layout.input_temp_pw, null);
-                        TextView title = (TextView) v.findViewById(R.id.title);
-                        title.setText("비밀번호 찾기");
-                        final EditText input = (EditText) v.findViewById(R.id.input);
-                        Button ok = (Button) v.findViewById(R.id.sendBtn);
-                        Button cancel = (Button) v.findViewById(R.id.cancelBtn);
-                        cancel.setOnClickListener(new View.OnClickListener() {
+
+
+                    }
+                    break;
+                }
+                case 3:{
+                    String result = (String) msg.obj;
+                    if(result.equals("updatePw")){
+                        android.app.AlertDialog.Builder malert = new android.app.AlertDialog.Builder(SearchPwActivity.this, R.style.SearchAlertDialog);
+                        malert.setTitle("비밀번호 변경");
+                        malert.setMessage("비밀번호가 변경되었습니다.\n로그인을 이용하세요");
+
+                        malert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(View view) {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                dialogInterface.dismiss();
                                 dialog.cancel();
                                 dialog.dismiss();
+
+                                finish();
+
+
                             }
                         });
-                        mBuilder.setView(v);
-                        dialog = mBuilder.create();
-                        dialog.show();
-
-
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(input.getText().toString().equals(sms)){
-                                    mBuilder = new AlertDialog.Builder(SearchPwActivity.this);
-                                    mBuilder.setCancelable(false);
-                                    View v = getLayoutInflater().inflate(R.layout.new_pw, null);
-                                    final EditText newpw = (EditText) v.findViewById(R.id.newPw);
-                                    final EditText newpw2 = (EditText)v.findViewById(R.id.newPw2);
-                                    Button ok = (Button) v.findViewById(R.id.sendBtn);
-                                    Button cancel = (Button) v.findViewById(R.id.cancelBtn);
-                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            dialog.cancel();
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    });
-                                    mBuilder.setView(v);
-                                    dialog = mBuilder.create();
-                                    dialog.show();
-                                }else{
-                                    android.app.AlertDialog.Builder malert = new android.app.AlertDialog.Builder(SearchPwActivity.this, R.style.SearchAlertDialog);
-                                    malert.setTitle("불일치");
-                                    malert.setMessage("입력하신 내용이 일치하지 않습니다\n문자를 다시 확인해주세요");
-
-                                    malert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.cancel();
-                                            dialogInterface.dismiss();
-                                            dialog.cancel();
-                                            dialog.dismiss();
-
-                                        }
-                                    });
-                                    malert.show();
-                                }
-                            }
-                        });
-
-
-
+                        malert.show();
                     }
                     break;
                 }
@@ -395,4 +440,13 @@ public class SearchPwActivity extends AppCompatActivity {
         mSmsManager.sendTextMessage(smsNumber, null, smsText, sentIntent, deliveredIntent);
 
     }
+
+    @Override
+    public void finish() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
 }

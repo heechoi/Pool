@@ -80,11 +80,13 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     File filePath;
     String imgurl = "http://192.168.0.60:8080";
     BaseAdapter mListAdapter;
-    ArrayList<ClassBoard> mList;
+    ArrayList<ClassBoard> mList  = new ArrayList<>();;
     SharedPreferences sp;
     SharedPreferences sp2;
     private boolean mLockListView = false;
     private boolean lastItemVisibleFlag = false;
+    int page =1;
+    int c = 0;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -99,8 +101,6 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                     String result = (String) msg.obj;
                     Log.d("bum", "=============3 " + result);
                     try {
-                        mList = new ArrayList<>();
-
                         JSONArray ja = new JSONArray(result);
 
                         if (ja.length() > 0) {
@@ -170,6 +170,10 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                     tr.replace(R.id.frame, fgm);
                     tr.commit();
                     break;
+                case 3:
+
+                    break;
+
 
             }
         }
@@ -245,7 +249,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         Bundle bundle = getArguments();
         if(bundle !=null){
             Log.d("bumbum",bundle.getString("cno"));
-            int c = Integer.parseInt(bundle.getString("cno"));
+            c = Integer.parseInt(bundle.getString("cno"));
             String[] arr = {c+""};
             String[] arrname = {"cno"};
             String searchhttp = http+"classboardlist";
@@ -260,7 +264,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         String[] arrname = {"bno"};
         String[] arr = {bno};
         String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
-        new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
+        new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 3).execute(httpread);
     }
 
     class MyNoListAdapter extends BaseAdapter {
@@ -477,10 +481,13 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-            // 화면이 바닦에 닿을때 처리
-            // 로딩중을 알리는 프로그레스바를 보인다.
             Log.d("bum","끝 스크롤");
 
+            String[] arr = {mList.get(0).getCno()+"",page+""};
+            String[] arrname = {"cno","page"};
+            String searchhttp = http+"classboardlist";
+            page++;
+            new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "noProgressbar").execute(searchhttp);
         }
     }
 
