@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -34,14 +36,15 @@ import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.dto.NoticeBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class NoticeListFragment extends Fragment implements View.OnClickListener{
+public class NoticeListFragment extends Fragment implements View.OnClickListener , OnScrollListener{
 
     private String http = "http://192.168.0.12:8080/pool";
     String[] arrays;
     List<NoticeBoard> nList;
     ListView listView;
-
-
+    private boolean lastItemVisibleFlag = false;
+    int page =1;
+    MyListAdapter adapter;
     public static NoticeListFragment newInstance(){
         NoticeListFragment cf = new NoticeListFragment();
         return cf;
@@ -53,8 +56,9 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.notice_list, container, false);
         listView = root.findViewById(R.id.notice_list);
+        listView.setOnScrollListener(this);
         nList= new ArrayList<>();
-        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list");
+        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list?page="+1);
 
         return root;
     }
@@ -94,7 +98,7 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
                         Log.i("Json_parser", e.getMessage());
                     }
 
-                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.notice_item,nList);
+                    adapter = new MyListAdapter(getContext(),R.layout.notice_item,nList);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -114,10 +118,52 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
 
                 }
                 break;
+                case 2:{
+                    String result = (String)msg.obj;
 
+                    try {
+                        JSONArray ja = new JSONArray(result);
+
+
+                        for (int i = 0; i < ja.length(); i++) {
+                            JSONObject order = ja.getJSONObject(i);
+                            NoticeBoard nBoard = new NoticeBoard();
+                            nBoard.setNno((Integer) order.get("nno"));
+                            nBoard.setTitle((String) order.get("title"));
+                            nBoard.setContent((String) order.get("content"));
+                            Date d = new Date((long)order.get("regdate"));
+
+                            nBoard.setRegdate(d);
+
+                            nBoard.setReadcnt((Integer) order.get("readcnt"));
+                            nList.add(nBoard);
+                        }
+                    } catch (JSONException e) {
+                        Log.i("Json_parser", e.getMessage());
+                    }
+
+                    adapter.notifyDataSetChanged();
+
+                }
+                break;
             }
         }
     };
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
+            Log.d("bum","끝 스크롤");
+
+            page++;
+            new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...",2).execute(http+"/notice/list?page="+page);
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
+    }
 
 
     class MyListAdapter extends BaseAdapter {
