@@ -66,8 +66,8 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
     int reqHeight;
     String galleryPath;
     File filePath;
-    String http = "http://192.168.0.60:8080/pool/restclassboard/";
-    private String imgUrl = "http://192.168.0.60:8080";
+    String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String imgUrl = "http://192.168.123.113:8080";
     ImageView img_btn;
     ImageView imgSelect;
     EditText etcontent;
