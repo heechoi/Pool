@@ -1,5 +1,6 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,20 +8,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,12 +35,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,9 +65,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import kr.or.dgit.bigdata.pool.BuildConfig;
+import kr.or.dgit.bigdata.pool.ClassBoardInsertActivity;
 import kr.or.dgit.bigdata.pool.ClassboardUpdateActivity;
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.SearchIdActivity;
 import kr.or.dgit.bigdata.pool.dto.ClassBoard;
 import kr.or.dgit.bigdata.pool.dto.ClassboardReply;
 import kr.or.dgit.bigdata.pool.onKeyBackPressedListener;
@@ -93,6 +105,9 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
     View root;
     SharedPreferences sp;
     SharedPreferences sp2;
+    private AlertDialog.Builder mDialog;
+    private AlertDialog dialog;
+
     @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,6 +139,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         String contexttext =  bundle.get("content").toString().replace("<br>",System.getProperty("line.separator"));
         tvContent.setText(contexttext);
         tvWriter.setText((String)bundle.get("id"));
+        String writer = (String)bundle.get("id");
         list = new ArrayList<>();
         Long l =bundle.getLong("regdate");
         rno = bundle.getInt("rno");
@@ -140,13 +156,14 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             tack = new back();
             tack.execute(url+imgpath);
         }
+        menu_img.setVisibility(View.GONE);
         sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
         sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
         String id2 = sp2.getString("name","");
         String id = sp.getString("name","");
-        if ((id.equalsIgnoreCase("") || id==null) && (id2.equalsIgnoreCase("") || id2==null)){
-            menu_img.setVisibility(View.GONE);
-
+        Log.d("bum","====================="+writer);
+        if (id.equalsIgnoreCase(writer) || id2.equalsIgnoreCase(writer)){
+            menu_img.setVisibility(View.VISIBLE);
         }
         bno = bundle.getInt("bno");
         cno = bundle.getInt("cno");
@@ -220,9 +237,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                 String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
                 new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "정보를 가져오는 중입니다.", 4).execute(httpread);
                 break;
-            case R.id.reply_update:
 
-                break;
         }
     }
 
@@ -254,6 +269,8 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             Toast.makeText(getContext(),"로그인이 필요합니다.",Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private class back extends AsyncTask<String, Integer, Bitmap> {
         @Override
@@ -424,6 +441,36 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     Intent intent = new Intent(getContext(),ClassboardUpdateActivity.class);
                     intent.putExtra("bno",bno);
                     startActivity(intent);
+                    break;
+                case 5:
+                    String result5 = (String) msg.obj;
+                    Log.d("bum", "googogogoggoo3"+result5);
+                    try {
+
+                        reply_text.setText("");
+                        imm.toggleSoftInput(0,0);
+                        JSONArray ja = new JSONArray(result5);
+                        getList(ja);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.cancel();
+                    dialog.dismiss();
+                    break;
+                case 6:
+                    String result6 = (String) msg.obj;
+                    Log.d("bum", "googogogoggoo3"+result6);
+                    try {
+                        reply_text.setText("");
+                        imm.toggleSoftInput(0,0);
+                        JSONArray ja = new JSONArray(result6);
+                        getList(ja);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.cancel();
+                    dialog.dismiss();
+                    break;
             }
         }
     };
@@ -442,13 +489,76 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     list.add(reply);
                     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View view = inflater.inflate(R.layout.class_reply,null);
+
+
                     ImageView imageView  = view.findViewById(R.id.reply_update);
                     //imgview.setText
-                    imageView.setOnClickListener(this);
+                    final int finalJ = j;
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mDialog = new AlertDialog.Builder(getContext());
+                            View v = getLayoutInflater().inflate(R.layout.reply_update,null);
+
+                            final EditText reply = v.findViewById(R.id.etreply);
+                            final Button deleteBtn = v.findViewById(R.id.deleteBtn);
+                            final Button okBtn = v.findViewById(R.id.okBtn);
+                            final Button updateBtn = v.findViewById(R.id.updateBtn);
+                            reply.setText(list.get(finalJ).getReplytext());
+                            reply.requestFocus();
+                            mDialog.setView(v);
+                            dialog = mDialog.create();
+                            dialog.show();
+                            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(),R.style.AlertDialog);
+                                    alert.setTitle("삭제");
+                                    alert.setMessage("댓글을 삭제하시겠습니까?").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String deleteHttp = url+"/pool/restclassboard/deletereply";
+                                            Log.d("bum",bno+"");
+                                            new HttpRequestTack(getContext(),mHandler,new String[]{list.get(finalJ).getRno()+"",bno+""},new String[]{"rno","bno"},"POST","댓글을 삭제하는중입니다...",5).execute(deleteHttp);
+                                            dialog.cancel();
+                                            dialog.dismiss();
+                                        }
+                                    }).setNegativeButton("취소",null);
+                                    alert.create();
+                                    alert.show();
+                                }
+                            });
+                            okBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                    dialog.dismiss();
+                                }
+                            });
+                            updateBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    String replytext = reply.getText().toString();
+                                    int rno = list.get(finalJ).getRno();
+                                    String[] arr = {replytext,rno+"",bno+""};
+                                    String[] arrName = {"replytext","rno","bno"};
+                                    String updateHttp = url+"/pool/restclassboard/updatereply";
+                                    new HttpRequestTack(getContext(),mHandler,arr,arrName,"POST","댓글을 수정하는중입니다...",6).execute(updateHttp);
+                                }
+                            });
+                        }
+                    });
                     TextView content = view.findViewById(R.id.content);
                     content.setText(order.getString("replytext"));
                     TextView writer = view.findViewById(R.id.id);
                     writer.setText(order.getString("id"));
+                    sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
+                    sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
+                    String id2 = sp2.getString("name","");
+                    String id = sp.getString("name","");
+                    if ((!id.equalsIgnoreCase(writer.getText().toString()) || id==null) && (!id2.equalsIgnoreCase(writer.getText().toString()) || id2==null)){
+                        imageView.setVisibility(View.GONE);
+                    }
                     TextView regdate = view.findViewById(R.id.regdate);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String strDate = sdf.format(date);
@@ -460,8 +570,5 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-    public void mCloseImg(){
-        Toast.makeText(getContext(),"클릭",Toast.LENGTH_SHORT).show();
     }
 }

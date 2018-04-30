@@ -155,7 +155,6 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
             galleryBtn = findViewById(R.id.gallery);
             camaraBtn.setOnClickListener(this);
             galleryBtn.setOnClickListener(this);
-
         }
 
         @Override
