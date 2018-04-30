@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -68,7 +69,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener , AbsListView.OnScrollListener{
     private String http = "http://192.168.0.60:8080/pool/restclassboard/";
     private String time = "";
     private String level = "";
@@ -82,6 +83,8 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     ArrayList<ClassBoard> mList;
     SharedPreferences sp;
     SharedPreferences sp2;
+    private boolean mLockListView = false;
+    private boolean lastItemVisibleFlag = false;
     public static ClassBoardFragment newInstance() {
         ClassBoardFragment cf = new ClassBoardFragment();
         return cf;
@@ -187,6 +190,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         View root = inflater.inflate(R.layout.classboard, container, false);
         listview = root.findViewById(R.id.listview);
         listview.setOnItemClickListener(this);
+        listview.setOnScrollListener(this);
         sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
         sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
         Button cls_board_btn = (Button) root.findViewById(R.id.cls_board_btn);
@@ -469,5 +473,18 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         }
         Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
         return rotated;
+    }
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
+            // 화면이 바닦에 닿을때 처리
+            // 로딩중을 알리는 프로그레스바를 보인다.
+            Log.d("bum","끝 스크롤");
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
     }
 }

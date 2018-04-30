@@ -35,12 +35,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,6 +107,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
     SharedPreferences sp2;
     private AlertDialog.Builder mDialog;
     private AlertDialog dialog;
+
     @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,6 +139,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         String contexttext =  bundle.get("content").toString().replace("<br>",System.getProperty("line.separator"));
         tvContent.setText(contexttext);
         tvWriter.setText((String)bundle.get("id"));
+        String writer = (String)bundle.get("id");
         list = new ArrayList<>();
         Long l =bundle.getLong("regdate");
         rno = bundle.getInt("rno");
@@ -152,13 +156,14 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             tack = new back();
             tack.execute(url+imgpath);
         }
+        menu_img.setVisibility(View.GONE);
         sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
         sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
         String id2 = sp2.getString("name","");
         String id = sp.getString("name","");
-        if ((id.equalsIgnoreCase("") || id==null) && (id2.equalsIgnoreCase("") || id2==null)){
-            menu_img.setVisibility(View.GONE);
-
+        Log.d("bum","====================="+writer);
+        if (id.equalsIgnoreCase(writer) || id2.equalsIgnoreCase(writer)){
+            menu_img.setVisibility(View.VISIBLE);
         }
         bno = bundle.getInt("bno");
         cno = bundle.getInt("cno");
@@ -264,6 +269,8 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             Toast.makeText(getContext(),"로그인이 필요합니다.",Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private class back extends AsyncTask<String, Integer, Bitmap> {
         @Override
@@ -482,6 +489,8 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     list.add(reply);
                     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View view = inflater.inflate(R.layout.class_reply,null);
+
+
                     ImageView imageView  = view.findViewById(R.id.reply_update);
                     //imgview.setText
                     final int finalJ = j;
@@ -543,6 +552,13 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     content.setText(order.getString("replytext"));
                     TextView writer = view.findViewById(R.id.id);
                     writer.setText(order.getString("id"));
+                    sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
+                    sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
+                    String id2 = sp2.getString("name","");
+                    String id = sp.getString("name","");
+                    if ((!id.equalsIgnoreCase(writer.getText().toString()) || id==null) && (!id2.equalsIgnoreCase(writer.getText().toString()) || id2==null)){
+                        imageView.setVisibility(View.GONE);
+                    }
                     TextView regdate = view.findViewById(R.id.regdate);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String strDate = sdf.format(date);
@@ -554,8 +570,5 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-    public void mCloseImg(){
-        Toast.makeText(getContext(),"클릭",Toast.LENGTH_SHORT).show();
     }
 }

@@ -109,7 +109,7 @@ public class SearchPwActivity extends AppCompatActivity {
             public void onClick(View view) {
                 PendingIntent sentIntent = PendingIntent.getBroadcast(SearchPwActivity.this,0,new Intent("SMS_SENT_ACTION"),0);
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage("01041229404",null,"testtest",sentIntent,null);
+                    smsManager.sendTextMessage("01041229404","01041229404","testtest",sentIntent,null);
 
 
             }
