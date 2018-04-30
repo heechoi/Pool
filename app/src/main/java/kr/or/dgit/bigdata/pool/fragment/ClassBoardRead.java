@@ -153,6 +153,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         Log.d("bum","bno ====="+bno);
         String replyhttps = url+"/pool/restclassboard/readreply";
         new HttpRequestTack(getContext(),mHandler,new String[]{bno+""},new String[]{"bno"},"POST","댓글을 읽어오고 있습니다...").execute(replyhttps);
+
         return root;
 
 }
@@ -209,7 +210,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                 if(id.equalsIgnoreCase("")){
                     new HttpRequestTack(getContext(),mHandler,new String[]{bno+"",replytext,id2},new String[]{"bno","replytext","id"},"POST","댓글을 작성중입니다.",3).execute(insertHttp);
                 }else{
-                    new HttpRequestTack(getContext(),mHandler,new String[]{bno+"",replytext,id2},new String[]{"bno","replytext","id"},"POST","댓글을 작성중입니다.",3).execute(insertHttp);
+                    new HttpRequestTack(getContext(),mHandler,new String[]{bno+"",replytext,id},new String[]{"bno","replytext","id"},"POST","댓글을 작성중입니다.",3).execute(insertHttp);
                 }
 
                 break;
@@ -218,6 +219,9 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                 String[] arrname = {"bno"};
                 String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
                 new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "정보를 가져오는 중입니다.", 4).execute(httpread);
+                break;
+            case R.id.reply_update:
+
                 break;
         }
     }
@@ -438,6 +442,9 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     list.add(reply);
                     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View view = inflater.inflate(R.layout.class_reply,null);
+                    ImageView imageView  = view.findViewById(R.id.reply_update);
+                    //imgview.setText
+                    imageView.setOnClickListener(this);
                     TextView content = view.findViewById(R.id.content);
                     content.setText(order.getString("replytext"));
                     TextView writer = view.findViewById(R.id.id);
@@ -453,5 +460,8 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public void mCloseImg(){
+        Toast.makeText(getContext(),"클릭",Toast.LENGTH_SHORT).show();
     }
 }
