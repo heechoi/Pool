@@ -29,7 +29,7 @@ public class SearchPwActivity extends AppCompatActivity {
     private AlertDialog.Builder mBuilder;
     private AlertDialog dialog;
     private String http = "http://192.168.0.239:8080/pool/restLogin/";
-
+    private String sms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
