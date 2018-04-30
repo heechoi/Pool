@@ -19,6 +19,7 @@
             android:text="비밀번호 찾기"
             android:textColor="#fff"
             android:padding="10dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,24 +27,39 @@
             android:layout_gravity="center|top"
             android:padding="20dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 찾을 방법을 선택해주세요"
+                android:gravity="center"
+                android:layout_marginBottom="100dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="휴대폰으로 찾기"
+                android:text="연락처로 찾기"
+                android:textColor="#fff"
+                android:padding="10dp"
+                android:drawableLeft="@drawable/phone"
+                android:background="@drawable/join_btn"
                 android:onClick="findPwPhone"
-                android:id="@+id/findPwPhone"/>
+                android:id="@+id/findPwPhone"
+                android:layout_marginBottom="20dp"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="이메일으로 찾기"
                 android:onClick="findPwEmail"
+                android:padding="10dp"
+                android:textColor="#fff"
+                android:background="@drawable/join_btn"
+                android:drawableLeft="@drawable/email"
                 android:id="@+id/findPwEmail"/>
 
         </LinearLayout>
 
     </LinearLayout>
-
-
-
 </ScrollView>

@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/tab_background"
     tools:context="kr.or.dgit.bigdata.pool.SearchPwTeacherActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="비밀번호 찾기"
+            android:textColor="#fff"
+            android:padding="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center|top"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 찾을 방법을 선택해주세요"
+                android:gravity="center"
+                android:layout_marginBottom="100dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="연락처로 찾기"
+                android:textColor="#fff"
+                android:padding="10dp"
+                android:drawableLeft="@drawable/phone"
+                android:background="@drawable/join_btn"
+                android:onClick="findPwPhone"
+                android:id="@+id/findPwPhone"
+                android:layout_marginBottom="20dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
