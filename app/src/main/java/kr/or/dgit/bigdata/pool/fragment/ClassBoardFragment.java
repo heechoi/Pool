@@ -264,7 +264,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         String[] arrname = {"bno"};
         String[] arr = {bno};
         String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
-        new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
+        new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 3).execute(httpread);
     }
 
     class MyNoListAdapter extends BaseAdapter {

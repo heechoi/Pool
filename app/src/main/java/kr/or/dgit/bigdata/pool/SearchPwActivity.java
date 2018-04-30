@@ -31,13 +31,12 @@ public class SearchPwActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private String http = "http://192.168.0.239:8080/pool/restLogin/";
     private String sms;
-    private String id;
-    private SharedPreferences member;
+    private String mid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_pw);
-        id = member.getString("id","");
     }
 
     public void findPwEmail(View view) {
@@ -124,7 +123,7 @@ public class SearchPwActivity extends AppCompatActivity {
                 String[] arrQueryname = {"id","name","tell","age"};
                 String tell = tell1.getText().toString()+"-"+tell2.getText().toString()+"-"+tell3.getText().toString();
                 String[] arrQuery ={id.getText().toString(),name.getText().toString(),tell,age.getText().toString()} ;
-
+                    mid=id.getText().toString();
                 HttpRequestTack httpRequestTack = new HttpRequestTack(SearchPwActivity.this, mHandler, arrQuery, arrQueryname, "POST", "정보확인 중...", 2);
                 httpRequestTack.execute(searchPw);
 
@@ -235,8 +234,8 @@ public class SearchPwActivity extends AppCompatActivity {
                                             mBuilder = new AlertDialog.Builder(SearchPwActivity.this);
                                             mBuilder.setCancelable(false);
                                             View v = getLayoutInflater().inflate(R.layout.new_pw, null);
-                                            final EditText newpw = (EditText) v.findViewById(R.id.newPw);
-                                            final EditText newpw2 = (EditText)v.findViewById(R.id.newPw2);
+                                            final EditText newpw = (EditText) v.findViewById(R.id.pw1);
+                                            final EditText newpw2 = (EditText)v.findViewById(R.id.pw2);
                                             Button ok = (Button) v.findViewById(R.id.sendBtn);
                                             Button cancel = (Button) v.findViewById(R.id.cancelBtn);
                                             cancel.setOnClickListener(new View.OnClickListener() {
@@ -258,7 +257,7 @@ public class SearchPwActivity extends AppCompatActivity {
 
                                                     String updatePw = http+"updatePw";
                                                     String[] arrQueryname = {"id","pw"};
-                                                    String[] arrQuery = {id,newpw.getText().toString()};
+                                                    String[] arrQuery = {mid,newpw.getText().toString()};
 
                                                     HttpRequestTack httpRequestTack = new HttpRequestTack(SearchPwActivity.this, mHandler, arrQuery, arrQueryname, "POST", "비밀번호 변경중...", 3);
                                                     httpRequestTack.execute(updatePw);
