@@ -56,7 +56,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://192.168.0.239:8080/pool/restLogin/";
+    private String http ="http://211.107.115.62:8080/pool/restLogin/";
     private SharedPreferences tlogin;
     private SharedPreferences mlogin;
     private SharedPreferences state;
