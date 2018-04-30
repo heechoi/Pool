@@ -1,10 +1,17 @@
 package kr.or.dgit.bigdata.pool;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,17 +21,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
+
+import kr.or.dgit.bigdata.pool.dto.Teacher;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
+import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.QnaInsertFragment;
 import kr.or.dgit.bigdata.pool.fragment.NoticeFragment;
 import kr.or.dgit.bigdata.pool.fragment.ReclassFragment;
+import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -35,7 +53,10 @@ public class MainActivity extends AppCompatActivity
     private TextView logOut;
     private SharedPreferences mlogin;
     private SharedPreferences admin;
+    private SharedPreferences state;
     private ImageView barcode;
+    private  Toolbar toolbar;
+    private TextView toolbar_title;
     private onKeyBackPressedListener mOnKeyBackPressedListener;
 
     public void setOnKeyBackPressedListener(onKeyBackPressedListener onKeyBackPressedListener) {
@@ -49,12 +70,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar_title =findViewById(R.id.toolbar_title);
+        toolbar_title.setText("대구아이티수영장");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,6 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         mlogin = getSharedPreferences("member", MODE_PRIVATE);
         admin = getSharedPreferences("Admin", MODE_PRIVATE);
+        state  = getSharedPreferences("state",0);
         getLoginInfo();
 
         Intent intent = getIntent();
@@ -92,6 +112,9 @@ public class MainActivity extends AppCompatActivity
             bundle.putString("cno",intent.getStringExtra("classboard"));
             tf.setArguments(bundle);
             viewFragment(tf);
+        }else if(intent.getStringExtra("bno") !=null){
+            String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+            new HttpRequestTack(this, mHandler, new String[] {intent.getStringExtra("bno")}, new String[]{"bno"}, "POST", "글을 불러옵니다.",1).execute(httpread);
         }
 
     }
@@ -106,11 +129,34 @@ public class MainActivity extends AppCompatActivity
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             } else {
-                super.onBackPressed();
+                toolbar_title.setText("대구아이티수영장");
+                FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
+                int count = fm.getBackStackEntryCount();
+                for(int i = 0; i < count; ++i) {
+                    fm.popBackStack();
+                }
+
+                if(count==0){
+                    super.onBackPressed();
+                }
             }
+       }
+    }
+
+    @Override
+    public void finish() {
+        int store = state.getInt("state",0);
+        if(store==0){
+            SharedPreferences.Editor logOutm = mlogin.edit();
+            logOutm.clear();
+            logOutm.commit();
+            //강사정보 삭제
+            SharedPreferences.Editor logOutT = admin.edit();
+            logOutT.clear();
+            logOutT.commit();
+
         }
-
-
+        super.finish();
     }
 
     @Override
@@ -142,9 +188,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.classboard) {
+            toolbar_title.setText("반별게시판");
             ClassBoardFragment cf = ClassBoardFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.user_attendance) {
+            toolbar_title.setText("출석보기");
             MemberInfoFragment mf = MemberInfoFragment.newInstance();
             viewFragment(mf);
         } else if (id == R.id.classtime) {
@@ -153,22 +201,23 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         } else if (id == R.id.clinic) {
-
-        } else if (id == R.id.classboard) {
-
+            toolbar_title.setText("클리닉");
         } else if (id == R.id.qnaboard) {
-
+            toolbar_title.setText("문의하기");
+            QnaInsertFragment qna = QnaInsertFragment.newInstance();
+            viewFragment(qna);
         } else if (id == R.id.noticeboard) {
 
         } else if (id == R.id.classinfo) {
+            toolbar_title.setText("반별정보");
             ClassInfoFragment cf = ClassInfoFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.reclass) {
+            toolbar_title.setText("재등록률");
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
-            NoticeFragment nf = NoticeFragment.newInstance();
-            viewFragment(nf);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -193,6 +242,11 @@ public class MainActivity extends AppCompatActivity
             logOutT.clear();
             logOutT.commit();
             //main activity 재요청0
+
+            //로그인 유지 상태
+            SharedPreferences.Editor edit = state.edit();
+            edit.clear();
+            edit.commit();
 
             finish();
             startActivity(getIntent());
@@ -255,6 +309,35 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    String result = (String) msg.obj;
+                    Bundle bundle = new Bundle();
+                    try {
+                        JSONObject jObj = new JSONObject(result);
+                        bundle.putInt("bno",jObj.getInt("bno"));
+                        bundle.putInt("readcnt",jObj.getInt("readcnt"));
+                        bundle.putLong("regdate",jObj.getLong("regdate"));
+                        bundle.putString("imgpath",jObj.getString("imgpath"));
+                        bundle.putString("title",jObj.getString("title"));
+                        bundle.putString("id",jObj.getString("id"));
+                        bundle.putString("content",jObj.getString("content"));
+                        bundle.putInt("cno",jObj.getInt("cno"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+                    tr.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.exit);
+                    ClassBoardRead fgm = new ClassBoardRead();
+                    fgm.setArguments(bundle);
+                    tr.replace(R.id.frame, fgm);
+                    tr.commit();
 
-
+            }
+        }
+    };
 }

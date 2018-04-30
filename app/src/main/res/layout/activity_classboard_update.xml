@@ -32,12 +32,15 @@
                     android:paddingLeft="5dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="5dp"
+                    android:textStyle="bold"
                     android:text="제목"
                     />
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/ettitle"
+                    android:textSize="13sp"
+                    android:background="@null"
                     android:layout_weight="3" />
             </LinearLayout>
             <View
@@ -58,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:paddingRight="5dp"
+                    android:textStyle="bold"
                     android:paddingLeft="5dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="5dp"
@@ -96,6 +100,8 @@
                     android:id="@+id/etcontent"
                     android:padding="10dp"
                     android:hint="내용을 입력하세요."
+                    android:textSize="13sp"
+                    android:background="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textCursorDrawable="@drawable/classboard_cursor_color"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -22,6 +26,10 @@ import org.json.JSONObject;
 
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.SearchIdActivity;
+import kr.or.dgit.bigdata.pool.SearchIdTeacherActivity;
+import kr.or.dgit.bigdata.pool.SearchPwActivity;
+import kr.or.dgit.bigdata.pool.SearchPwTeacherActivity;
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.dto.Teacher;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
@@ -34,10 +42,15 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://192.168.0.239:8080/pool/restLogin/";
+    private String http ="http://211.107.115.62:8080/pool/restLogin/";
     private SharedPreferences tlogin;
     private SharedPreferences mlogin;
-
+    private SharedPreferences state;
+    private ImageView stateImg;
+    private TextView stateLable;
+    private LinearLayout stateLayout;
+    private TextView searchId;
+    private TextView searchPw;
 
     @Nullable
     @Override
@@ -48,28 +61,71 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
         loginBtn = view.findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(this);
 
+        searchId = view.findViewById(R.id.searchId);
+        searchId.setOnClickListener(this);
+
+        searchPw = view.findViewById(R.id.searchPw);
+        searchPw.setOnClickListener(this);
+
+        stateImg = view.findViewById(R.id.state_img);
+        stateLable = view.findViewById(R.id.state_label);
+        stateLayout = view.findViewById(R.id.state);
+
+        stateLayout.setOnClickListener(this);
+
         tlogin = this.getActivity().getSharedPreferences("Admin", Context.MODE_PRIVATE);
         mlogin = this.getActivity().getSharedPreferences("member",0);
+        state = this.getActivity().getSharedPreferences("state",Context.MODE_PRIVATE);
 
         return view;
     }
 
     @Override
     public void onClick(View view) {
+        if(view.getId()==R.id.loginBtn){
+            if(id.getText().toString().equals("")||pw.getText().toString().equals("")){
+                Toast.makeText(getContext(),"아이디와 비밀번호를 모두 입력해 주세요",Toast.LENGTH_SHORT).show();
+                id.requestFocus();
+                return;
+            }
 
-        if(id.getText().toString().equals("")||pw.getText().toString().equals("")){
-            Toast.makeText(getContext(),"아이디와 비밀번호를 모두 입력해 주세요",Toast.LENGTH_SHORT).show();
-            id.requestFocus();
-            return;
+            String loginHttp = http+"tLogin";
+
+            String[] arrQueryname ={"id","pw"};
+            String[] arrQuery={id.getText().toString(),pw.getText().toString()};
+
+            HttpRequestTack httpRequestTack = new HttpRequestTack(getContext(),mHandler,arrQuery,arrQueryname,"POST","로그인..");
+            httpRequestTack.execute(loginHttp);
+
         }
 
-        String loginHttp = http+"tLogin";
 
-        String[] arrQueryname ={"id","pw"};
-        String[] arrQuery={id.getText().toString(),pw.getText().toString()};
+        if(view.getId()==R.id.state){
 
-        HttpRequestTack httpRequestTack = new HttpRequestTack(getContext(),mHandler,arrQuery,arrQueryname,"POST","로그인..");
-        httpRequestTack.execute(loginHttp);
+            if(stateLable.getHint().toString().equals("전")){
+                stateLable.setHint("후");
+                stateImg.setImageResource(R.drawable.login_check_after);
+                stateLable.setTextColor(Color.WHITE);
+            }else if(stateLable.getHint().toString().equals("후")){
+                stateLable.setHint("전");
+                stateLable.setTextColor(Color.parseColor("#e4e4e4"));
+                stateImg.setImageResource(R.drawable.login_check_before);
+            }
+
+        }
+
+        if(view.getId()==R.id.searchPw){
+            Intent intent = new Intent(getActivity(),SearchPwTeacherActivity.class);
+            startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+        }
+
+        if(view.getId()==R.id.searchId){
+            Intent intent = new Intent(getActivity(),SearchIdTeacherActivity.class);
+            startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.login,R.anim.login_out);
+        }
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -115,6 +171,17 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             editor.putString("title",object.getString("title"));
                             editor.putString("name",object.getString("name"));
                             editor.commit();
+
+                            if(stateLable.getHint().toString().equals("전")){
+                                SharedPreferences.Editor edit = state.edit();
+                                edit.clear();
+                                edit.putInt("state",1);
+                                edit.commit();
+                            }else if(stateLable.getHint().toString().equals("후")){
+                                SharedPreferences.Editor edit = state.edit();
+                                edit.clear();
+                                edit.commit();
+                            }
 
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

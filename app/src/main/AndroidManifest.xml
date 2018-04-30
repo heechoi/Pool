@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -72,8 +71,10 @@
             android:name=".SearchPwActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-
-        <activity android:name=".BarCodeActivity" android:screenOrientation="landscape" />
+        <activity
+            android:name=".BarCodeActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.Search" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -93,24 +94,32 @@
             android:name=".TeacherInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Search" />
-        <activity android:name=".ClassboardUpdateActivity" />
+        <activity
+            android:name=".ClassboardUpdateActivity"
+            android:theme="@style/ClassBoardTitle" />
 
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id"/>
+            android:value="@string/default_notification_channel_id" />
+
+        <activity
+            android:name=".SearchPwTeacherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Search" />
+        <activity android:name=".SearchIdTeacherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Search"/>
     </application>
 
 </manifest>

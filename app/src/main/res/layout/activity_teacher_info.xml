@@ -31,7 +31,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_margin="3dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="7"
@@ -42,14 +43,14 @@
                         android:textColor="#000" />
                     <Button
                         android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_height="40dp"
                         android:layout_weight="2"
                         android:text="프로필 변경"
                         android:textSize="12dp"
-                        android:layout_marginRight="7dp"
+                        android:layout_marginRight="5dp"
                         android:textColor="#fff"
                         android:textAlignment="center"
-                        android:background="@drawable/info_btn"
+                        android:background="@color/colorPrimaryDark"
                         android:onClick="clickPhoto"/>
                 </LinearLayout>
 
@@ -160,7 +161,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_margin="3dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -173,13 +175,13 @@
                     <Button
                         android:layout_width="0dp"
                         android:layout_weight="2"
-                        android:layout_height="35dp"
+                        android:layout_height="40dp"
                         android:text="수정"
                         android:textSize="12dp"
-                        android:layout_marginRight="7dp"
+                        android:layout_marginRight="5dp"
                         android:textColor="#fff"
                         android:textAlignment="center"
-                        android:background="@drawable/info_btn"
+                        android:background="@color/colorPrimaryDark"
                         android:id="@+id/changeInfo"/>
                 </LinearLayout>
                 <View
@@ -289,7 +291,7 @@
                 android:orientation="horizontal"
                 android:id="@+id/change_tell_layout"
                 android:padding="10dp"
-                android:visibility="gone" >
+                android:visibility="gone">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -337,11 +339,11 @@
                     android:maxLength="4"/>
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_weight="2"
                     android:textSize="12dp"
                     android:textColor="#fff"
-                    android:background="@drawable/info_btn"
+                    android:background="@color/colorPrimaryDark"
                     android:text="변경"
                     android:onClick="clickCheckTell"
                     android:id="@+id/newtell"/>
@@ -389,7 +391,7 @@
                     android:orientation="vertical"
                     android:id="@+id/change_layout"
                     android:padding="10dp"
-                    android:visibility="gone">
+                   android:visibility="gone">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -406,7 +408,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="현재비밀번호"
-                            android:hint="기존 비밀번호"
                             android:textStyle="bold"
                             android:textAlignment="center"/>
                         <EditText
@@ -434,7 +435,7 @@
                         <EditText
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:textSize="13dp"
                             android:maxLength="20"
                             android:id="@+id/newPw"
@@ -461,13 +462,76 @@
                             android:id="@+id/newPw2"
                             android:inputType="textPassword"/>
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="#fff"
+                        android:padding="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:id="@+id/auto"
+                            android:text="test"
+                            android:textSize="15dp"
+                            android:textStyle="italic"
+                            android:layout_gravity="center_vertical"
+                            android:textAlignment="center"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <Button
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/colorRed"
+                                android:text="새로고침"
+                                android:textColor="#fff"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"
+                                android:id="@+id/refresh"/>
+                            <Button
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:textSize="12dp"
+                                android:background="@color/colorRed"
+                                android:textColor="#fff"
+                                android:text="음성으로 듣기"
+                                android:layout_margin="5dp"
+                                android:onClick="clickVoice"
+                                android:id="@+id/voice"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="자동입력방지"
+                            android:textStyle="bold"
+                            android:textAlignment="center"/>
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:inputType="textVisiblePassword"
+                            android:id="@+id/check"/>
+                    </LinearLayout>
                     <Button
                         android:layout_width="wrap_content"
-                        android:layout_height="35dp"
+                        android:layout_height="40dp"
                         android:textSize="12dp"
+                        android:layout_marginRight="5dp"
                         android:text="변경"
                         android:textColor="#fff"
-                        android:background="@drawable/info_btn"
+                        android:background="@color/colorPrimaryDark"
                         android:id="@+id/pwChageBtn"
                         android:onClick="clickChangePw"
                         android:layout_gravity="right"/>

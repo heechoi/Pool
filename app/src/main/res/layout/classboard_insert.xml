@@ -12,6 +12,7 @@
             android:id="@+id/tvwriter"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:text="작성자"
@@ -21,10 +22,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:textSize="13sp"
+            android:textSize="15sp"
+            android:background="@null"
             android:layout_gravity="right"
             android:maxLength="1"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#D3D0D0"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +42,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="15sp"
+            android:textStyle="bold"
             android:text="반"
             />
         <TextView
@@ -47,6 +56,12 @@
             android:text="반을 선택해주세요."
             />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#D3D0D0"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,6 +72,8 @@
             android:hint="내용을 입력하세요."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@null"
+            android:textSize="13sp"
             />
     </ScrollView>
     <View
