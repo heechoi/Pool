@@ -1,5 +1,7 @@
 package kr.or.dgit.bigdata.pool.dto;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,15 @@ public class Clinic implements Serializable {
     private String clinic_title;
     private String clinic_content;
     private String clinic_path;
+    private Bitmap rotate;
+
+    public Bitmap getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(Bitmap rotate) {
+        this.rotate = rotate;
+    }
 
     @Override
     public String toString() {
