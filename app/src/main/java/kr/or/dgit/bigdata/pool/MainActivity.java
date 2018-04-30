@@ -272,6 +272,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if(v.getId()==R.id.qna_list){
+            toolbar_title.setText("문의하기");
             QnaListFragment qf = QnaListFragment.newInstance();
             viewFragment(qf);
         }

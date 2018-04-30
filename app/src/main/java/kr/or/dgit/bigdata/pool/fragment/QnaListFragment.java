@@ -33,7 +33,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class QnaListFragment extends Fragment implements View.OnClickListener{
 
-    private String http = "http://192.168.0.12:8080/pool";
+    private String http = "http://192.168.0.239:8080/pool";
     String[] arrays;
     List<QnaBoard> nList;
     ListView listView;
@@ -102,11 +102,11 @@ public class QnaListFragment extends Fragment implements View.OnClickListener{
                             FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
                             tr.setCustomAnimations(R.anim.enter,R.anim.exit,R.anim.pop_enter,R.anim.exit);
                             tr.addToBackStack(null);
-                            NoticeBoardRead nb = new NoticeBoardRead();
+                            QnaReadFragement qna = new QnaReadFragement();
                             Bundle bundle = new Bundle();
-                           /* bundle.putSerializable("nno", nList.get(i).getNno());*/
-                            nb.setArguments(bundle);
-                            tr.replace(R.id.frame,nb);
+                            bundle.putSerializable("bno", nList.get(i).getBno());
+                            qna.setArguments(bundle);
+                            tr.replace(R.id.frame,qna);
                             tr.commit();
                         }
                     });
