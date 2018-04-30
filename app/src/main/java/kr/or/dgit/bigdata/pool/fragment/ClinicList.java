@@ -9,17 +9,33 @@ import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.or.dgit.bigdata.pool.R;
+import kr.or.dgit.bigdata.pool.dto.Clinic;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,6 +61,7 @@ public class ClinicList extends Fragment {
     File filePath;
     MyListAdapter adapter;
     private String imgUrl = "http://192.168.0.60:8080";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +70,7 @@ public class ClinicList extends Fragment {
         Bundle bundle = getArguments();
         lists = (ArrayList<Clinic>) bundle.getSerializable("list");
         adapter = new MyListAdapter(getContext(),R.layout.clinic_item,lists);
+
         mListView.setAdapter(adapter);
         for(int i=0; i< lists.size(); i++){
             Log.d("bum",lists.get(i).toString());
@@ -101,8 +119,29 @@ public class ClinicList extends Fragment {
         @Override
         public View getView(final int position, View convertview, ViewGroup viewGroup) {
             Log.d(TAG, "getView()");
+           final ImageView imageView;
+           final TextView text;
+            final LinearLayout layout;
             if (convertview == null) {
                 convertview = mInflater.inflate(mItemRowLayout, viewGroup, false);
+                imageView = convertview.findViewById(R.id.click);
+                layout = convertview.findViewById(R.id.content_layout);
+                text = layout.findViewById(R.id.content);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(layout.getVisibility()==View.GONE){
+                            imageView.setImageResource(R.drawable.arrow_up);
+                            Animation down = AnimationUtils.loadAnimation(getContext(),R.anim.slide_down);
+                            layout.setVisibility(View.VISIBLE);
+                            layout.setAnimation(down);
+                        }else if(layout.getVisibility()==View.VISIBLE){
+                            imageView.setImageResource(R.drawable.arrow_down);
+                            layout.setVisibility(View.GONE);
+                        }
+
+                    }
+                });
             }
 
             TextView title = convertview.findViewById(R.id.title);

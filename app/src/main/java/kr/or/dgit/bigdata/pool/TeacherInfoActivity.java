@@ -33,6 +33,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -98,8 +100,8 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
     String galleryPath;
     CustomDialog customDialog;
 
-    private String imgUrl = "http://192.168.123.113:8080";
-    private String http ="http://192.168.123.113:8080/pool/restInfoUpdate/";
+    private String imgUrl = "http://192.168.0.239:8080";
+    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -411,7 +413,11 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                 editText.setFocusable(false);
             }else if(layout.getVisibility()==View.GONE){
                 showTell.setImageResource(R.drawable.arrow_up);
+                Animation animation = new AlphaAnimation(0,1);
+                animation.setDuration(500);
                 layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(animation);
+                editText.requestFocus();
                 editText.requestFocus();
             }
         }
@@ -425,7 +431,11 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                 editText.setFocusable(false);
             }else if(layout.getVisibility()==View.GONE){
                 showPw.setImageResource(R.drawable.arrow_up);
+                Animation animation = new AlphaAnimation(0,1);
+                animation.setDuration(500);
                 layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(animation);
+                editText.requestFocus();
                 editText.requestFocus();
 
             }
@@ -860,4 +870,5 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
             e.printStackTrace();
         }
     }
+
 }

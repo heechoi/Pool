@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity
             toolbar_title.setText("클리닉");
             ClinicFragment cf = new ClinicFragment();
             viewFragment(cf);
+
         } else if (id == R.id.qnaboard) {
             toolbar_title.setText("문의하기");
             QnaInsertFragment qna = QnaInsertFragment.newInstance();
