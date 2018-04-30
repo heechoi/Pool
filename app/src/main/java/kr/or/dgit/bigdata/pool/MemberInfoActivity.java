@@ -1,5 +1,7 @@
 package kr.or.dgit.bigdata.pool;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +18,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,7 +58,7 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
     private Button checkEmail;
     private EditText chageEmail;
     private TextView nowEmail;
-    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
+    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
     private ImageView showTell;
     private TextView tell;
     private EditText tell1;
@@ -131,12 +136,15 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
             LinearLayout layout = findViewById(R.id.isleave_layout);
             EditText editText = layout.findViewById(R.id.isleqve_pw);
             if(layout.getVisibility()==View.VISIBLE){
-                isleaveBtn.setImageResource(R.drawable.arrow_down);
-                layout.setVisibility(View.GONE);
-                editText.setFocusable(false);
-            }else if(layout.getVisibility()==View.GONE){
                 isleaveBtn.setImageResource(R.drawable.arrow_up);
+                layout.setVisibility(View.GONE);
+            }else if(layout.getVisibility()==View.GONE){
+                isleaveBtn.setImageResource(R.drawable.arrow_down);
+                Animation animation = new AlphaAnimation(0,1);
+                animation.setDuration(500);
                 layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(animation);
+                editText.requestFocus();
                 editText.requestFocus();
             }
 
@@ -151,7 +159,11 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                 editText.setFocusable(false);
             }else if(layout.getVisibility()==View.GONE){
                 showPwBtn.setImageResource(R.drawable.arrow_up);
+                Animation animation = new AlphaAnimation(0,1);
+                animation.setDuration(500);
                 layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(animation);
+                editText.requestFocus();
                 editText.requestFocus();
 
             }
@@ -167,23 +179,31 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                 editText.setFocusable(false);
             }else if(layout.getVisibility()==View.GONE){
                 showEmailBtn.setImageResource(R.drawable.arrow_up);
+                Animation animation = new AlphaAnimation(0,1);
+                animation.setDuration(500);
                 layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(animation);
+                editText.requestFocus();
                 editText.requestFocus();
             }
 
         }
 
         if(view.getId()==R.id.show_tell){
-            LinearLayout layout = findViewById(R.id.change_tell_layout);
-            EditText editText = layout.findViewById(R.id.tell1);
+           final LinearLayout layout = findViewById(R.id.change_tell_layout);
+           final EditText editText = layout.findViewById(R.id.tell1);
             if(layout.getVisibility()==View.VISIBLE){
-                showTell.setImageResource(R.drawable.arrow_down);
+                showTell.setImageResource(R.drawable.arrow_up);
                 layout.setVisibility(View.GONE);
                 editText.setFocusable(false);
             }else if(layout.getVisibility()==View.GONE){
                 showTell.setImageResource(R.drawable.arrow_up);
+                Animation animation = new AlphaAnimation(0,1);
+                animation.setDuration(500);
                 layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(animation);
                 editText.requestFocus();
+
             }
         }
 

@@ -4,8 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -23,6 +29,14 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import kr.or.dgit.bigdata.pool.MainActivity;
 import kr.or.dgit.bigdata.pool.R;
@@ -42,7 +56,7 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://211.107.115.62:8080/pool/restLogin/";
+    private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences tlogin;
     private SharedPreferences mlogin;
     private SharedPreferences state;

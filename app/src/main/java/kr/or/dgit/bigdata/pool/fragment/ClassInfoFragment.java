@@ -42,7 +42,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ClassInfoFragment extends Fragment implements View.OnClickListener{
 
-    private String http = "http://192.168.0.12:8080/pool";
+    private String http = "http://192.168.0.60:8080/pool";
     Button classBtn;
     String[] arrays;
     int[] cno;

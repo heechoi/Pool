@@ -468,6 +468,7 @@
                         android:orientation="horizontal"
                         android:background="#fff"
                         android:padding="5dp">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

@@ -17,7 +17,8 @@
         android:layout_height="match_parent"
         android:background="@drawable/card_bg"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:id="@+id/card">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,17 +63,18 @@
                 android:paddingTop="60dp"
                 android:paddingLeft="15dp">
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/barcode" />
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/code"
                     android:textStyle="bold"
                     android:textSize="12dp"
                     android:letterSpacing="0.7"
-                    android:text="123" />
+                    android:text="123"
+                    android:textAlignment="center"/>
             </LinearLayout>
             <ImageView
                 android:layout_width="0dp"

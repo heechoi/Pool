@@ -124,6 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#D3D0D0" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -145,71 +146,70 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:background="@color/colorWhtie"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/change_tell_layout"
-                android:padding="10dp"
-                android:visibility="gone">
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:background="@color/colorWhtie"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="새 연락처"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:textSize="13dp"
-                    android:inputType="numberDecimal"
-                    android:id="@+id/tell1"
-                    android:maxLength="3"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textSize="13dp"
-                    android:text="-"
-                    android:textColor="#000"
-                    android:textAlignment="center"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:textSize="13dp"
-                    android:inputType="numberDecimal"
-                    android:id="@+id/tell2"
-                    android:maxLength="4"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textSize="13dp"
-                    android:text="-"
-                    android:textColor="#000"
-                    android:textAlignment="center"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:textSize="13dp"
-                    android:inputType="numberDecimal"
-                    android:id="@+id/tell3"
-                    android:maxLength="4"/>
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:textSize="12dp"
-                    android:textColor="#fff"
-                    android:background="@color/colorPrimaryDark"
-                    android:text="변경"
-                    android:onClick="clickCheckTell"
-                    android:id="@+id/newtell"/>
-            </LinearLayout>
-
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:id="@+id/change_tell_layout"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="새 연락처"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textSize="13dp"
+                        android:inputType="numberDecimal"
+                        android:id="@+id/tell1"
+                        android:maxLength="3"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="13dp"
+                        android:text="-"
+                        android:textColor="#000"
+                        android:textAlignment="center"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textSize="13dp"
+                        android:inputType="numberDecimal"
+                        android:id="@+id/tell2"
+                        android:maxLength="4"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="13dp"
+                        android:text="-"
+                        android:textColor="#000"
+                        android:textAlignment="center"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textSize="13dp"
+                        android:inputType="numberDecimal"
+                        android:id="@+id/tell3"
+                        android:maxLength="4"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="2"
+                        android:textSize="12dp"
+                        android:textColor="#fff"
+                        android:background="@color/colorPrimaryDark"
+                        android:text="변경"
+                        android:onClick="clickCheckTell"
+                        android:id="@+id/newtell"/>
+                </LinearLayout>
 
             <LinearLayout
                 android:layout_marginTop="6dp"
