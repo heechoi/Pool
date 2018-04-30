@@ -434,6 +434,36 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     Intent intent = new Intent(getContext(),ClassboardUpdateActivity.class);
                     intent.putExtra("bno",bno);
                     startActivity(intent);
+                    break;
+                case 5:
+                    String result5 = (String) msg.obj;
+                    Log.d("bum", "googogogoggoo3"+result5);
+                    try {
+
+                        reply_text.setText("");
+                        imm.toggleSoftInput(0,0);
+                        JSONArray ja = new JSONArray(result5);
+                        getList(ja);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.cancel();
+                    dialog.dismiss();
+                    break;
+                case 6:
+                    String result6 = (String) msg.obj;
+                    Log.d("bum", "googogogoggoo3"+result6);
+                    try {
+                        reply_text.setText("");
+                        imm.toggleSoftInput(0,0);
+                        JSONArray ja = new JSONArray(result6);
+                        getList(ja);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.cancel();
+                    dialog.dismiss();
+                    break;
             }
         }
     };
@@ -462,11 +492,51 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                             View v = getLayoutInflater().inflate(R.layout.reply_update,null);
 
                             final EditText reply = v.findViewById(R.id.etreply);
+                            final Button deleteBtn = v.findViewById(R.id.deleteBtn);
+                            final Button okBtn = v.findViewById(R.id.okBtn);
+                            final Button updateBtn = v.findViewById(R.id.updateBtn);
                             reply.setText(list.get(finalJ).getReplytext());
                             reply.requestFocus();
                             mDialog.setView(v);
                             dialog = mDialog.create();
                             dialog.show();
+                            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(),R.style.AlertDialog);
+                                    alert.setTitle("삭제");
+                                    alert.setMessage("댓글을 삭제하시겠습니까?").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String deleteHttp = url+"/pool/restclassboard/deletereply";
+                                            Log.d("bum",bno+"");
+                                            new HttpRequestTack(getContext(),mHandler,new String[]{list.get(finalJ).getRno()+"",bno+""},new String[]{"rno","bno"},"POST","댓글을 삭제하는중입니다...",5).execute(deleteHttp);
+                                            dialog.cancel();
+                                            dialog.dismiss();
+                                        }
+                                    }).setNegativeButton("취소",null);
+                                    alert.create();
+                                    alert.show();
+                                }
+                            });
+                            okBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.cancel();
+                                    dialog.dismiss();
+                                }
+                            });
+                            updateBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    String replytext = reply.getText().toString();
+                                    int rno = list.get(finalJ).getRno();
+                                    String[] arr = {replytext,rno+"",bno+""};
+                                    String[] arrName = {"replytext","rno","bno"};
+                                    String updateHttp = url+"/pool/restclassboard/updatereply";
+                                    new HttpRequestTack(getContext(),mHandler,arr,arrName,"POST","댓글을 수정하는중입니다...",6).execute(updateHttp);
+                                }
+                            });
                         }
                     });
                     TextView content = view.findViewById(R.id.content);
