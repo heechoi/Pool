@@ -37,6 +37,7 @@ import kr.or.dgit.bigdata.pool.dto.Teacher;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.ClinicFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
 import kr.or.dgit.bigdata.pool.fragment.QnaInsertFragment;
@@ -202,6 +203,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.clinic) {
             toolbar_title.setText("클리닉");
+            ClinicFragment cf = new ClinicFragment();
+            viewFragment(cf);
         } else if (id == R.id.qnaboard) {
             toolbar_title.setText("문의하기");
             QnaInsertFragment qna = QnaInsertFragment.newInstance();

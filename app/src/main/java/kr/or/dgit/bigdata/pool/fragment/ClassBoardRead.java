@@ -77,7 +77,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
     back tack;
     Bitmap rotate;
     File filePath;
-    String url = "http://192.168.123.113:8080";
+    String url = "http://192.168.0.60:8080";
     ProgressDialog mProgressDialog;
     int bno;
     List<ClassboardReply> list;
@@ -216,7 +216,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             case R.id.classboard_update:
                 String[] arr = {bno+""};
                 String[] arrname = {"bno"};
-                String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+                String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
                 new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "정보를 가져오는 중입니다.", 4).execute(httpread);
                 break;
         }
