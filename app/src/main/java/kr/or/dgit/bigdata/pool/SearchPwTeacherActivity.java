@@ -257,7 +257,7 @@ public class SearchPwTeacherActivity extends AppCompatActivity {
                 }
                 case 2:{
                     String result = (String) msg.obj;
-                    if(result.equals("updatePw")){
+                    if(result.equals("success")){
                         android.app.AlertDialog.Builder malert = new android.app.AlertDialog.Builder(SearchPwTeacherActivity.this, R.style.SearchAlertDialog);
                         malert.setTitle("비밀번호 변경");
                         malert.setMessage("비밀번호가 변경되었습니다.\n로그인을 이용하세요");
