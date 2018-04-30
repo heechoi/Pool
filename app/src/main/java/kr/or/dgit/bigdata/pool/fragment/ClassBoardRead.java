@@ -89,7 +89,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
     back tack;
     Bitmap rotate;
     File filePath;
-    String url = "http://192.168.0.60:8080";
+    String url = "http://192.168.123.113:8080";
     ProgressDialog mProgressDialog;
     int bno;
     List<ClassboardReply> list;
@@ -158,11 +158,12 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
         }
         menu_img.setVisibility(View.GONE);
         sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
-        sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
+        sp2 = getActivity().getSharedPreferences("Admin",MODE_PRIVATE);
         String id2 = sp2.getString("name","");
         String id = sp.getString("name","");
+        String matser =  sp2.getString("title","");
         Log.d("bum","====================="+writer);
-        if (id.equalsIgnoreCase(writer) || id2.equalsIgnoreCase(writer)){
+        if (id.equalsIgnoreCase(writer) || id2.equalsIgnoreCase(writer) || matser.equalsIgnoreCase("사장")){
             menu_img.setVisibility(View.VISIBLE);
         }
         bno = bundle.getInt("bno");
@@ -234,7 +235,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             case R.id.classboard_update:
                 String[] arr = {bno+""};
                 String[] arrname = {"bno"};
-                String httpread = "http://192.168.0.60:8080/pool/restclassboard/read";
+                String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
                 new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "정보를 가져오는 중입니다.", 4).execute(httpread);
                 break;
 
@@ -262,7 +263,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
     @Override
     public void onFocusChange(View view, boolean b) {
         sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
-        sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
+        sp2 = getActivity().getSharedPreferences("Admin",MODE_PRIVATE);
         String id2 = sp2.getString("name","");
         String id = sp.getString("name","");
         if ((id.equalsIgnoreCase("") || id==null) && (id2.equalsIgnoreCase("") || id2==null)){
@@ -490,7 +491,6 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View view = inflater.inflate(R.layout.class_reply,null);
 
-
                     ImageView imageView  = view.findViewById(R.id.reply_update);
                     //imgview.setText
                     final int finalJ = j;
@@ -553,11 +553,15 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     TextView writer = view.findViewById(R.id.id);
                     writer.setText(order.getString("id"));
                     sp = getActivity().getSharedPreferences("member",MODE_PRIVATE);
-                    sp2 = getActivity().getSharedPreferences("admin",MODE_PRIVATE);
+                    sp2 = getActivity().getSharedPreferences("Admin",MODE_PRIVATE);
                     String id2 = sp2.getString("name","");
                     String id = sp.getString("name","");
+                    String title = sp2.getString("title","");
                     if ((!id.equalsIgnoreCase(writer.getText().toString()) || id==null) && (!id2.equalsIgnoreCase(writer.getText().toString()) || id2==null)){
                         imageView.setVisibility(View.GONE);
+                    }
+                    if(title.equalsIgnoreCase("사장")){
+                        imageView.setVisibility(View.VISIBLE);
                     }
                     TextView regdate = view.findViewById(R.id.regdate);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

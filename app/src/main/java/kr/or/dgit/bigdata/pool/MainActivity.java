@@ -1,16 +1,21 @@
 package kr.or.dgit.bigdata.pool;
 
+import android.*;
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -128,6 +133,11 @@ public class MainActivity extends AppCompatActivity
             String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
             new HttpRequestTack(this, mHandler, new String[] {intent.getStringExtra("bno")}, new String[]{"bno"}, "POST", "글을 불러옵니다.",1).execute(httpread);
         }
+
+        //퍼미션
+
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS,android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.READ_CONTACTS,android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+
 
     }
 
