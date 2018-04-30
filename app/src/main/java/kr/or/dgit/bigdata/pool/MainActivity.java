@@ -39,6 +39,7 @@ import kr.or.dgit.bigdata.pool.dto.Teacher;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClassBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.ClassInfoFragment;
+import kr.or.dgit.bigdata.pool.fragment.ClasstimeFragment;
 import kr.or.dgit.bigdata.pool.fragment.ClinicFragment;
 import kr.or.dgit.bigdata.pool.fragment.MapsActivity;
 import kr.or.dgit.bigdata.pool.fragment.MemberInfoFragment;
@@ -203,7 +204,9 @@ public class MainActivity extends AppCompatActivity
             MemberInfoFragment mf = MemberInfoFragment.newInstance();
             viewFragment(mf);
         } else if (id == R.id.classtime) {
-
+            toolbar_title.setText("수강시간");
+            ClasstimeFragment cf = new ClasstimeFragment();
+            viewFragment(cf);
         } else if (id == R.id.bus) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
