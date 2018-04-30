@@ -30,9 +30,8 @@ import com.google.zxing.common.BitMatrix;
 
 import org.w3c.dom.Text;
 
-import kr.or.dgit.bigdata.pool.fragment.BarCodeFragment;
 
-public class BarCodeActivity extends AppCompatActivity implements View.OnTouchListener {
+public class BarCodeActivity extends AppCompatActivity {
     private ImageView view;
     private TextView code;
     private LinearLayout layout;
@@ -52,7 +51,7 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnTouchLi
         name = findViewById(R.id.name);
 
         card = findViewById(R.id.card);
-        card.setOnTouchListener(this);
+      ;
 
         layout = (LinearLayout)findViewById(R.id.layout);
         member = getSharedPreferences("member",MODE_PRIVATE);
@@ -64,9 +63,6 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnTouchLi
         String data = mno+"";
 
         code.setText(mno+"");
-
-        fragment = BarCodeFragment.newInstance();
-
 
         try{
             final int WIDTH = 800;
@@ -91,13 +87,4 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnTouchLi
 
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (motionEvent.getAction()&MotionEvent.ACTION_MASK){
-            case MotionEvent.ACTION_DOWN:
-                fragment.show(getSupportFragmentManager(),fragment.getTag());
-                break;
-        }
-        return true;
-    }
 }
