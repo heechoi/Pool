@@ -2,7 +2,7 @@ package kr.or.dgit.bigdata.pool.fragment;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,15 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,21 +27,20 @@ import java.util.Date;
 import java.util.List;
 
 import kr.or.dgit.bigdata.pool.R;
-import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.dto.NoticeBoard;
+import kr.or.dgit.bigdata.pool.dto.QnaBoard;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-public class NoticeListFragment extends Fragment implements View.OnClickListener , OnScrollListener{
+public class QnaListFragment extends Fragment implements View.OnClickListener{
 
     private String http = "http://192.168.0.12:8080/pool";
     String[] arrays;
-    List<NoticeBoard> nList;
+    List<QnaBoard> nList;
     ListView listView;
-    private boolean lastItemVisibleFlag = false;
-    int page =1;
-    MyListAdapter adapter;
-    public static NoticeListFragment newInstance(){
-        NoticeListFragment cf = new NoticeListFragment();
+    String id;
+    SharedPreferences member;
+    public static QnaListFragment newInstance(){
+        QnaListFragment cf = new QnaListFragment();
         return cf;
     }
 
@@ -54,11 +48,12 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.notice_list, container, false);
-        listView = root.findViewById(R.id.notice_list);
-        listView.setOnScrollListener(this);
+        View root = inflater.inflate(R.layout.qna_list, container, false);
+        listView = root.findViewById(R.id.qna_list);
         nList= new ArrayList<>();
-        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/notice/list?page="+1);
+        member = getContext().getSharedPreferences("member",0);
+        id = member.getString("id","");
+        new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...").execute(http+"/restQna/list?id="+id);
 
         return root;
     }
@@ -83,22 +78,22 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
 
                         for (int i = 0; i < ja.length(); i++) {
                             JSONObject order = ja.getJSONObject(i);
-                            NoticeBoard nBoard = new NoticeBoard();
-                            nBoard.setNno((Integer) order.get("nno"));
-                            nBoard.setTitle((String) order.get("title"));
-                            nBoard.setContent((String) order.get("content"));
+                            QnaBoard qBoard = new QnaBoard();
+                            qBoard.setBno((Integer) order.get("bno"));
+                            qBoard.setWriter((String) order.get("writer"));
+                            qBoard.setTitle((String) order.get("title"));
+                            qBoard.setReplycheck((boolean)order.get("replycheck"));
                             Date d = new Date((long)order.get("regdate"));
 
-                            nBoard.setRegdate(d);
+                            qBoard.setRegdate(d);
 
-                            nBoard.setReadcnt((Integer) order.get("readcnt"));
-                            nList.add(nBoard);
+                            nList.add(qBoard);
                         }
                     } catch (JSONException e) {
                         Log.i("Json_parser", e.getMessage());
                     }
 
-                    adapter = new MyListAdapter(getContext(),R.layout.notice_item,nList);
+                    MyListAdapter adapter = new MyListAdapter(getContext(),R.layout.qna_item,nList);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -109,7 +104,7 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
                             tr.addToBackStack(null);
                             NoticeBoardRead nb = new NoticeBoardRead();
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable("nno", nList.get(i).getNno());
+                           /* bundle.putSerializable("nno", nList.get(i).getNno());*/
                             nb.setArguments(bundle);
                             tr.replace(R.id.frame,nb);
                             tr.commit();
@@ -118,52 +113,10 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
 
                 }
                 break;
-                case 2:{
-                    String result = (String)msg.obj;
 
-                    try {
-                        JSONArray ja = new JSONArray(result);
-
-
-                        for (int i = 0; i < ja.length(); i++) {
-                            JSONObject order = ja.getJSONObject(i);
-                            NoticeBoard nBoard = new NoticeBoard();
-                            nBoard.setNno((Integer) order.get("nno"));
-                            nBoard.setTitle((String) order.get("title"));
-                            nBoard.setContent((String) order.get("content"));
-                            Date d = new Date((long)order.get("regdate"));
-
-                            nBoard.setRegdate(d);
-
-                            nBoard.setReadcnt((Integer) order.get("readcnt"));
-                            nList.add(nBoard);
-                        }
-                    } catch (JSONException e) {
-                        Log.i("Json_parser", e.getMessage());
-                    }
-
-                    adapter.notifyDataSetChanged();
-
-                }
-                break;
             }
         }
     };
-
-    @Override
-    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-            Log.d("bum","끝 스크롤");
-
-            page++;
-            new HttpRequestTack(getContext(),mHandler,"GET","정보를 가져오고 있습니다...",2).execute(http+"/notice/list?page="+page);
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
-    }
 
 
     class MyListAdapter extends BaseAdapter {
@@ -171,9 +124,9 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
         private Context mContext;  //MyListAdapter 가 Activity가 아니므로
         private int mItemRowLayout; //항목레이아웃
         private LayoutInflater mInflater; //항목레이아웃을 전개할 전개자
-        private List<NoticeBoard> arItem;
+        private List<QnaBoard> arItem;
 
-        public MyListAdapter(Context context, int itemRowLayout, List<NoticeBoard> list) {
+        public MyListAdapter(Context context, int itemRowLayout, List<QnaBoard> list) {
             mContext = context;
             mItemRowLayout = itemRowLayout;
             arItem = list;
@@ -210,10 +163,18 @@ public class NoticeListFragment extends Fragment implements View.OnClickListener
             name.setText("관리자");
 
             TextView nno = convertview.findViewById(R.id.tv_nno);
-            nno.setText(String.valueOf(arItem.get(position).getNno()));
+            nno.setText(String.valueOf(arItem.get(position).getBno()));
 
             TextView title  = convertview.findViewById(R.id.tv_title);
             title.setText(arItem.get(position).getTitle());
+
+            TextView check  = convertview.findViewById(R.id.tv_check);
+            if(arItem.get(position).isReplycheck()){
+                check.setText("O");
+            }else{
+                check.setText("X");
+            }
+
 
             TextView date  = convertview.findViewById(R.id.tv_date);
             SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd");

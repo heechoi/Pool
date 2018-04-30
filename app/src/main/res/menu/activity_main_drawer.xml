@@ -6,19 +6,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/user_attendance"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_attend"
             android:title="출석보기" />
         <item
             android:id="@+id/classtime"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_time"
             android:title="수업시간" />
         <item
             android:id="@+id/bus"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_bus"
             android:title="버스위치" />
         <item
             android:id="@+id/clinic"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_pool_black_24dp"
             android:title="수영클리닉" />
     </group>
 
@@ -26,15 +26,15 @@
         <menu>
             <item
                 android:id="@+id/classboard"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_class_board"
                 android:title="반별 게시판" />
             <item
                 android:id="@+id/qnaboard"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_star"
                 android:title="문의하기" />
             <item
                 android:id="@+id/noticeboard"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_board"
                 android:title="공지사항" />
         </menu>
     </item>
@@ -42,15 +42,15 @@
         <menu>
             <item
                 android:id="@+id/classinfo"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_info"
                 android:title="반별 정보" />
             <item
                 android:id="@+id/reclass"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_chart"
                 android:title="등록률 보기" />
             <item
                 android:id="@+id/notice_alram"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_arim"
                 android:title="공지사항 알림보내기" />
         </menu>
     </item>

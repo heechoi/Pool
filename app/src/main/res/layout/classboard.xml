@@ -13,14 +13,20 @@
             android:id="@+id/cls_board_btn"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="반 선택" />
+            android:layout_height="40dp"
+            android:text="반 선택"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="#fff"/>
         <Button
             android:id="@+id/cls_board_insert_btn"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="글 쓰기"/>
+            android:layout_height="40dp"
+            android:text="글 쓰기"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="#fff"/>
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"
