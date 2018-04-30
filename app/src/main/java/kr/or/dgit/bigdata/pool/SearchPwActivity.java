@@ -208,7 +208,7 @@ public class SearchPwActivity extends AppCompatActivity {
                         });
                         malert.show();
 
-                        PendingIntent sentIntent = PendingIntent.getBroadcast(SearchPwActivity.this,0,new Intent("SMS_SENT_ACTION"),0);
+                       PendingIntent sentIntent = PendingIntent.getBroadcast(SearchPwActivity.this,0,new Intent("SMS_SENT_ACTION"),0);
                         SmsManager smsManager = SmsManager.getDefault();
                         sms = "";
                         for(int i=0;i<8;i++){
@@ -244,8 +244,6 @@ public class SearchPwActivity extends AppCompatActivity {
                                     mBuilder = new AlertDialog.Builder(SearchPwActivity.this);
                                     mBuilder.setCancelable(false);
                                     View v = getLayoutInflater().inflate(R.layout.new_pw, null);
-                                    TextView title = (TextView) v.findViewById(R.id.main_title);
-                                    title.setText("비밀번호 변경");
                                     final EditText newpw = (EditText) v.findViewById(R.id.newPw);
                                     final EditText newpw2 = (EditText)v.findViewById(R.id.newPw2);
                                     Button ok = (Button) v.findViewById(R.id.sendBtn);

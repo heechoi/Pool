@@ -480,6 +480,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             // 화면이 바닦에 닿을때 처리
             // 로딩중을 알리는 프로그레스바를 보인다.
             Log.d("bum","끝 스크롤");
+
         }
     }
 
