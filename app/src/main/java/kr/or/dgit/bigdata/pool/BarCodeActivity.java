@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.ActionMode;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -27,7 +30,9 @@ import com.google.zxing.common.BitMatrix;
 
 import org.w3c.dom.Text;
 
-public class BarCodeActivity extends AppCompatActivity{
+import kr.or.dgit.bigdata.pool.fragment.BarCodeFragment;
+
+public class BarCodeActivity extends AppCompatActivity implements View.OnTouchListener {
     private ImageView view;
     private TextView code;
     private LinearLayout layout;
@@ -35,6 +40,7 @@ public class BarCodeActivity extends AppCompatActivity{
     private int mno;
     private TextView name;
     private LinearLayout card;
+    BottomSheetDialogFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,7 @@ public class BarCodeActivity extends AppCompatActivity{
         name = findViewById(R.id.name);
 
         card = findViewById(R.id.card);
-
+        card.setOnTouchListener(this);
 
         layout = (LinearLayout)findViewById(R.id.layout);
         member = getSharedPreferences("member",MODE_PRIVATE);
@@ -58,8 +64,12 @@ public class BarCodeActivity extends AppCompatActivity{
         String data = mno+"";
 
         code.setText(mno+"");
+
+        fragment = BarCodeFragment.newInstance();
+
+
         try{
-            final int WIDTH = 300;
+            final int WIDTH = 800;
             final int HEIGHT = 150;
 
             BitMatrix byteamap = gen.encode(data, BarcodeFormat.CODE_128,WIDTH,HEIGHT);
@@ -81,4 +91,13 @@ public class BarCodeActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (motionEvent.getAction()&MotionEvent.ACTION_MASK){
+            case MotionEvent.ACTION_DOWN:
+                fragment.show(getSupportFragmentManager(),fragment.getTag());
+                break;
+        }
+        return true;
+    }
 }
