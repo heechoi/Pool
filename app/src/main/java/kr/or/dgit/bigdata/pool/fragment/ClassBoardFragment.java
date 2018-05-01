@@ -102,24 +102,46 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                     String result = (String) msg.obj;
                     Log.d("bum", "=============3 " + result);
                     try {
-                        JSONArray ja = new JSONArray(result);
+                        if(!result.equalsIgnoreCase("")){
+                            JSONArray ja = new JSONArray(result);
 
-                        if (ja.length() > 0) {
-                            for (int j = 0; j < ja.length(); j++) {
-                                JSONObject order = ja.getJSONObject(j);
+                            if (ja.length() > 0) {
+                                for (int j = 0; j < ja.length(); j++) {
+                                    JSONObject order = ja.getJSONObject(j);
+                                    ClassBoard board = new ClassBoard();
+                                    board.setCno(order.getInt("cno"));
+                                    board.setBno(order.getInt("bno"));
+                                    board.setId(order.getString("id"));
+                                    Date date = new Date(order.getLong("regdate"));
+                                    board.setRegdate(date);
+                                    board.setContent(order.getString("content"));
+                                    board.setImgpath(order.getString("imgpath"));
+                                    board.setTitle(order.getString("title"));
+                                    mList.add(board);
+                                }
+                                mListAdapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
+                            } else {
                                 ClassBoard board = new ClassBoard();
-                                board.setCno(order.getInt("cno"));
-                                board.setBno(order.getInt("bno"));
-                                board.setId(order.getString("id"));
-                                Date date = new Date(order.getLong("regdate"));
+                                board.setBno(-1);
+                                board.setId("없음");
+                                Date date = new Date();
                                 board.setRegdate(date);
-                                board.setContent(order.getString("content"));
-                                board.setImgpath(order.getString("imgpath"));
-                                board.setTitle(order.getString("title"));
+                                board.setTitle("등록된 게시글이 없습니다. ");
                                 mList.add(board);
+                                mListAdapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
                             }
-                            mListAdapter = new MyListAdapter(getContext(), R.layout.class_item, mList);
-                        } else {
+                            mListAdapter.notifyDataSetChanged();
+                            listview.setAdapter(mListAdapter);
+                            Log.d("bum", "끝끝");
+                            for(int i=0; i< mList.size(); i++){
+                                Log.d("bum",mList.get(i).toString());
+                                if (!mList.get(i).getImgpath().toString().equalsIgnoreCase("null") && !mList.get(i).getImgpath().toString().equalsIgnoreCase("") && mList.get(i).getImgpath() != null) {
+                                    Log.d("bum", mList.get(i).getBno() + "널아님");
+                                    tack = new back(i);
+                                    tack.execute(imgurl + mList.get(i).getImgpath());
+                                }
+                            }
+                        }else {
                             ClassBoard board = new ClassBoard();
                             board.setBno(-1);
                             board.setId("없음");
@@ -128,20 +150,9 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                             board.setTitle("등록된 게시글이 없습니다. ");
                             mList.add(board);
                             mListAdapter = new MyNoListAdapter(getContext(), R.layout.class_item2, mList);
+                            mListAdapter.notifyDataSetChanged();
+                            listview.setAdapter(mListAdapter);
                         }
-                        mListAdapter.notifyDataSetChanged();
-                        listview.setAdapter(mListAdapter);
-                        Log.d("bum", "끝끝");
-                        for(int i=0; i< mList.size(); i++){
-                            Log.d("bum",mList.get(i).toString());
-                            if (!mList.get(i).getImgpath().toString().equalsIgnoreCase("null") && !mList.get(i).getImgpath().toString().equalsIgnoreCase("") && mList.get(i).getImgpath().toString() != null) {
-                                Log.d("bum", mList.get(i).getBno() + "널아님");
-                                tack = new back(i);
-                                tack.execute(imgurl + mList.get(i).getImgpath());
-                            }
-                        }
-
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
