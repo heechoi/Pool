@@ -38,7 +38,7 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
     private EditText id;
     private EditText pw;
     private Button loginBtn;
-    private String http ="http://211.107.115.62:8080/pool/restLogin/";
+    private String http ="http://192.168.0.239:8080/pool/restLogin/";
     private SharedPreferences login;
     private SharedPreferences tlogin;
     private SharedPreferences state;
@@ -187,11 +187,11 @@ public class MemberLogin extends Fragment implements View.OnClickListener {
                              if(stateLable.getHint().toString().equals("전")){
                                  SharedPreferences.Editor edit = state.edit();
                                  edit.clear();
-                                 edit.putInt("state",1);
                                  edit.commit();
                              }else if(stateLable.getHint().toString().equals("후")){
                                  SharedPreferences.Editor edit = state.edit();
                                  edit.clear();
+                                 edit.putInt("state",1);
                                  edit.commit();
                              }
 

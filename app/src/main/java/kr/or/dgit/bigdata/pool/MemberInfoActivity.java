@@ -62,7 +62,7 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
     private Button checkEmail;
     private EditText chageEmail;
     private TextView nowEmail;
-    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
+    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
     private ImageView showTell;
     private TextView tell;
     private EditText tell1;
@@ -299,7 +299,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         });
                         alert.show();
                     }
+
                 }
+                break;
                 case 2:{
                     String result = (String) msg.obj;
                     if(result.equals("fail")){
@@ -325,7 +327,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         });
                         alert.show();
                     }
+
                 }
+                break;
                 case 3:{
                     String result = (String) msg.obj;
                     if(result.equals("fail")){
@@ -352,7 +356,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         });
                         alert.show();
                     }
+
                 }
+                break;
                 case 4:{
                     String result = (String) msg.obj;
                     try{
@@ -382,6 +388,7 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                     }
 
                 }
+                break;
                 case 5:{
                     String result = (String) msg.obj;
                     if(result.equals("success")){

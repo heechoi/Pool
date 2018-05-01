@@ -235,6 +235,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                         e.printStackTrace();
                     }
                 }
+                break;
                 case 2:{
                     String result = (String) msg.obj;
                     if(result.equals("update")){
@@ -253,6 +254,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                         alert.show();
                     }
                 }
+                break;
                 case 3:{
                     String result = (String) msg.obj;
                     if(result.equals("no")){
@@ -280,6 +282,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                     }
 
                 }
+                break;
                 case 4:{
                     String result = (String) msg.obj;
                     if(result.equals("success")){
@@ -298,6 +301,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                         alert.show();
                     }
                 }
+                break;
                 case 5:{
                     String result = (String) msg.obj;
                     String imgpath = "";
@@ -313,6 +317,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
                     HttpRequestTack httpRequestTack = new HttpRequestTack(TeacherInfoActivity.this,mHandler,arr,arrname,"POST","비밀번호 변경중..",6);
                     httpRequestTack.execute(updateimgpath);
                 }
+                break;
                 case 6:{
                     String result = (String) msg.obj;
                     Log.d("bum",result);

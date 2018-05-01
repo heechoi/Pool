@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/user_attendance"
             android:icon="@drawable/ic_attend"
-            android:title="출석보기" />
+            android:title="출석보기"/>
         <item
             android:id="@+id/classtime"
             android:icon="@drawable/ic_time"
@@ -38,7 +39,7 @@
                 android:title="공지사항" />
         </menu>
     </item>
-    <item android:title="강사">
+    <item android:title="강사" android:id="@+id/teacherItem">
         <menu>
             <item
                 android:id="@+id/classinfo"
@@ -54,6 +55,10 @@
                 android:title="공지사항 알림보내기" />
         </menu>
     </item>
-
-
+    <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/logOut"
+                android:icon="@drawable/sign_out"
+                android:title="로그아웃" />
+    </group>
 </menu>

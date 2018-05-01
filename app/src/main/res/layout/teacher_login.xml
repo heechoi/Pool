@@ -21,7 +21,7 @@
                 android:layout_height="50dp"
                 android:id="@+id/idtext"
                 android:hint="ID"
-                android:inputType="text"
+                android:inputType="textVisiblePassword"
                 android:textColorHint="#fff"
                 android:textColor="#fff"
                 android:maxLines="1"
