@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     private  Toolbar toolbar;
     private TextView toolbar_title;
     private onKeyBackPressedListener mOnKeyBackPressedListener;
+    private TextView user;
     private Menu navigationViewMenu;
     public void setOnKeyBackPressedListener(onKeyBackPressedListener onKeyBackPressedListener) {
         mOnKeyBackPressedListener = onKeyBackPressedListener;
@@ -98,22 +99,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationViewMenu = navigationView.getMenu();
+
+        navigationViewMenu =navigationView.getMenu();
 
         login = navigationView.getHeaderView(0).findViewById(R.id.login);
         login.setOnClickListener(this);
+        user = navigationView.getHeaderView(0).findViewById(R.id.user);
         //회원정보수정
         info = navigationView.getHeaderView(0).findViewById(R.id.info);
         login_title = navigationView.getHeaderView(0).findViewById(R.id.login_title);
         qna_list = navigationView.getHeaderView(0).findViewById(R.id.qna_list);
         qna_list.setOnClickListener(this);
         info.setOnClickListener(this);
-        //로그아웃
-        logOut = navigationView.getHeaderView(0).findViewById(R.id.logOut);
-        logOut.setOnClickListener(this);
-
-        barcode = navigationView.getHeaderView(0).findViewById(R.id.barCode);
-        barcode.setOnClickListener(this);
 
         TestFragment cf = TestFragment.newInstance();
 
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity
             tf.setArguments(bundle);
             viewFragment(tf);
         }else if(intent.getStringExtra("bno") !=null){
-            String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+            String httpread = "http://rkd0519.cafe24.com/pool/restclassboard/read";
             new HttpRequestTack(this, mHandler, new String[] {intent.getStringExtra("bno")}, new String[]{"bno"}, "POST", "글을 불러옵니다.",1).execute(httpread);
         }
 
@@ -187,20 +184,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
-        int mno = mlogin.getInt("mno", 0);
         return true;
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -244,21 +235,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.notice_alram) {
             NoticeFragment nf = NoticeFragment.newInstance();
             viewFragment(nf);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.login) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            overridePendingTransition(R.anim.login, R.anim.login_out);
-        }
-        if (v.getId() == R.id.logOut) {
+        }else if(id==R.id.logOut){
             //회원정보 삭제
             SharedPreferences.Editor logOutm = mlogin.edit();
             logOutm.clear();
@@ -276,17 +253,33 @@ public class MainActivity extends AppCompatActivity
 
             finish();
             startActivity(getIntent());
-
-        }
-        if(v.getId()==R.id.barCode){
-            Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
-            startActivity(intent);
         }
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.login) {
+            int mno = mlogin.getInt("mno",0);
+            int tno = admin.getInt("tno",0);
+
+            if(mno!=0||tno!=0){
+                return;
+            }
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            overridePendingTransition(R.anim.login, R.anim.login_out);
+
+        }
         if(v.getId()==R.id.qna_list){
-            toolbar_title.setText("문의하기");
+            toolbar_title.setText("문의내역");
             QnaListFragment qf = QnaListFragment.newInstance();
             viewFragment(qf);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
         }
 
         if (v.getId() == R.id.info) {
@@ -320,28 +313,57 @@ public class MainActivity extends AppCompatActivity
         int tno = admin.getInt("tno", 0);
         String title = admin.getString("title", "");
         int mno = mlogin.getInt("mno", 0);
-
+        String mName = mlogin.getString("name","");
+        String tName = admin.getString("name","");
         //회원,강사일때
         if (mno != 0 || (tno != 0 && !title.equals("사장"))) {
+            if(mno!=0){
+                user.setText(mName+"동동 회원님");
+                MenuItem attendance = navigationViewMenu.findItem(R.id.user_attendance);
+                attendance.setVisible(true);
+                MenuItem teacheritem = navigationViewMenu.findItem(R.id.teacherItem);
+                teacheritem.setVisible(false);
+            }
+
+            if(tno !=0){
+                user.setText(tName+"강사님");
+                MenuItem teacheritem = navigationViewMenu.findItem(R.id.teacherItem);
+                teacheritem.setVisible(true);
+                MenuItem attendance = navigationViewMenu.findItem(R.id.user_attendance);
+                attendance.setVisible(false);
+            }
+
             info.setVisibility(View.VISIBLE);
             login_title.setVisibility(View.GONE);
-            logOut.setVisibility(View.VISIBLE);
-            barcode.setVisibility(View.VISIBLE);
             qna_list.setVisibility(View.VISIBLE);
+            MenuItem logoutItem = navigationViewMenu.findItem(R.id.logOut);
+            logoutItem.setVisible(true);
         }
         //모든 정보가 없을때 로그인 할 수 있는 화면으로
         if (mno == 0 && tno == 0) {
+            user.setText("");
             info.setVisibility(View.GONE);
-            logOut.setVisibility(View.GONE);
             login_title.setVisibility(View.VISIBLE);
-            barcode.setVisibility(View.GONE);
             qna_list.setVisibility(View.GONE);
-
+            MenuItem teacheritem = navigationViewMenu.findItem(R.id.teacherItem);
+            teacheritem.setVisible(false);
+            MenuItem attendance = navigationViewMenu.findItem(R.id.user_attendance);
+            attendance.setVisible(false);
+            MenuItem logoutItem = navigationViewMenu.findItem(R.id.logOut);
+            logoutItem.setVisible(false);
         }
         //사장님일때
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
-            Toast.makeText(this, "사장님 로그인: " + tno, Toast.LENGTH_SHORT).show();
-            barcode.setVisibility(View.GONE);
+            Toast.makeText(this, "관리자님 환영합니다" + tno, Toast.LENGTH_SHORT).show();
+            info.setVisibility(View.GONE);
+            login_title.setVisibility(View.GONE);
+            qna_list.setVisibility(View.GONE);
+            MenuItem teacheritem = navigationViewMenu.findItem(R.id.teacherItem);
+            teacheritem.setVisible(true);
+            MenuItem logoutItem = navigationViewMenu.findItem(R.id.logOut);
+            logoutItem.setVisible(true);
+            MenuItem attendance = navigationViewMenu.findItem(R.id.user_attendance);
+            attendance.setVisible(false);
         }
 
     }
@@ -372,6 +394,7 @@ public class MainActivity extends AppCompatActivity
                     fgm.setArguments(bundle);
                     tr.replace(R.id.frame, fgm);
                     tr.commit();
+
             }
         }
     };

@@ -36,7 +36,7 @@ import kr.or.dgit.bigdata.pool.fragment.NoticeListFragment;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class TestFragment extends Fragment implements View.OnClickListener{
-    private String http = "http://192.168.0.60:8080/pool";
+    private String http = "http://rkd0519.cafe24.com/pool";
     ListView mListView;
     List<NoticeBoard> nList;
     Button btn_tel;

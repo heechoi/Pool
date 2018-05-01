@@ -19,7 +19,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class ReclassFragment extends Fragment{
 
-    private String http = "http://192.168.0.12:8080/pool";
+    private String http = "http://rkd0519.cafe24.com/pool";
     int tno;
     String level;
     DonutView view;

@@ -26,7 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText id;
     private EditText pw1;
     private EditText pw2;
-    private String http ="http://192.168.0.239:8080/pool/restJoin/";
+    private String http ="http://rkd0519.cafe24.com/pool/restJoin/";
     private String mno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

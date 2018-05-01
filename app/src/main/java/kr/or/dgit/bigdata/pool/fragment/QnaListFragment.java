@@ -33,7 +33,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
 public class QnaListFragment extends Fragment implements View.OnClickListener{
 
-    private String http = "http://192.168.0.239:8080/pool";
+    private String http = "http://rkd0519.cafe24.com/pool";
     String[] arrays;
     List<QnaBoard> nList;
     ListView listView;

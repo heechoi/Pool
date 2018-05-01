@@ -110,7 +110,7 @@
                     android:layout_weight="1"
                     android:text="비밀번호"
                     android:textAlignment="center" />
-
+                
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -123,6 +123,13 @@
                     android:backgroundTint="@color/colorPrimaryDark"/>
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:text="로그인을 하지 않았을때 문의내역을 확인할 수 있는 비밀번호입니다"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

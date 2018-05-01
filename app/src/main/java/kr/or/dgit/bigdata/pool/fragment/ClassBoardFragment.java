@@ -70,7 +70,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener , AbsListView.OnScrollListener{
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String http = "http://rkd0519.cafe24.com/pool/restclassboard/";
     private String time = "";
     private String level = "";
     Bitmap bmImg;
@@ -78,7 +78,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     Bitmap rotate;
     ListView listview;
     File filePath;
-    String imgurl = "http://192.168.123.113:8080";
+    String imgurl = "http://rkd0519.cafe24.com";
     BaseAdapter mListAdapter;
     ArrayList<ClassBoard> mList  = new ArrayList<>();;
     SharedPreferences sp;
@@ -286,7 +286,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
         String bno = mList.get(position).getBno() + "";
         String[] arrname = {"bno"};
         String[] arr = {bno};
-        String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+        String httpread = "http://rkd0519.cafe24.com/pool/restclassboard/read";
         new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "글을 읽어오고 있습니다...", 2).execute(httpread);
     }
 
