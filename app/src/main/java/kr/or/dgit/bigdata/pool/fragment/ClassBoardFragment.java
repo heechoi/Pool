@@ -244,7 +244,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
                                 time = arrays[i];
                                 new AlertDialog.Builder(getActivity())
                                         .setIcon(R.mipmap.ic_launcher)
-                                        .setTitle("시간을 선택해주세요")
+                                        .setTitle("반을 선택해주세요")
                                         .setItems(R.array.classboard_level, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {

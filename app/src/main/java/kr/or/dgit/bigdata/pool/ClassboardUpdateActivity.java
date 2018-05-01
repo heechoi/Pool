@@ -395,9 +395,9 @@ public class ClassboardUpdateActivity extends AppCompatActivity implements View.
         String title = etTitle.getText().toString();
         String imgPathcheck = null;
         if(filePath !=null){
-            imgPathcheck =  "/pool/resources/upload/teacher/"+filePath.getName();
+            imgPathcheck =  "/pool/resources/upload/classboard/"+filePath.getName();
         }else if(galleryPath !=null){
-            imgPathcheck =  "/pool/resources/upload/teacher/"+galleryPath;
+            imgPathcheck =  "/pool/resources/upload/classboard/"+galleryPath;
         }
         String[] arrname = new String[]{"time","level","id","content","title","imgPathcheck","oriImgPath","bno"};
         String[] arr = {time,level,id,content,title,imgPathcheck,original_imgPath,bno+""};

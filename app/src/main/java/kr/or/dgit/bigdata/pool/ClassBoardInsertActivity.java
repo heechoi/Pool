@@ -485,7 +485,6 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         }
         String[] arrname = new String[]{"time","level","id","content","title","imgPathcheck"};
         String[] arr = {time,level,id,content,title,imgPathcheck};
-
         String httpclasstime = http + "insert";
         new HttpRequestTack(this, mhandler, arr, arrname, "POST", "글을 작성합니다.",2).execute(httpclasstime);
     }
