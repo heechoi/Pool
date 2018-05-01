@@ -100,8 +100,8 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
     String galleryPath;
     CustomDialog customDialog;
 
-    private String imgUrl = "http://192.168.0.239:8080";
-    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
+    private String imgUrl = "http://211.107.115.62:8080";
+    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +138,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         });
         check =  findViewById(R.id.check);
         auto = findViewById(R.id.auto);
+        makeRandom();
         refresh = findViewById(R.id.refresh);
         voice = findViewById(R.id.voice);
 
@@ -178,7 +179,14 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         httpRequestTack.execute(findHttp);
 
     }
-
+    private void makeRandom(){
+        String text="";
+        for(int i=0;i<6;i++){
+            int num = (int)(Math.random()*10);
+            text+=num+"";
+        }
+        auto.setText(text);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -359,6 +367,7 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         }
         if(!auto.getText().toString().equals(check.getText().toString())){
             Toast toast = Toast.makeText(this,"자동입력방지가 일치하지 않습니다",Toast.LENGTH_SHORT);
+            makeRandom();
             check.requestFocus();
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
@@ -513,6 +522,11 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
         speech.setPitch(1.0f);
         speech.setSpeechRate(0.5f);
         speech.speak(auto.getText().toString(),TextToSpeech.QUEUE_FLUSH,null);
+    }
+
+    public void clickRefresh(View view) {
+        makeRandom();
+
     }
 
     private class back extends AsyncTask<String, Integer, Bitmap> {

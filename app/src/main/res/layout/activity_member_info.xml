@@ -410,7 +410,7 @@
                             android:layout_weight="2"
                             android:id="@+id/auto"
                             android:text="test"
-                            android:textSize="15dp"
+                            android:textSize="20dp"
                             android:textStyle="italic"
                             android:layout_gravity="center_vertical"
                             android:textAlignment="center"/>
@@ -429,6 +429,7 @@
                                 android:drawableLeft="@drawable/refresh"
                                 android:textSize="13dp"
                                 android:layout_margin="5dp"
+                                android:onClick="clickRefresh"
                                 android:id="@+id/refresh"/>
                             <Button
                                 android:layout_width="match_parent"

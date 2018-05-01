@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
@@ -35,11 +36,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kr.or.dgit.bigdata.pool.dto.Member;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
+
+import static android.speech.tts.TextToSpeech.ERROR;
 
 public class MemberInfoActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView name;
@@ -58,13 +62,15 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
     private Button checkEmail;
     private EditText chageEmail;
     private TextView nowEmail;
-    private String http ="http://192.168.0.239:8080/pool/restInfoUpdate/";
+    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
     private ImageView showTell;
     private TextView tell;
     private EditText tell1;
     private EditText tell2;
     private EditText tell3;
-
+    private TextView auto;
+    private TextToSpeech speech;
+    private EditText check;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +112,18 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         tell1 = findViewById(R.id.tell1);
         tell2 = findViewById(R.id.tell2);
         tell3 = findViewById(R.id.tell3);
+        check =  findViewById(R.id.check);
+        auto = findViewById(R.id.auto);
+        makeRandom();
+
+        speech = new TextToSpeech(this,new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status !=ERROR){
+                    speech.setLanguage(Locale.KOREA);
+                }
+            }
+        });
 
         String findHttp = http+"findMember";
 
@@ -115,6 +133,23 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","회원정보 가져오는 중..",4);
         httpRequestTack.execute(findHttp);
 
+    }
+    private void makeRandom(){
+        String text="";
+        for(int i=0;i<6;i++){
+            int num = (int)(Math.random()*10);
+            text+=num+"";
+        }
+        auto.setText(text);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(speech !=null){
+            speech.stop();
+            speech.shutdown();
+            speech=null;
+        }
     }
 
     @Override
@@ -435,6 +470,24 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
             toast.show();
             return;
         }
+
+        if(check.getText().toString().isEmpty()){
+            Toast toast = Toast.makeText(this,"자동입력방지를 입력해주세요",Toast.LENGTH_SHORT);
+            check.requestFocus();
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            return;
+        }
+        if(!auto.getText().toString().equals(check.getText().toString())){
+            Toast toast = Toast.makeText(this,"자동입력방지가 일치하지 않습니다",Toast.LENGTH_SHORT);
+            makeRandom();
+            check.requestFocus();
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            return;
+        }
+
+
         String updatePw = http+"updatePw";
         String[] arrQuery = {member.getString("id",""),nowPw.getText().toString(),newPw.getText().toString()};
         String[] arrQueryname = {"id","pw","newPw"};
@@ -459,8 +512,7 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void clickVoice(View view) {
-    }
+
 
     public void clickCheckTell(View view) {
         if(tell1.getText().toString().isEmpty()||tell2.getText().toString().isEmpty()||tell3.getText().toString().isEmpty()){
@@ -489,5 +541,15 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
         String[] arrQueryname ={"mno","tell"};
         HttpRequestTack httpRequestTack = new HttpRequestTack(this,mHandler,arrQuery,arrQueryname,"POST","연락처 변경 중..",5);
         httpRequestTack.execute(tellHttp);
+    }
+
+    public void clickRefresh(View view) {
+        makeRandom();
+    }
+
+    public void clickVoice(View view) {
+        speech.setPitch(1.0f);
+        speech.setSpeechRate(0.5f);
+        speech.speak(auto.getText().toString(),TextToSpeech.QUEUE_FLUSH,null);
     }
 }
