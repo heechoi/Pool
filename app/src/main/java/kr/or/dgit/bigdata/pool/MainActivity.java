@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     private  Toolbar toolbar;
     private TextView toolbar_title;
     private onKeyBackPressedListener mOnKeyBackPressedListener;
-
+    private Menu navigationViewMenu;
     public void setOnKeyBackPressedListener(onKeyBackPressedListener onKeyBackPressedListener) {
         mOnKeyBackPressedListener = onKeyBackPressedListener;
     }
@@ -98,6 +98,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationViewMenu = navigationView.getMenu();
+
         login = navigationView.getHeaderView(0).findViewById(R.id.login);
         login.setOnClickListener(this);
         //회원정보수정
@@ -185,22 +187,20 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        int mno = mlogin.getInt("mno", 0);
         return true;
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-
         return super.onOptionsItemSelected(item);
     }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -337,6 +337,7 @@ public class MainActivity extends AppCompatActivity
             login_title.setVisibility(View.VISIBLE);
             barcode.setVisibility(View.GONE);
             qna_list.setVisibility(View.GONE);
+
         }
         //사장님일때
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
@@ -372,7 +373,6 @@ public class MainActivity extends AppCompatActivity
                     fgm.setArguments(bundle);
                     tr.replace(R.id.frame, fgm);
                     tr.commit();
-
             }
         }
     };
