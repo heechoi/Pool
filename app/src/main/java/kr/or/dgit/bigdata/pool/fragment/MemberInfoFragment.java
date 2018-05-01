@@ -77,19 +77,29 @@ public class MemberInfoFragment extends Fragment implements View.OnClickListener
 
         Calendar cal = Calendar.getInstance();
         Date d = new Date();
-        d.setMonth(5-1);
+
+
         cal.setTime(d);
         int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
+
+
         lists = new ArrayList<>();
         list = new ArrayList<>();
+        int mon = d.getMonth()+1;
+        String month = "";
+        if(mon<10){
+            month ="0"+mon;
+        }else{
+            month = mon+"";
+        }
         for(int i=1; i <= lastDay; i++) {
             d.setDate(i);
             if(d.getDay() != 0 && d.getDay() !=6) {
                 if(i<10){
-                    lists.add("2018040"+i);
+                    lists.add(cal.get(Calendar.YEAR)+""+month+"0"+i);
                 }else{
-                    lists.add("201804"+i);
+                    lists.add(cal.get(Calendar.YEAR)+""+month+""+i);
                 }
             }
         }
