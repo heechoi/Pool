@@ -44,7 +44,7 @@ public class ClinicFragment extends Fragment implements  TabLayout.OnTabSelected
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ArrayList<Fragment> arrFragment;
-    private String http = "http://192.168.0.60:8080/pool/restclinic/clinic";
+    private String http = "http://rkd0519.cafe24.com/pool/restclinic/clinic";
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -25,7 +25,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class JoinActivity extends AppCompatActivity {
     private EditText mno;
     private Button mnoCheck;
-    private String http ="http://192.168.123.113:8080/pool/restJoin/";
+    private String http ="http://rkd0519.cafe24.com/pool/restJoin/";
     private TextView nameText;
     private TextView genderText;
     private TextView tellText;

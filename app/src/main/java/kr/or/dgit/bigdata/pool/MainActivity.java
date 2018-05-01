@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
             tf.setArguments(bundle);
             viewFragment(tf);
         }else if(intent.getStringExtra("bno") !=null){
-            String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+            String httpread = "http://rkd0519.cafe24.com/pool/restclassboard/read";
             new HttpRequestTack(this, mHandler, new String[] {intent.getStringExtra("bno")}, new String[]{"bno"}, "POST", "글을 불러옵니다.",1).execute(httpread);
         }
 

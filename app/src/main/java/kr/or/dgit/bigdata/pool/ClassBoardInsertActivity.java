@@ -57,7 +57,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
     int reqWidth;
     int reqHeight;
     String galleryPath;
-    String http = "http://192.168.0.60:8080/pool/restclassboard/";
+    String http = "http://rkd0519.cafe24.com/pool/restclassboard/";
     ImageView img_btn;
     ImageView imgSelect;
     EditText etcontent;

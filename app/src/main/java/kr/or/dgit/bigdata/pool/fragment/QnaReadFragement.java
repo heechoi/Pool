@@ -48,8 +48,9 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class QnaReadFragement extends Fragment implements onKeyBackPressedListener {
     int bno;
     ProgressDialog mProgressDialog;
-    private String imgHttp ="http://192.168.0.239:8080";
-    private String http ="http://192.168.0.239:8080/pool/restQna/";
+    private String http ="http://rkd0519.cafe24.com/pool/restQna/";
+    private String imgHttp ="http://rkd0519.cafe24.com";
+
     File filePath;
     View root;
     TextView title;
