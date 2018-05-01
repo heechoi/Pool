@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout login;
     private TextView info;
     private TextView login_title;
+    private TextView logOut;
     private TextView qna_list;
     private SharedPreferences mlogin;
     private SharedPreferences admin;
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS,android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.READ_CONTACTS,android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
 
 
-
     }
 
     @Override
@@ -189,14 +189,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-
         return super.onOptionsItemSelected(item);
     }
 
