@@ -123,7 +123,7 @@ public class ClinicList extends Fragment {
            final ImageView imageView;
            final TextView text;
             final LinearLayout layout;
-            if (convertview == null) {
+                if (convertview == null) {
                 convertview = mInflater.inflate(mItemRowLayout, viewGroup, false);
                 imageView = convertview.findViewById(R.id.click);
                 layout = convertview.findViewById(R.id.content_layout);
@@ -141,8 +141,6 @@ public class ClinicList extends Fragment {
                             imageView.setImageResource(R.drawable.arrow_down);
                             layout.setVisibility(View.GONE);
                         }
-
-
                     }
                 });
             }

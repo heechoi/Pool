@@ -35,10 +35,6 @@ import kr.or.dgit.bigdata.pool.fragment.NoticeBoardRead;
 import kr.or.dgit.bigdata.pool.fragment.NoticeListFragment;
 import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 
-/**
- * Created by DGIT3-7 on 2018-04-17.
- */
-
 public class TestFragment extends Fragment implements View.OnClickListener{
     private String http = "http://rkd0519.cafe24.com/pool";
     ListView mListView;

@@ -299,7 +299,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         });
                         alert.show();
                     }
+
                 }
+                break;
                 case 2:{
                     String result = (String) msg.obj;
                     if(result.equals("fail")){
@@ -325,7 +327,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         });
                         alert.show();
                     }
+
                 }
+                break;
                 case 3:{
                     String result = (String) msg.obj;
                     if(result.equals("fail")){
@@ -352,7 +356,9 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                         });
                         alert.show();
                     }
+
                 }
+                break;
                 case 4:{
                     String result = (String) msg.obj;
                     try{
@@ -382,6 +388,7 @@ public class MemberInfoActivity extends AppCompatActivity implements View.OnClic
                     }
 
                 }
+                break;
                 case 5:{
                     String result = (String) msg.obj;
                     if(result.equals("success")){

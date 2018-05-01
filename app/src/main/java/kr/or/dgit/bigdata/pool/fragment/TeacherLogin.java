@@ -189,11 +189,11 @@ public class TeacherLogin extends Fragment implements View.OnClickListener{
                             if(stateLable.getHint().toString().equals("전")){
                                 SharedPreferences.Editor edit = state.edit();
                                 edit.clear();
-                                edit.putInt("state",1);
                                 edit.commit();
                             }else if(stateLable.getHint().toString().equals("후")){
                                 SharedPreferences.Editor edit = state.edit();
                                 edit.clear();
+                                edit.putInt("state",1);
                                 edit.commit();
                             }
 

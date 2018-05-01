@@ -61,7 +61,7 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
     private Button ok;
     private String http ="http://rkd0519.cafe24.com/pool/restQna/";
     SharedPreferences member;
-
+    SharedPreferences admin;
     public static QnaInsertFragment newInstance() {
         QnaInsertFragment qna = new QnaInsertFragment();
         return qna;
@@ -72,7 +72,7 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
         View root = inflater.inflate(R.layout.qna_insert, container, false);
 
         member = this.getActivity().getSharedPreferences("member", 0);
-
+        admin = this.getActivity().getSharedPreferences("Admin",0);
         scrollView = root.findViewById(R.id.scrollView);
         contentLayout = root.findViewById(R.id.contentLayout);
         content = root.findViewById(R.id.qna);
@@ -88,7 +88,14 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
         ok.setOnClickListener(this);
         writer = root.findViewById(R.id.writer);
 
-        writer.setText(member.getString("name", ""));
+        if(member.getInt("mno",0)!=0){
+            writer.setText(member.getString("name", ""));
+        }
+
+        if(admin.getInt("tno",0)!=0){
+            writer.setText(admin.getString("name", ""));
+        }
+
 
 
         title = root.findViewById(R.id.title);

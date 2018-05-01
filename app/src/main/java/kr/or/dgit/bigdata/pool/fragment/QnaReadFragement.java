@@ -49,6 +49,8 @@ public class QnaReadFragement extends Fragment implements onKeyBackPressedListen
     int bno;
     ProgressDialog mProgressDialog;
     private String http ="http://rkd0519.cafe24.com/pool/restQna/";
+    private String imgHttp ="http://rkd0519.cafe24.com";
+
     File filePath;
     View root;
     TextView title;
@@ -139,7 +141,7 @@ public class QnaReadFragement extends Fragment implements onKeyBackPressedListen
                             mProgressDialog = ProgressDialog.show(getContext(), "Wait", "이미지를 불러오는 중입니다.");
                             Log.d("bum","이미지 경로널 아님");
                             back = new back();
-                            back.execute(http+imgpath);
+                            back.execute(imgHttp+imgpath);
                         }
 
 
