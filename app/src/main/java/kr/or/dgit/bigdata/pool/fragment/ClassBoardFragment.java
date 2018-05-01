@@ -70,7 +70,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ClassBoardFragment extends Fragment implements AdapterView.OnItemClickListener , AbsListView.OnScrollListener{
-    private String http = "http://192.168.123.113:8080/pool/restclassboard/";
+    private String http = "http://rkd0519.cafe24.com/pool/restclassboard/";
     private String time = "";
     private String level = "";
     Bitmap bmImg;

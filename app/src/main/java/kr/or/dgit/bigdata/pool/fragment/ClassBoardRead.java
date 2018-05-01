@@ -89,7 +89,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
     back tack;
     Bitmap rotate;
     File filePath;
-    String url = "http://192.168.123.113:8080";
+    String url = "http://rkd0519.cafe24.com";
     ProgressDialog mProgressDialog;
     int bno;
     List<ClassboardReply> list;
@@ -235,7 +235,7 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
             case R.id.classboard_update:
                 String[] arr = {bno+""};
                 String[] arrname = {"bno"};
-                String httpread = "http://192.168.123.113:8080/pool/restclassboard/read";
+                String httpread = "http://rkd0519.cafe24.com/pool/restclassboard/read";
                 new HttpRequestTack(getContext(), mHandler, arr, arrname, "POST", "정보를 가져오는 중입니다.", 4).execute(httpread);
                 break;
 
@@ -426,7 +426,6 @@ public class ClassBoardRead extends Fragment implements View.OnClickListener,onK
                     String result3 = (String) msg.obj;
                     Log.d("bum", "googogogoggoo3"+result3);
                     try {
-
                         reply_text.setText("");
                         //imm.hideSoftInputFromInputMethod(reply_text.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
                         imm.toggleSoftInput(0,0);

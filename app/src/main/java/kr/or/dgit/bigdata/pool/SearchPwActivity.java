@@ -32,7 +32,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class SearchPwActivity extends AppCompatActivity {
     private AlertDialog.Builder mBuilder;
     private AlertDialog dialog;
-    private String http = "http://192.168.0.239:8080/pool/restLogin/";
+    private String http = "http://rkd0519.cafe24.com/pool/restLogin/";
     private String sms;
     private String mid;
 

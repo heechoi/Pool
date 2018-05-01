@@ -59,7 +59,7 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
     private ScrollView scrollView;
     private LinearLayout contentLayout;
     private Button ok;
-    private String http ="http://192.168.0.239:8080/pool/restQna/";
+    private String http ="http://rkd0519.cafe24.com/pool/restQna/";
     SharedPreferences member;
 
     public static QnaInsertFragment newInstance() {

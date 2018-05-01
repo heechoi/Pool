@@ -71,7 +71,7 @@ public class NoticeBoardRead extends Fragment{
     back back;
     Bitmap rotate;
 
-    String http = "http://192.168.0.12:8080";
+    String http = "http://rkd0519.cafe24.com";
     ProgressDialog mProgressDialog;
     int nno;
 

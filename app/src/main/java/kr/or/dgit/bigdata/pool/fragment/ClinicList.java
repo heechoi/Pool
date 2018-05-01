@@ -60,7 +60,7 @@ public class ClinicList extends Fragment {
     Bitmap rotate;
     File filePath;
     MyListAdapter adapter;
-    private String imgUrl = "http://192.168.0.60:8080";
+    private String imgUrl = "http://rkd0519.cafe24.com";
 
     @Nullable
     @Override

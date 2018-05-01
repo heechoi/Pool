@@ -100,8 +100,8 @@ public class TeacherInfoActivity extends AppCompatActivity implements View.OnCli
     String galleryPath;
     CustomDialog customDialog;
 
-    private String imgUrl = "http://211.107.115.62:8080";
-    private String http ="http://211.107.115.62:8080/pool/restInfoUpdate/";
+    private String imgUrl = "http://rkd0519.cafe24.com";
+    private String http ="http://rkd0519.cafe24.com/pool/restInfoUpdate/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

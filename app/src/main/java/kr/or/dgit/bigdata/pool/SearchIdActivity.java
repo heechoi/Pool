@@ -25,7 +25,7 @@ public class SearchIdActivity extends AppCompatActivity implements View.OnClickL
     private Button searchTell;
     private Button searchEmail;
     private AlertDialog.Builder mDialog;
-    private String http = "http://192.168.0.239:8080/pool/restLogin/";
+    private String http = "http://rkd0519.cafe24.com/pool/restLogin/";
     private AlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
