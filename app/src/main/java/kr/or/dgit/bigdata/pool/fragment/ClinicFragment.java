@@ -57,14 +57,10 @@ public class ClinicFragment extends Fragment implements  TabLayout.OnTabSelected
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
+    public void onTabUnselected(TabLayout.Tab tab) {}
 
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
+    public void onTabReselected(TabLayout.Tab tab) {}
 
     @Nullable
     @Override
