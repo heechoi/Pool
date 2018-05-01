@@ -1,5 +1,6 @@
 package kr.or.dgit.bigdata.pool.fragment;
 
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -134,11 +135,13 @@ public class ClinicList extends Fragment {
                             imageView.setImageResource(R.drawable.arrow_up);
                             Animation down = AnimationUtils.loadAnimation(getContext(),R.anim.slide_down);
                             layout.setVisibility(View.VISIBLE);
+
                             layout.setAnimation(down);
                         }else if(layout.getVisibility()==View.VISIBLE){
                             imageView.setImageResource(R.drawable.arrow_down);
                             layout.setVisibility(View.GONE);
                         }
+
 
                     }
                 });
