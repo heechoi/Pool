@@ -48,6 +48,7 @@ import kr.or.dgit.bigdata.pool.util.HttpRequestTack;
 public class QnaReadFragement extends Fragment implements onKeyBackPressedListener {
     int bno;
     ProgressDialog mProgressDialog;
+    private String imgHttp ="http://192.168.0.239:8080";
     private String http ="http://192.168.0.239:8080/pool/restQna/";
     File filePath;
     View root;
@@ -139,7 +140,7 @@ public class QnaReadFragement extends Fragment implements onKeyBackPressedListen
                             mProgressDialog = ProgressDialog.show(getContext(), "Wait", "이미지를 불러오는 중입니다.");
                             Log.d("bum","이미지 경로널 아님");
                             back = new back();
-                            back.execute(http+imgpath);
+                            back.execute(imgHttp+imgpath);
                         }
 
 
