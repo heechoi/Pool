@@ -233,6 +233,7 @@ public class MainActivity extends AppCompatActivity
             ReclassFragment cf = ReclassFragment.newInstance();
             viewFragment(cf);
         } else if (id == R.id.notice_alram) {
+            toolbar_title.setText("공지하기");
             NoticeFragment nf = NoticeFragment.newInstance();
             viewFragment(nf);
         }else if(id==R.id.logOut){
