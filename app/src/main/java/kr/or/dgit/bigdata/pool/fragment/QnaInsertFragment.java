@@ -97,7 +97,6 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
         }
 
 
-
         title = root.findViewById(R.id.title);
         content.setMovementMethod(new ScrollingMovementMethod());
         content.setOnTouchListener(new View.OnTouchListener() {
@@ -139,7 +138,7 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
 
                     String qnaHttp = http+"insert";
                     String contentReplace = content.getText().toString();
-                    String qnaContent = contentReplace.replace(System.getProperty("line.separator"),"<br>");
+                    String qnaContent = contentReplace.replace(System.getProperty("line.separator"),"<br />");
 
                     String[] arr = {writer.getText().toString(),title.getText().toString(),qnaContent,pw.getText().toString(),member.getString("id","")};
                     String[] arrname ={"writer","title","content","pw","id"};
