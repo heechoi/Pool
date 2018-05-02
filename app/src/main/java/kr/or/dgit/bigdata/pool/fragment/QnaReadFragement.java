@@ -134,7 +134,6 @@ public class QnaReadFragement extends Fragment implements onKeyBackPressedListen
                             replyContent.setText(str);
                         }
 
-
                         String imgpath =order.getString("imgpath");
 
                         if (imgpath !=null && !imgpath.equalsIgnoreCase("") && !imgpath.equalsIgnoreCase("null")){

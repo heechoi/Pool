@@ -97,7 +97,6 @@ public class QnaInsertFragment extends Fragment implements View.OnClickListener,
         }
 
 
-
         title = root.findViewById(R.id.title);
         content.setMovementMethod(new ScrollingMovementMethod());
         content.setOnTouchListener(new View.OnTouchListener() {
