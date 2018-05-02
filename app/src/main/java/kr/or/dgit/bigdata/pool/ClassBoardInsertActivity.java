@@ -475,7 +475,7 @@ public class ClassBoardInsertActivity extends AppCompatActivity implements View.
         SharedPreferences sp = getSharedPreferences("member",MODE_PRIVATE);
         String id = sp.getString("name","");
         String contentReplace = etcontent.getText().toString();
-        String content = contentReplace.replace(System.getProperty("line.separator"),"<br>");
+        String content = contentReplace.replace(System.getProperty("line.separator"),"<br />");
         String title = etTitle.getText().toString();
         String imgPathcheck = null;
         if(filePath !=null){

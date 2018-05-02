@@ -97,6 +97,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            Log.d("bum","들어옴");
             switch (msg.what) {
                 case 1: {
                     String result = (String) msg.obj;
@@ -390,7 +391,7 @@ public class ClassBoardFragment extends Fragment implements AdapterView.OnItemCl
             writer.setText(arItem.get(position).getId());
 
             TextView content = convertview.findViewById(R.id.content);
-            String contenttext = arItem.get(position).getContent().replace("<br>",System.getProperty("line.separator"));
+            String contenttext = arItem.get(position).getContent().replace("<br />",System.getProperty("line.separator"));
             content.setText(contenttext);
 
             TextView title = convertview.findViewById(R.id.title);
