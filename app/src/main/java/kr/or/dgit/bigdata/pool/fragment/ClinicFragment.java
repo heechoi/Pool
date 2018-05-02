@@ -118,6 +118,7 @@ public class ClinicFragment extends Fragment implements  TabLayout.OnTabSelected
                             for(int j=0; j < ja.length(); j++){
                                 Clinic clinic = new Clinic();
                                 JSONObject order = ja.getJSONObject(j);
+                                String contentText = order.getString("clinic_content").replace("<br>",System.getProperty("line.separator"));
                                 clinic.setClinic_content(order.getString("clinic_content"));
                                 clinic.setClinic_title(order.getString("clinic_title"));
                                 clinic.setClinic_path(order.getString("clinic_path"));

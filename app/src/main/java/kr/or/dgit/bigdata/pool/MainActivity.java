@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity
         }
         //사장님일때
         if (mno == 0 && (title.equals("사장") && tno != 0)) {
-                user.setText(tName+" 관리자님");
+            user.setText(tName+" 관리자님");
 
             Toast.makeText(this, "관리자님 환영합니다" + tno, Toast.LENGTH_SHORT).show();
             info.setVisibility(View.GONE);
