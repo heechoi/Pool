@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity
             QnaInsertFragment qna = QnaInsertFragment.newInstance();
             viewFragment(qna);
         } else if (id == R.id.noticeboard) {
+            toolbar_title.setText("공지게시판");
             NoticeListFragment nl = NoticeListFragment.newInstance();
             viewFragment(nl);
         } else if (id == R.id.classinfo) {
